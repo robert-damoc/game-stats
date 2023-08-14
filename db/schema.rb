@@ -19,6 +19,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_14_085406) do
     t.string "state", limit: 30, default: "created", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["id"], name: "index_games_on_id", unique: true
     t.index ["state"], name: "index_games_on_state"
   end
 
