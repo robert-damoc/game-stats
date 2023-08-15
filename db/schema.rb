@@ -26,7 +26,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_15_171025) do
     t.string "name", limit: 30, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_players_on_name", unique: true
+    t.index ["name"], name: "index_players_on_name"
   end
 
 end
