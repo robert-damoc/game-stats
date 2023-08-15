@@ -1,9 +1,5 @@
-Game.states.each do |state|
-  10.times do
-    Game.create(state: state)
-  end
+Game.states.each_value do |state|
+  10.times { Game.create(state:) }
 end
 
-30.times do
-  Player.create(name: Faker::Name.name)
-end
+30.times { Player.create(name: Faker::Name.name) }
