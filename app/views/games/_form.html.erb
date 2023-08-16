@@ -11,7 +11,11 @@
     </div>
   <% end %>
 
-  <div>
+  <%= form_with(model: @game, local: true) do |form| %>
+    <%= form.label :state %>
+    <%= form.select :state, options_for_select(Game.states.map {|key, value| [ key.humanize, Game.states.key(value)]}, @game.state) %>
+    <br/>
     <%= form.submit %>
-  </div>
+  <% end %>
 <% end %>
+
