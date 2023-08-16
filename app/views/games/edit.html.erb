@@ -1,10 +1,8 @@
 <h1>Editing game</h1>
 
 <%= render "form", game: @game %>
-
-<br>
-
-<div>
-  <%= link_to "Show this game", @game %> |
-  <%= link_to "Back to games", games_path %>
+<br/>
+<div class="btn-group">
+  <%= link_to "Show", @game, class: "btn btn-info btn-sm" %>&nbsp;
+  <%= link_to "Back to games", games_path, class: "btn btn-info btn-sm" %>&nbsp;
 </div>

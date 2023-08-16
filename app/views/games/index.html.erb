@@ -1,14 +1,10 @@
-<p style="color: green"><%= notice %></p>
 
-<h1>Games</h1>
+<h1>
+  <p style="float: left;">Games</p>
+  <p style="float: right;"><%= link_to "New game", new_game_path, class: "btn btn-primary" %></p>
+</h1>
 
-<div id="games">
-  <% @games.each do |game| %>
-    <%= render game %>
-    <p>
-      <%= link_to "Show this game", game %>
-    </p>
-  <% end %>
-</div>
 
-<%= link_to "New game", new_game_path %>
+<%= render 'games/gametable' %>
+
+<%= link_to "New game", new_game_path, class: "btn btn-info" %>
