@@ -13,7 +13,7 @@
 
   <%= form_with(model: @game, local: true) do |form| %>
     <%= form.label :state %>
-    <%= form.select :state, options_for_select(Game.states.map {|key, value| [ key.humanize, Game.states.key(value)]}, @game.state) %>
+    <%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %>
     <br/><br/>
     <%= form.submit class: "btn btn-info btn-sm" %>
   <% end %>
