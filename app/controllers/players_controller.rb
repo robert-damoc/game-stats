@@ -7,8 +7,7 @@ class PlayersController < ApplicationController
   end
 
   # GET /players/1 or /players/1.json
-  def show
-  end
+  def show; end
 
   # GET /players/new
   def new
@@ -16,8 +15,7 @@ class PlayersController < ApplicationController
   end
 
   # GET /players/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /players or /players.json
   def create
@@ -59,11 +57,11 @@ class PlayersController < ApplicationController
 
   private
 
-    def set_player
-      @player = Player.find(params[:id])
-    end
+  def set_player
+    @player = Player.find(params[:id])
+  end
 
-    def player_params
-      params.fetch(:player, {})
-    end
+  def player_params
+    params.fetch(:player, {})
+  end
 end
