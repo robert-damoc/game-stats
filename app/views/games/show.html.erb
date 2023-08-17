@@ -1,4 +1,7 @@
-<h1 style="text-align: center">Game <%= @game.id.split("-").first %></h1>
+<h1>
+  <p style="float: left;">Game <%= @game.id.split("-").first %></p>
+  <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary btn-sm" %></p>
+</h1>
 
 <table class="table table table-striped table-hover table-sm">
   <thead class="table-dark">
@@ -19,9 +22,6 @@
           <% end %>
           <%= button_to game_path(@game), method: :delete, class:"text-decoration-none", class:"btn btn-empty btn-sm" do %>
             <i class="bi bi-trash3-fill" style="color: blue;"></i>
-          <% end %>
-          <%= link_to games_path, class:"text-decoration-none" do %>
-            <i class="bi bi-backspace-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
           <% end %>
         </div>
       </td>
