@@ -1,8 +1,34 @@
-<h1>Editing game</h1>
+<h1 style="text-align: center">Game <%= @game.id.split("-").first %></h1>
 
-<%= render "form", game: @game %>
-<br/>
-<div class="btn-group">
-  <%= link_to "Show", @game, class: "btn btn-info btn-sm" %>&nbsp;
-  <%= link_to "Back to games", games_path, class: "btn btn-info btn-sm" %>&nbsp;
-</div>
+<table class="table table table-striped table-hover table-sm">
+  <thead class="table-dark">
+    <tr style="text-align: center">
+      <th scope="col">State</th>
+      <th scope="col">Created</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody style="text-align: center">
+    <tr>
+      <td scope="row">
+        <%= form_with(model: @game, local: true) do |form| %>
+          <%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %>
+        <% end %>
+      </td>
+      <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
+      <td scope="row">
+        <div class="btn-group">
+          <%= link_to game_path(@game), class:"text-decoration-none" do %>
+            <i class="bi bi-eye-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
+          <% end %>
+          <%= button_to game_path(@game), method: :delete, class:"text-decoration-none", class:"btn btn-empty btn-sm" do %>
+            <i class="bi bi-trash3-fill" style="color: blue;"></i>
+          <% end %>
+          <%= link_to games_path, class:"text-decoration-none" do %>
+            <i class="bi bi-backspace-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
+          <% end %>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
