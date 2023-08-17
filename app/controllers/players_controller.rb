@@ -62,6 +62,6 @@ class PlayersController < ApplicationController
   end
 
   def player_params
-    params.fetch(:player, {})
+    params.fetch(:player, {}).permit(:name)
   end
 end
