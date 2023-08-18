@@ -1,9 +1,9 @@
-<table class="table table table-striped table-hover table-sm">
-  <thead class="table-dark">
+<table class="table table table-striped table-hover tabletable-sm">
+  <thead class="table-dark table-bordered ">
     <tr style="text-align: center">
-      <th scope="col">Number</th>
-      <th scope="col">State</th>
-      <th scope="col">Created</th>
+      <th scope="col"><%= link_to "Game Number", :sort => "id"%></th>
+      <th scope="col"><%= link_to "State", :sort => "state"%></th>
+      <th scope="col"><%= link_to "Created", :sort => "created_at"%></th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
