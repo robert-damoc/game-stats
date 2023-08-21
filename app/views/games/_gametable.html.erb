@@ -1,6 +1,6 @@
 
 
-<table class="table table table-striped table-hover tabletable-sm">
+<table class="table table-striped table-hover table-sm">
   <thead class="table-dark table-bordered ">
     <tr style="text-align: center">
       <th>
@@ -21,7 +21,7 @@
   <tbody style="text-align: center">
     <% @games.each do |game| %>
       <tr>
-        <th scope="row"><%= game.id.split("-").first %></th>
+        <td scope="row"><%= game.id.split("-").first %></td>
         <td scope="row"><%= game.state.humanize %></td>
         <td scope="row"><%= time_ago_in_words(game.created_at) %></td>
         <td scope="row">

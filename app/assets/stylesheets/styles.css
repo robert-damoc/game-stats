@@ -3,3 +3,9 @@
   color: inherit; /* Inherit the color from the parent element */
   cursor: pointer; /* Change the cursor to a pointer to indicate interactivity */
 }
+
+.plain-link:hover {
+  text-decoration: none; /* Remove underlines */
+  color: inherit; /* Inherit the color from the parent element */
+  cursor: pointer; /* Change the cursor to a pointer to indicate interactivity */
+}
