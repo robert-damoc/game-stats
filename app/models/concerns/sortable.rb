@@ -18,11 +18,11 @@ module Sortable
     end
 
     def default_sort_column
-      :id
+      'id'
     end
 
     def default_direction
-      :asc
+      'asc'
     end
   end
 end
