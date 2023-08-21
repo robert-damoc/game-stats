@@ -3,7 +3,12 @@ class GamesController < ApplicationController
 
   # GET /games or /games.json
   def index
-    @games = Game.order(params[:sort] || :id)
+    allowed_sort_columns = %w[id created_at state]
+
+    sort_column = params[:sort].presence_in(allowed_sort_columns) || 'created_at'
+    sort_order = params[:order] == 'asc' ? 'asc' : 'desc'
+
+    @games = Game.order("#{sort_column} #{sort_order}")
   end
 
   # GET /games/1 or /games/1.json
@@ -64,4 +69,7 @@ class GamesController < ApplicationController
   def game_params
     params.fetch(:game, {}).permit(:state)
   end
+
+  # def sort_table(sort_order)
+
 end
