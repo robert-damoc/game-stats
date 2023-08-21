@@ -1,0 +1,13 @@
+<th>
+  <%= link_to header_name, {
+    sort: sort_key,
+    sort_dir: @sort == sort_key && @sort_dir == 'asc' ? 'desc' : 'asc'
+  }, class: 'plain-link' %>
+  <%if @sort == sort_key %>
+    <% if @sort_dir == 'asc' %>
+      <i class="bi bi-caret-down-fill"></i>
+    <% else %>
+      <i class="bi bi-caret-up-fill"></i>
+    <% end %>
+  <% end %>
+</th>

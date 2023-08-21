@@ -3,7 +3,10 @@ class GamesController < ApplicationController
 
   # GET /games or /games.json
   def index
-    @games = Game.all
+    @sort = params[:sort] || Game.default_sort_column
+    @sort_dir = params[:sort_dir] || Game.default_direction
+
+    @games = Game.all.sort_table(@sort, @sort_dir)
   end
 
   # GET /games/1 or /games/1.json
