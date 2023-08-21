@@ -7,7 +7,6 @@ module Sortable
   ALLOWED_DIRECTIONS = %w[asc desc].freeze
 
   class_methods do
-
     def sort_table(column_name = nil, direction = nil)
       column_name ||= default_sort_column
       direction ||= default_direction
