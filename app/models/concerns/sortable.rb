@@ -4,8 +4,9 @@ module Sortable
   class ColumnNotSortableBy < StandardError; end
   class UndefinedDirection < StandardError; end
 
+  ALLOWED_DIRECTIONS = %w[asc desc].freeze
+
   class_methods do
-    ALLOWED_DIRECTIONS = %w[asc desc]
 
     def sort_table(column_name = nil, direction = nil)
       column_name ||= default_sort_column

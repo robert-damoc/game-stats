@@ -1,29 +1,10 @@
 
-
 <table class="table table-striped table-hover table-sm">
   <thead class="table-dark table-bordered ">
     <tr style="text-align: center">
-      <th>
-        <%= link_to "Game Number", {
-          sort: 'id',
-          sort_dir: @sort == 'id' && @sort_dir == 'asc' ? 'desc' : 'asc'
-        }, class: 'plain-link' %>
-        <%= render 'games/sortingarrows' if @sort == 'id' %>
-      </th>
-      <th>
-        <%= link_to "State", {
-          sort: 'state',
-          sort_dir: @sort == 'state' && @sort_dir == 'asc' ? 'desc' : 'asc'
-        }, class: 'plain-link' %>
-        <%= render 'games/sortingarrows' if @sort == 'state' %>
-      </th>
-      <th>
-        <%= link_to "Created At", {
-          sort: 'created_at',
-          sort_dir: @sort == 'created_at' && @sort_dir == 'asc' ? 'desc' : 'asc'
-        }, class: 'plain-link' %>
-        <%= render 'games/sortingarrows' if @sort == 'created_at' %>
-      </th>
+      <%= render 'shared/table_header', header_name: 'Game Number', sort_key: 'id' %>
+      <%= render 'shared/table_header', header_name: 'State', sort_key: 'state' %>
+      <%= render 'shared/table_header', header_name: 'Created At', sort_key: 'created_at' %>
       <th scope="col">Actions</th>
     </tr>
   </thead>
