@@ -69,7 +69,4 @@ class GamesController < ApplicationController
   def game_params
     params.fetch(:game, {}).permit(:state)
   end
-
-  # def sort_table(sort_order)
-
 end
