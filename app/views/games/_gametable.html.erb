@@ -4,16 +4,25 @@
   <thead class="table-dark table-bordered ">
     <tr style="text-align: center">
       <th>
-        <%= link_to "Game Number", "?sort=id&order=#{params[:sort] == 'id' && params[:order] == 'asc' ? 'desc' : 'asc'}", class:'plain-link' %>
-        <%= render 'games/sortingarrows' if params[:sort] == 'id'%>
+        <%= link_to "Game Number", {
+          sort: 'id',
+          sort_dir: @sort == 'id' && @sort_dir == 'asc' ? 'desc' : 'asc'
+        }, class: 'plain-link' %>
+        <%= render 'games/sortingarrows' if @sort == 'id' %>
       </th>
       <th>
-        <%= link_to "State", "?sort=state&order=#{params[:sort] == 'state' && params[:order] == 'asc' ? 'desc' : 'asc'}", class:'plain-link' %>
-        <%= render 'games/sortingarrows' if params[:sort] == 'state' %>
+        <%= link_to "State", {
+          sort: 'state',
+          sort_dir: @sort == 'state' && @sort_dir == 'asc' ? 'desc' : 'asc'
+        }, class: 'plain-link' %>
+        <%= render 'games/sortingarrows' if @sort == 'state' %>
       </th>
       <th>
-        <%= link_to "Created At", "?sort=created_at&order=#{params[:sort] == 'created_at' && params[:order] == 'asc' ? 'desc' : 'asc'}", class:'plain-link' %>
-        <%= render 'games/sortingarrows' if params[:sort] == 'created_at' %>
+        <%= link_to "Created At", {
+          sort: 'created_at',
+          sort_dir: @sort == 'created_at' && @sort_dir == 'asc' ? 'desc' : 'asc'
+        }, class: 'plain-link' %>
+        <%= render 'games/sortingarrows' if @sort == 'created_at' %>
       </th>
       <th scope="col">Actions</th>
     </tr>
@@ -41,5 +50,3 @@
     <% end %>
   </tbody>
 </table>
-
-
