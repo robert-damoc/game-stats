@@ -1,9 +1,38 @@
+
+
 <table class="table table table-striped table-hover tabletable-sm">
   <thead class="table-dark table-bordered ">
     <tr style="text-align: center">
-      <th scope="col"><%= link_to "Game Number", :sort => "id"%></th>
-      <th scope="col"><%= link_to "State", :sort => "state"%></th>
-      <th scope="col"><%= link_to "Created", :sort => "created_at"%></th>
+      <th>
+        <%= link_to "Game Number", "?sort=id&order=#{params[:sort] == 'id' && params[:order] == 'asc' ? 'desc' : 'asc'}", class:'plain-link' %>
+        <% if params[:sort] == 'id' %>
+          <% if params[:order] == 'asc' %>
+            <i class="bi bi-arrow-up"></i>
+          <% else %>
+            <i class="bi bi-arrow-down"></i>
+          <% end %>
+        <% end %>
+      </th>
+      <th>
+        <%= link_to "State", "?sort=state&order=#{params[:sort] == 'state' && params[:order] == 'asc' ? 'desc' : 'asc'}", class:'plain-link' %>
+        <% if params[:sort] == 'state' %>
+          <% if params[:order] == 'asc' %>
+            <i class="bi bi-arrow-up"></i>
+          <% else %>
+            <i class="bi bi-arrow-down"></i>
+          <% end %>
+        <% end %>
+      </th>
+      <th>
+        <%= link_to "Created At", "?sort=created_at&order=#{params[:sort] == 'created_at' && params[:order] == 'asc' ? 'desc' : 'asc'}", class:'plain-link' %>
+        <% if params[:sort] == 'created_at' %>
+          <% if params[:order] == 'asc' %>
+            <i class="bi bi-arrow-up"></i>
+          <% else %>
+            <i class="bi bi-arrow-down"></i>
+          <% end %>
+        <% end %>
+      </th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -30,4 +59,5 @@
     <% end %>
   </tbody>
 </table>
+
 
