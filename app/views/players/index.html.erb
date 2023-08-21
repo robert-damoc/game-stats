@@ -1,14 +1,7 @@
-<p style="color: green"><%= notice %></p>
+<h1>
+  <p style="float: left;">Players</p>
+  <p style="float: right;"><%= link_to "New player", new_player_path, class: "btn btn-primary" %></p>
+</h1>
 
-<h1>Players</h1>
+  <%= render 'playertable' %>
 
-<div id="players">
-  <% @players.each do |player| %>
-    <%= render player %>
-    <p>
-      <%= link_to "Show this player", player %>
-    </p>
-  <% end %>
-</div>
-
-<%= link_to "New player", new_player_path %>
