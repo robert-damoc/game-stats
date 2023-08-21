@@ -5,8 +5,8 @@ class GamesController < ApplicationController
   def index
     allowed_sort_columns = %w[id created_at state]
 
-    sort_column = params[:sort].presence_in(allowed_sort_columns) || 'created_at'
-    sort_order = params[:order] == 'asc' ? 'asc' : 'desc'
+    sort_column = params[:sort].presence_in(allowed_sort_columns) || :id
+    sort_order = params[:order] == 'desc' ? 'desc' : 'asc'
 
     @games = Game.order("#{sort_column} #{sort_order}")
   end
