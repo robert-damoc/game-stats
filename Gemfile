@@ -9,6 +9,7 @@ gem 'bootsnap', require: false
 gem 'faker'
 gem 'importmap-rails'
 gem 'jbuilder'
+gem 'pagy', '~> 6.0'
 gem 'pg', '~> 1.1'
 gem 'pry'
 gem 'puma', '~> 5.0'
@@ -34,5 +35,3 @@ group :test do
   gem 'selenium-webdriver'
   gem 'webdrivers'
 end
-
-gem 'pagy', '~> 6.0'
