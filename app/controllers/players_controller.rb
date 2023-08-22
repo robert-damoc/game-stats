@@ -7,7 +7,7 @@ class PlayersController < ApplicationController
     @sort_dir = params[:sort_dir] || Player.default_direction
 
     @players = Player.all.sort_table(@sort, @sort_dir)
-    @pagy, @players = pagy(@players, items: PER_PAGE)
+    @pagy, @players = pagy(@players)
   end
 
   # GET /players/1 or /players/1.json
