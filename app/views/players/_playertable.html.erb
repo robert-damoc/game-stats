@@ -1,7 +1,7 @@
 <table class="table table table-striped table-hover table-sm">
   <thead class="table-dark">
     <tr style="text-align: left">
-      <th scope="col">Name</th>
+      <%= render 'shared/table_header', header_name: 'Name', sort_key: 'name' %>
       <th scope="col">Actions</th>
     </tr>
   </thead>

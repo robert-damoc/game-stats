@@ -3,5 +3,8 @@
   <p style="float: right;"><%= link_to "New player", new_player_path, class: "btn btn-primary" %></p>
 </h1>
 
-  <%= render 'playertable' %>
+<br/><br/><br/>
+<%== pagy_info(@pagy, item_name: 'games'.pluralize(@pagy.count)) %>
+<%= render 'playertable' %>
 
+<%== pagy_bootstrap_nav(@pagy) %>

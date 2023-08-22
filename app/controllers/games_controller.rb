@@ -7,7 +7,7 @@ class GamesController < ApplicationController
     @sort_dir = params[:sort_dir] || Game.default_direction
 
     @games = Game.all.sort_table(@sort, @sort_dir)
-    @pagy, @games = pagy(@games, items: PER_PAGE)
+    @pagy, @games = pagy(@games)
   end
 
   # GET /games/1 or /games/1.json

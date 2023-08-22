@@ -3,7 +3,11 @@ class PlayersController < ApplicationController
 
   # GET /players or /players.json
   def index
-    @players = Player.all
+    @sort = params[:sort] || Player.default_sort_column
+    @sort_dir = params[:sort_dir] || Player.default_direction
+
+    @players = Player.all.sort_table(@sort, @sort_dir)
+    @pagy, @players = pagy(@players)
   end
 
   # GET /players/1 or /players/1.json
