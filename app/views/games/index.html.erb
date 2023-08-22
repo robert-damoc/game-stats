@@ -6,3 +6,4 @@
 <%= render 'games/game_table' %>
 
 <%== pagy_bootstrap_nav(@pagy) %>
+<%== pagy_info(@pagy, item_name: 'games'.pluralize(@pagy.count)) %>
