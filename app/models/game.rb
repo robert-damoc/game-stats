@@ -1,5 +1,7 @@
 class Game < ApplicationRecord
   include Sortable
+  has_many :gameplayers
+  has_many :players, through: :gameplayers
 
   enum state: {
     created: 'created',

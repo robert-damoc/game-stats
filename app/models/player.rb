@@ -1,5 +1,7 @@
 class Player < ApplicationRecord
   include Sortable
+  has_many :gameplayers
+  has_many :games, through: :gameplayers
 
   validates :name, presence: true, length: { maximum: 30 }
 
