@@ -17,8 +17,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_23_122131) do
 
   create_table "game_players", force: :cascade do |t|
     t.integer "position"
+    t.uuid "game_id"
+    t.uuid "player_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_game_players_on_game_id"
+    t.index ["player_id"], name: "index_game_players_on_player_id"
   end
 
   create_table "games", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -35,4 +39,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_23_122131) do
     t.index ["name"], name: "index_players_on_name"
   end
 
+  add_foreign_key "game_players", "games"
+  add_foreign_key "game_players", "players"
 end
