@@ -1,5 +1,6 @@
 class Player < ApplicationRecord
   include Sortable
+
   has_many :game_players
   has_many :games, through: :game_players
 
@@ -18,7 +19,7 @@ class Player < ApplicationRecord
 
   def can_be_part_of_only_one_active_game
     if games.in_progress.exists?
-      errors.add(:base, "A player can only be part of one active game at a time")
+      errors.add(:base, 'A player can only be part of one active game at a time')
     end
   end
 end
