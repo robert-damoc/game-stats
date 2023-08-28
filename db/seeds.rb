@@ -7,7 +7,7 @@
 # 30.times { Player.create(name: Faker::Name.name) }
 
 Rails.logger.info 'Started seeding gameplayers'
-Game.all.each do |game|
+Game.find_each do |game|
   Player.all.sample(3).each do |player|
     GamePlayer.create!(game_id: game.id, player_id: player.id)
   end
