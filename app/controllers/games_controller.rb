@@ -24,9 +24,15 @@ class GamesController < ApplicationController
   # POST /games or /games.json
   def create
     @game = Game.new(game_params)
+    player_ids = params[:game][:player_ids]
 
     respond_to do |format|
       if @game.save
+        player_ids.each do |player_id|
+          game_player = GamePlayer.new(game_id: @game.id, player_id: player_id)
+          game_player.save
+        end
+
         format.html { redirect_to game_url(@game), notice: 'Game was successfully created.' }
         format.json { render :show, status: :created, location: @game }
       else
@@ -66,6 +72,6 @@ class GamesController < ApplicationController
   end
 
   def game_params
-    params.fetch(:game, {}).permit(:state)
+    params.fetch(:game, {}).permit(:state, :player_ids)
   end
 end
