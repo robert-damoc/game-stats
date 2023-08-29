@@ -8,8 +8,10 @@
 
 Rails.logger.info 'Started seeding gameplayers'
 Game.find_each do |game|
-  Player.all.sample(3).each do |player|
-    GamePlayer.create!(game_id: game.id, player_id: player.id)
+  players = Player.order('RANDOM()').limit(3)
+
+  players.each do |player|
+    game.game_players.create(player:)
   end
 end
 
