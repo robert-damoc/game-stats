@@ -5,6 +5,7 @@ ruby '~> 3.2'
 
 gem 'rails', '~> 7.0.6'
 
+gem 'acts_as_list'
 gem 'bootsnap', require: false
 gem 'faker'
 gem 'importmap-rails'
