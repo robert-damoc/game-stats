@@ -2,6 +2,10 @@ class Game < ApplicationRecord
   include Sortable
 
   MAX_PLAYERS_PER_GAME = 8
+  validates :game_players, length: {
+    maximum: MAX_PLAYERS_PER_GAME,
+    message: 'There can be a maximum of 8 players in a game.'
+  }
 
   has_many :game_players, dependent: :destroy
   has_many :players, through: :game_players

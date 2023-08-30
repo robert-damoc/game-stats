@@ -30,6 +30,7 @@ class GamesController < ApplicationController
         format.html { redirect_to game_url(@game), notice: 'Game was successfully created.' }
         format.json { render :show, status: :created, location: @game }
       else
+        flash[:notice] = @game.errors.map(&:message).join(' ')
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @game.errors, status: :unprocessable_entity }
       end
@@ -40,9 +41,24 @@ class GamesController < ApplicationController
   def update
     respond_to do |format|
       if @game.update(game_params)
+        if params[:players]
+          for player_id in params[:players]
+            player = Player.find(player_id)
+            if !@game.players.include?(player)
+              @game.players << player
+            end
+          end
+
+          for player in @game.players
+            if !params[:players].include?(player.id)
+              @game.players.delete(player)
+            end
+          end
+        end
         format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
         format.json { render :show, status: :ok, location: @game }
       else
+        flash[:notice] = @game.errors.map(&:message).join(' ')
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @game.errors, status: :unprocessable_entity }
       end
