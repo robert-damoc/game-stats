@@ -25,15 +25,11 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
 
-    respond_to do |format|
-      if @game.save
-        format.html { redirect_to game_url(@game), notice: 'Game was successfully created.' }
-        format.json { render :show, status: :created, location: @game }
-      else
-        flash[:notice] = @game.errors.map(&:message).join(' ')
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @game.errors, status: :unprocessable_entity }
-      end
+    if @game.save
+      redirect_to game_url(@game), notice: 'Game was successfully created.'
+    else
+      flash[:notice] = @game.errors.map(&:message).join(' ')
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -44,26 +40,18 @@ class GamesController < ApplicationController
       @game.game_players.where(player_id: to_delete).map(&:destroy!)
     end
 
-    respond_to do |format|
-      if @game.update(update_params)
-        format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
-        format.json { render :show, status: :ok, location: @game }
-      else
-        flash[:notice] = @game.errors.map(&:message).join(' ')
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @game.errors, status: :unprocessable_entity }
-      end
+    if @game.update(update_params)
+      redirect_to game_url(@game), notice: 'Game was successfully updated.'
+    else
+      flash[:notice] = @game.errors.map(&:message).join(' ')
+      render :edit, status: :unprocessable_entity
     end
   end
 
   # DELETE /games/1 or /games/1.json
   def destroy
     @game.destroy
-
-    respond_to do |format|
-      format.html { redirect_to games_url, notice: 'Game was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
 
   private
