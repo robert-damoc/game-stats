@@ -18,22 +18,32 @@
         <td scope="row"><%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %></td>
         <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
         <td>
-          <div>
-            <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |b| %>
-              <%= b.check_box %>
-              <%= b.label %>
-              <br/>
+          <% if @game.state_created? %>
+            <div>
+              <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |b| %>
+                <%= b.check_box %>
+                <%= b.label %>
+                <br/>
+              <% end %>
+            </div>
+          <% else %>
+            <% @game.game_players.each do |player| %>
+              <div><%= player.name_with_position %></div>
             <% end %>
-          </div>
+          <% end %>
         </td>
         <td>
-          <div>
-            <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |b|%>
-              <%= b.check_box %>
-              <%= b.label %>
-              <br/>
-            <% end %>
-          </div>
+          <% if @game.state_created? %>
+            <div>
+              <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |b|%>
+                <%= b.check_box %>
+                <%= b.label %>
+                <br/>
+              <% end %>
+            </div>
+          <% else %>
+            Cannot add more players.
+          <% end %>
         </td>
 
         <td scope="row">

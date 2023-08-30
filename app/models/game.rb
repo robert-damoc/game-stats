@@ -15,7 +15,7 @@ class Game < ApplicationRecord
     in_progress: 'in_progress',
     completed: 'completed',
     canceled: 'canceled'
-  }
+  }, _prefix: true
 
   def self.allowed_sort_columns
     %w[created_at id state]

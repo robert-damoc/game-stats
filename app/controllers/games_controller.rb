@@ -39,11 +39,13 @@ class GamesController < ApplicationController
 
   # PATCH/PUT /games/1 or /games/1.json
   def update
-    to_delete = @game.player_ids - game_params[:player_ids]
-    @game.game_players.where(player_id: to_delete).map(&:destroy!)
+    if @game.state_created?
+      to_delete = @game.player_ids - update_params[:player_ids]
+      @game.game_players.where(player_id: to_delete).map(&:destroy!)
+    end
 
     respond_to do |format|
-      if @game.update(game_params)
+      if @game.update(update_params)
         format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
         format.json { render :show, status: :ok, location: @game }
       else
@@ -72,5 +74,13 @@ class GamesController < ApplicationController
 
   def game_params
     params.require(:game).permit(:state, player_ids: [])
+  end
+
+  def update_params
+    if @game.state_created?
+      game_params
+    else
+      params.require(:game).permit(:state)
+    end
   end
 end
