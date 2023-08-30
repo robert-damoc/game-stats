@@ -3,6 +3,7 @@
     <tr style="text-align: center">
       <%= render 'shared/table_header', header_name: 'Game Number', sort_key: 'id' %>
       <%= render 'shared/table_header', header_name: 'State', sort_key: 'state' %>
+      <th scope="col">Players</th>
       <%= render 'shared/table_header', header_name: 'Created At', sort_key: 'created_at' %>
       <th scope="col">Actions</th>
     </tr>
@@ -12,6 +13,7 @@
       <tr>
         <td scope="row"><%= game.id.split("-").first %></td>
         <td scope="row"><%= game.state.humanize %></td>
+        <td scope="row"><%= game.game_players.count %>/<%= Game::MAX_PLAYERS_PER_GAME %></td>
         <td scope="row"><%= time_ago_in_words(game.created_at) %></td>
         <td scope="row">
           <div class="btn-group">

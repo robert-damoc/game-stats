@@ -1,6 +1,8 @@
 class Game < ApplicationRecord
   include Sortable
 
+  MAX_PLAYERS_PER_GAME = 8
+
   has_many :game_players, dependent: :destroy
   has_many :players, through: :game_players
 

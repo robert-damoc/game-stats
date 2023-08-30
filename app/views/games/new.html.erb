@@ -3,16 +3,16 @@
   <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary btn-sm" %></p>
 </h1>
 
-<table class="table table table-striped table-hover table-sm">
-  <thead class="table-dark">
-    <tr style="text-align: left">
-      <th scope="col">State</th>
-      <th scope="col">Players</th>
-    </tr>
-  </thead>
-  <tbody style="text-align: left">
-    <tr>
-      <%= form_with(model: @game, local: true) do |form| %>
+<%= form_with(model: @game, local: true) do |form| %>
+  <table class="table table table-striped table-hover table-sm">
+    <thead class="table-dark">
+      <tr style="text-align: left">
+        <th scope="col">State</th>
+        <th scope="col">Players</th>
+      </tr>
+    </thead>
+    <tbody style="text-align: left">
+      <tr>
         <td scope="row">
             <%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %>
         </td>
@@ -21,9 +21,8 @@
             <%= form.select :player_ids, Player.all.map { |p| [p.name, p.id] }, {}, { multiple: true, class: 'select2' } %>
           </div>
         </td>
-      <% end %>
-    </tr>
-  </tbody>
-</table>
-
-<%= button_to 'Create game', games_path, method: :post, class:'btn btn-primary'%>
+      </tr>
+    </tbody>
+  </table>
+  <%= form.submit 'Create Game', class: 'btn btn-primary' %>
+<% end %>

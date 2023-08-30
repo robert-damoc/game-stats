@@ -8,6 +8,7 @@
     <tr style="text-align: center">
       <th scope="col">State</th>
       <th scope="col">Created</th>
+      <th scope="col">Players</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
@@ -15,6 +16,15 @@
     <tr>
       <td scope="row"><%= @game.state.humanize %></td>
       <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
+      <td scope="row">
+        <% if @game.players.any? %>
+          <% @game.players.each do |player| %>
+            <div><%= player.name %></div>
+          <% end %>
+        <% else %>
+          No players
+        <% end %>
+      </td>
       <td scope="row">
         <div class="btn-group">
           <%= link_to edit_game_path(@game), class:"text-decoration-none" do %>
