@@ -8,9 +8,13 @@ class PlayersController < ApplicationController
     @pagy, @players = pagy(filtered)
   end
 
+  def show; end
+
   def new
     @player = Player.new
   end
+
+  def edit; end
 
   def create
     @player = Player.new(player_params)
@@ -18,13 +22,13 @@ class PlayersController < ApplicationController
     if @player.save
       flash.now[:notice] = 'Player was successfully created.'
       render turbo_stream: [
-        turbo_stream.prepend("players", @player),
+        turbo_stream.prepend('players', @player),
         turbo_stream.replace(
-          "form_player",
-          partial: "form",
+          'form_player',
+          partial: 'form',
           locals: { player: Player.new }
         ),
-        turbo_stream.replace("notice", partial: "layouts/flash")
+        turbo_stream.replace('notice', partial: 'layouts/flash')
       ]
     else
       render :new, status: :unprocessable_entity
@@ -33,10 +37,10 @@ class PlayersController < ApplicationController
 
   def update
     if @player.update(player_params)
-      flash.now[:notice] = "Player was successfully updated."
+      flash.now[:notice] = 'Player was successfully updated.'
       render turbo_stream: [
         turbo_stream.replace(@player, @player),
-        turbo_stream.replace("notice", partial: "layouts/flash")
+        turbo_stream.replace('notice', partial: 'layouts/flash')
       ]
     else
       render :edit, status: :unprocessable_entity
@@ -46,10 +50,10 @@ class PlayersController < ApplicationController
   def destroy
     @player.destroy
 
-    flash.now[:notice] = "Player was successfully destroyed."
+    flash.now[:notice] = 'Player was successfully destroyed.'
     render turbo_stream: [
       turbo_stream.remove(@player),
-      turbo_stream.replace("notice", partial: "layouts/flash")
+      turbo_stream.replace('notice', partial: 'layouts/flash')
     ]
   end
 
