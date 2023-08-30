@@ -16,9 +16,11 @@
         <td scope="row">
             <%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %>
         </td>
-        <td>
+        <td scope="row">
           <div class="field">
-            <%= form.select :player_ids, Player.all.map { |p| [p.name, p.id] }, {}, { multiple: true, class: 'select2' } %>
+            <div class="checkbox-list">
+              <%= form.collection_check_boxes :player_ids, Player.all, :id, :name, {} %>
+            </div>
           </div>
         </td>
       </tr>
