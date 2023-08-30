@@ -1,10 +1,22 @@
-<h1>
-  <p style="float: left;">Players</p>
-  <p style="float: right;"><%= link_to "New player", new_player_path, class: "btn btn-primary" %></p>
-</h1>
-
-<br/><br/><br/>
-<%== pagy_info(@pagy, item_name: 'games'.pluralize(@pagy.count)) %>
-<%= render 'playertable' %>
-
-<%== pagy_bootstrap_nav(@pagy) %>
+<div class="w-full">
+  <div class="flex justify-between items-center">
+    <h1 class="font-bold text-4xl">Players</h1>
+    <div class="">
+      <%= form_with url: players_path, method: :get, data: { controller: "form", action: "input->form#search", turbo_frame: "players", turbo_action: "advance" } do %>
+        <%= text_field_tag "filter", nil, placeholder: "Filter", class: "inline-block rounded-md border border-gray-200 outline-none px-3 py-2  w-full" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="min-w-full my-8">
+    <div class="table font-bold min-w-full">
+      <div>Id</div>
+      <div>Name</div>
+      <div></div>
+    </div>
+    <%= turbo_frame_tag "new-player-form", src: new_player_path %>
+    <%= turbo_frame_tag "players" do %>
+      <%= render @players %>
+      <%== pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"') %>
+    <% end %>
+  </div>
+</div>

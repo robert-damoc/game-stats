@@ -1,62 +1,56 @@
 class PlayersController < ApplicationController
+  include ActionView::RecordIdentifier
+
   before_action :set_player, only: %i[show edit update destroy]
 
-  # GET /players or /players.json
   def index
-    @sort = params[:sort] || Player.default_sort_column
-    @sort_dir = params[:sort_dir] || Player.default_direction
-
-    @players = Player.all.sort_table(@sort, @sort_dir)
-    @pagy, @players = pagy(@players)
+    filtered = Player.where('name ILIKE ?', "%#{params[:filter]}%")
+    @pagy, @players = pagy(filtered)
   end
 
-  # GET /players/1 or /players/1.json
-  def show; end
-
-  # GET /players/new
   def new
     @player = Player.new
   end
 
-  # GET /players/1/edit
-  def edit; end
-
-  # POST /players or /players.json
   def create
     @player = Player.new(player_params)
 
-    respond_to do |format|
-      if @player.save
-        format.html { redirect_to player_url(@player), notice: 'Player was successfully created.' }
-        format.json { render :show, status: :created, location: @player }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @player.errors, status: :unprocessable_entity }
-      end
+    if @player.save
+      flash.now[:notice] = 'Player was successfully created.'
+      render turbo_stream: [
+        turbo_stream.prepend("players", @player),
+        turbo_stream.replace(
+          "form_player",
+          partial: "form",
+          locals: { player: Player.new }
+        ),
+        turbo_stream.replace("notice", partial: "layouts/flash")
+      ]
+    else
+      render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /players/1 or /players/1.json
   def update
-    respond_to do |format|
-      if @player.update(player_params)
-        format.html { redirect_to player_url(@player), notice: 'Player was successfully updated.' }
-        format.json { render :show, status: :ok, location: @player }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @player.errors, status: :unprocessable_entity }
-      end
+    if @player.update(player_params)
+      flash.now[:notice] = "Player was successfully updated."
+      render turbo_stream: [
+        turbo_stream.replace(@player, @player),
+        turbo_stream.replace("notice", partial: "layouts/flash")
+      ]
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
-  # DELETE /players/1 or /players/1.json
   def destroy
     @player.destroy
 
-    respond_to do |format|
-      format.html { redirect_to players_url, notice: 'Player was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    flash.now[:notice] = "Player was successfully destroyed."
+    render turbo_stream: [
+      turbo_stream.remove(@player),
+      turbo_stream.replace("notice", partial: "layouts/flash")
+    ]
   end
 
   private
