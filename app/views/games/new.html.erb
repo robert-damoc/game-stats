@@ -1,23 +1,30 @@
 <h1>
   <p style="float: left;">New Game</p>
-  <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary btn-sm" %></p>
+  <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary" %></p>
 </h1>
 
-<table class="table table table-striped table-hover table-sm">
-  <thead class="table-dark">
-    <tr style="text-align: left">
-      <th scope="col">State</th>
-    </tr>
-  </thead>
-  <tbody style="text-align: left">
-    <tr>
-      <td scope="row">
-        <%= form_with(model: @game, local: true) do |form| %>
-          <%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %>
-        <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-<%= button_to 'Create game', games_path, method: :post, class:'btn btn-primary'%>
+<%= form_with(model: @game, local: true) do |form| %>
+  <table class="table table table-striped table-hover table-sm">
+    <thead class="table-dark">
+      <tr style="text-align: left">
+        <th scope="col">State</th>
+        <th scope="col">Players</th>
+      </tr>
+    </thead>
+    <tbody style="text-align: left">
+      <tr>
+        <td scope="row">
+            <%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %>
+        </td>
+        <td scope="row">
+          <div class="field">
+            <div class="checkbox-list">
+              <%= form.collection_check_boxes :player_ids, Player.all, :id, :name, {} %>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <%= form.submit 'Create Game', class: 'btn btn-primary' %>
+<% end %>

@@ -3,6 +3,7 @@
     <tr style="text-align: center">
       <%= render 'shared/table_header', header_name: 'Game Number', sort_key: 'id' %>
       <%= render 'shared/table_header', header_name: 'State', sort_key: 'state' %>
+      <th scope="col">Players</th>
       <%= render 'shared/table_header', header_name: 'Created At', sort_key: 'created_at' %>
       <th scope="col">Actions</th>
     </tr>
@@ -12,17 +13,18 @@
       <tr>
         <td scope="row"><%= game.id.split("-").first %></td>
         <td scope="row"><%= game.state.humanize %></td>
+        <td scope="row"><%= game.game_players.count %>/<%= Game::MAX_PLAYERS_PER_GAME %></td>
         <td scope="row"><%= time_ago_in_words(game.created_at) %></td>
         <td scope="row">
           <div class="btn-group">
-            <%= link_to game_path(game), class:"text-decoration-none" do %>
-              <i class="bi bi-eye-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
+            <%= link_to game_path(game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-eye-fill" style="color: #0d6efd;"></i>&nbsp;
             <% end %>
-            <%= link_to edit_game_path(game), class:"text-decoration-none" do %>
-              <i class="bi bi-pencil-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
+            <%= link_to edit_game_path(game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-pencil-fill" style="color: #0d6efd;"></i>&nbsp;
             <% end %>
-            <%= button_to game_path(game), method: :delete, class:"btn btn-empty btn-sm" do %>
-              <i class="bi bi-trash3-fill" style="color: blue;"></i>
+            <%= button_to game_path(game), method: :delete, class:"btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-trash3-fill" style="color: #0d6efd;"></i>
             <% end %>
           </div>
         </td>

@@ -1,24 +1,55 @@
 <h1>
   <p style="float: left;">Editing Game <%= @game.id.split("-").first %></p>
-  <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary btn-sm" %></p>
+  <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary" %></p>
 </h1>
 <%= form_with(model: @game, local: true) do |form| %>
   <table class="table table table-striped table-hover table-sm">
     <thead class="table-dark">
-      <tr style="text-align: center">
+      <tr style="text-align: left">
         <th scope="col">State</th>
         <th scope="col">Created</th>
+        <th scope="col">Selected Players</th>
+        <th scope="col">Unselected Players</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
-    <tbody style="text-align: center">
+    <tbody style="text-align: left">
       <tr>
         <td scope="row"><%= form.select :state, options_for_select(Game.states.map { |key, value| [key.humanize, Game.states.key(value)] }, @game.state) %></td>
         <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
+        <td>
+          <% if @game.state_created? %>
+            <div>
+              <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |b| %>
+                <%= b.check_box %>
+                <%= b.label %>
+                <br/>
+              <% end %>
+            </div>
+          <% else %>
+            <% @game.game_players.each do |player| %>
+              <div><%= player.name_with_position %></div>
+            <% end %>
+          <% end %>
+        </td>
+        <td>
+          <% if @game.state_created? %>
+            <div>
+              <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |b|%>
+                <%= b.check_box %>
+                <%= b.label %>
+                <br/>
+              <% end %>
+            </div>
+          <% else %>
+            Cannot add more players.
+          <% end %>
+        </td>
+
         <td scope="row">
           <div class="btn-group">
-            <%= link_to game_path(@game), class:"text-decoration-none" do %>
-              <i class="bi bi-eye-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
+            <%= link_to game_path(@game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-eye-fill" style="color: #0d6efd;"></i>&nbsp;
             <% end %>
           </div>
         </td>
