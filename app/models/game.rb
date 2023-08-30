@@ -7,7 +7,7 @@ class Game < ApplicationRecord
     message: 'There can be a maximum of 8 players in a game.'
   }
 
-  has_many :game_players, dependent: :destroy
+  has_many :game_players, -> { order(position: :asc) }, dependent: :destroy
   has_many :players, through: :game_players
 
   enum state: {

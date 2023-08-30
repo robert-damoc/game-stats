@@ -39,19 +39,11 @@ class GamesController < ApplicationController
 
   # PATCH/PUT /games/1 or /games/1.json
   def update
+    to_delete = @game.player_ids - game_params[:player_ids]
+    @game.game_players.where(player_id: to_delete).map(&:destroy!)
+
     respond_to do |format|
       if @game.update(game_params)
-        if params[:players]
-          params[:players].each do |player_id|
-            player = Player.find(player_id)
-
-            @game.players << player unless @game.players.include?(player)
-          end
-
-          @game.players.each do |player|
-            @game.players.delete(player) unless params[:players].include?(player.id)
-          end
-        end
         format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
         format.json { render :show, status: :ok, location: @game }
       else

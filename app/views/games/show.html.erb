@@ -5,21 +5,21 @@
 
 <table class="table table table-striped table-hover table-sm">
   <thead class="table-dark">
-    <tr style="text-align: center">
+    <tr style="text-align: left">
       <th scope="col">State</th>
       <th scope="col">Created</th>
       <th scope="col">Players</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
-  <tbody style="text-align: center">
+  <tbody style="text-align: left">
     <tr>
       <td scope="row"><%= @game.state.humanize %></td>
       <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
       <td scope="row">
-        <% if @game.players.any? %>
-          <% @game.players.each do |player| %>
-            <div><%= player.name %></div>
+        <% if @game.game_players.any? %>
+          <% @game.game_players.each do |player| %>
+            <div><%= player.name_with_position %></div>
           <% end %>
         <% else %>
           No players
