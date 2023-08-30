@@ -1,7 +1,7 @@
 class Player < ApplicationRecord
   include Sortable
 
-  has_many :game_players, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :game_players
+  has_many :game_players, -> { order(position: :asc) }, dependent: :destroy
   has_many :games, through: :game_players
 
   validates :name, presence: true, length: { maximum: 30 }

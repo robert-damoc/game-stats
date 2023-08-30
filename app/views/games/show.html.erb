@@ -1,6 +1,6 @@
 <h1>
   <p style="float: left;">Game <%= @game.id.split("-").first %></p>
-  <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary btn-sm" %></p>
+  <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary" %></p>
 </h1>
 
 <table class="table table table-striped table-hover table-sm">
@@ -27,12 +27,12 @@
       </td>
       <td scope="row">
         <div class="btn-group">
-          <%= link_to edit_game_path(@game), class:"text-decoration-none" do %>
-            <i class="bi bi-pencil-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
-          <% end %>
-          <%= button_to game_path(@game), method: :delete, class:"btn btn-empty btn-sm" do %>
-            <i class="bi bi-trash3-fill" style="color: blue;"></i>
-          <% end %>
+            <%= link_to edit_game_path(@game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-pencil-fill" style="color: #0d6efd;"></i>&nbsp;
+            <% end %>
+            <%= button_to game_path(@game), method: :delete, class:"btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-trash3-fill" style="color: #0d6efd;"></i>
+            <% end %>
         </div>
       </td>
     </tr>

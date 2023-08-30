@@ -11,14 +11,14 @@
         <td scope="row"><%= player.name %></td>
         <td scope="row">
           <div class="btn-group">
-            <%= link_to player_path(player), class:"text-decoration-none" do %>
-              <i class="bi bi-eye-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
+            <%= link_to player_path(player), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-eye-fill" style="color: #0d6efd;"></i>&nbsp;
             <% end %>
-            <%= link_to edit_player_path(player), class:"text-decoration-none" do %>
-              <i class="bi bi-pencil-fill" style="font-size: 1.2rem; color: blue;"></i>&nbsp;
+            <%= link_to edit_player_path(player), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-pencil-fill" style="color: #0d6efd;"></i>&nbsp;
             <% end %>
-            <%= button_to player_path(player), method: :delete, class:"text-decoration-none", class:"btn btn-empty btn-sm" do %>
-              <i class="bi bi-trash3-fill" style="color: blue;"></i>
+            <%= button_to player_path(player), method: :delete, class:"btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+              <i class="bi bi-trash3-fill" style="color: #0d6efd;"></i>
             <% end %>
           </div>
         </td>
