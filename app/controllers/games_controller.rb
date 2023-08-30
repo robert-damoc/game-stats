@@ -42,17 +42,14 @@ class GamesController < ApplicationController
     respond_to do |format|
       if @game.update(game_params)
         if params[:players]
-          for player_id in params[:players]
+          params[:players].each do |player_id|
             player = Player.find(player_id)
-            if !@game.players.include?(player)
-              @game.players << player
-            end
+
+            @game.players << player unless @game.players.include?(player)
           end
 
-          for player in @game.players
-            if !params[:players].include?(player.id)
-              @game.players.delete(player)
-            end
+          @game.players.each do |player|
+            @game.players.delete(player) unless params[:players].include?(player.id)
           end
         end
         format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
