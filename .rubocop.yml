@@ -20,6 +20,10 @@ Metrics/PerceivedComplexity:
 Rails/I18nLocaleTexts:
   Enabled: false
 
+Rails/Output:
+  Exclude:
+   - 'db/seeds.rb'
+
 Style/ClassAndModuleChildren:
   Exclude:
     - 'test/channels/application_cable/connection_test.rb'
