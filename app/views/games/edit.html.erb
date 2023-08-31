@@ -7,6 +7,7 @@
   </p>
   <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary" %></p>
 </h1>
+
 <%= form_with(model: @game, local: true) do |form| %>
   <table class="table table table-striped table-hover table-sm">
     <thead class="table-dark">
@@ -49,7 +50,7 @@
         <td scope="row">
           <div class="btn-group">
             <%= link_to game_path(@game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-              <i class="bi bi-eye-fill" style="color: #0d6efd;"></i>&nbsp;
+              <i class="bi bi-eye-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
             <% end %>
           </div>
         </td>
