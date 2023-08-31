@@ -1,6 +1,6 @@
 <table class="table table-striped table-hover table-sm">
   <thead class="table-dark table-bordered ">
-    <tr style="text-align: center">
+    <tr style="text-align: left">
       <%= render 'shared/table_header', header_name: 'Game Number', sort_key: 'id' %>
       <%= render 'shared/table_header', header_name: 'State', sort_key: 'state' %>
       <th scope="col">Players</th>
@@ -8,7 +8,7 @@
       <th scope="col">Actions</th>
     </tr>
   </thead>
-  <tbody style="text-align: center">
+  <tbody style="text-align: left">
     <% @games.each do |game| %>
       <tr>
         <td scope="row"><%= game.id.split("-").first %></td>
