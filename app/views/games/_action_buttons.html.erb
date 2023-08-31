@@ -1,7 +1,9 @@
 <div class="btn-group">
   <% if game.state_created? %>
-    <%= button_to start_game_game_path(game), method: :put, class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-      <i class="bi bi-play-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
+    <% if game.game_players.count >= Game::MIN_PLAYERS_PER_GAME %>
+      <%= button_to start_game_game_path(game), method: :put, class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
+        <i class="bi bi-play-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
+      <% end %>
     <% end %>
     <%= button_to cancel_game_game_path(game), method: :put, class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
       <i class="bi bi-x-circle-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;

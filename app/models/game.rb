@@ -2,6 +2,7 @@ class Game < ApplicationRecord
   include Sortable
 
   MAX_PLAYERS_PER_GAME = 8
+  MIN_PLAYERS_PER_GAME = 2
   VALID_TRANSITIONS = {
     created: [:in_progress, :canceled],
     in_progress: [:completed, :canceled],
