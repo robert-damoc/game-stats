@@ -1,6 +1,6 @@
 <h1>
   <p style="float: left;">New Player</p>
-  <p style="float: right;"><%= link_to "Back to players", players_path, class: "btn btn-primary btn-sm" %></p>
+  <p style="float: right;"><%= link_to "Back to players", players_path, class: "btn btn-primary" %></p>
 </h1>
 <br/><br/><br/>
 
@@ -9,6 +9,6 @@
     <label for="exampleFormControlInput1" class="form-label">Name</label>
     <input class="form-control" id= <%= form.text_field :name %>
     <br/>
-    <%= form.submit 'Create player', class:"btn btn-primary btn-sm" %>
+    <%= form.submit 'Create player', class:"btn btn-primary" %>
   </div>
 <% end %>

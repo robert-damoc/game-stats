@@ -25,47 +25,50 @@ class GamesController < ApplicationController
   def create
     @game = Game.new(game_params)
 
-    respond_to do |format|
-      if @game.save
-        format.html { redirect_to game_url(@game), notice: 'Game was successfully created.' }
-        format.json { render :show, status: :created, location: @game }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @game.errors, status: :unprocessable_entity }
-      end
+    if @game.save
+      redirect_to game_url(@game), notice: 'Game was successfully created.'
+    else
+      flash[:notice] = @game.errors.map(&:message).join(' ')
+      render :new, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /games/1 or /games/1.json
   def update
-    respond_to do |format|
-      if @game.update(game_params)
-        format.html { redirect_to game_url(@game), notice: 'Game was successfully updated.' }
-        format.json { render :show, status: :ok, location: @game }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @game.errors, status: :unprocessable_entity }
-      end
+    if @game.state_created?
+      to_delete = @game.player_ids - update_params[:player_ids]
+      @game.game_players.where(player_id: to_delete).map(&:destroy!)
+    end
+
+    if @game.update(update_params)
+      redirect_to game_url(@game), notice: 'Game was successfully updated.'
+    else
+      flash[:notice] = @game.errors.map(&:message).join(' ')
+      render :edit, status: :unprocessable_entity
     end
   end
 
   # DELETE /games/1 or /games/1.json
   def destroy
     @game.destroy
-
-    respond_to do |format|
-      format.html { redirect_to games_url, notice: 'Game was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
 
   private
 
   def set_game
-    @game = Game.find(params[:id])
+    @game = Game.includes(:players).find(params[:id])
   end
 
   def game_params
-    params.fetch(:game, {}).permit(:state)
+    params.require(:game).permit(:state, player_ids: [])
+  end
+
+  def update_params
+    if @game.state_created?
+      game_params
+    else
+      params.require(:game).permit(:state)
+    end
   end
 end

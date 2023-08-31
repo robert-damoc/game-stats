@@ -8,6 +8,9 @@ AllCops:
 RSpec/FilePath:
   Enabled: false
 
+Metrics/AbcSize:
+  Max: 24
+
 Metrics/CyclomaticComplexity:
   Max: 9
 
