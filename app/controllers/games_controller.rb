@@ -54,6 +54,24 @@ class GamesController < ApplicationController
     redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
 
+  def start_game
+    @game = Game.find(params[:id])
+    @game.update(state: 'in_progress')
+    redirect_to @game
+  end
+
+  def complete_game
+    @game = Game.find(params[:id])
+    @game.update(state: 'completed')
+    redirect_to @game
+  end
+
+  def cancel_game
+    @game = Game.find(params[:id])
+    @game.update(state: 'canceled')
+    redirect_to @game
+  end
+
   private
 
   def set_game

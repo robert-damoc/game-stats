@@ -10,7 +10,7 @@ class Game < ApplicationRecord
   }.freeze
 
   validate :valid_state_transition, on: :update
-  validate :game_players, length: {
+  validates :game_players, length: {
     maximum: MAX_PLAYERS_PER_GAME,
     message: 'There can be a maximum of 8 players in a game.'
   }
