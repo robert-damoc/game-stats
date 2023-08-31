@@ -4,10 +4,10 @@ class Game < ApplicationRecord
   MAX_PLAYERS_PER_GAME = 8
   MIN_PLAYERS_PER_GAME = 2
   VALID_TRANSITIONS = {
-    created: [:in_progress, :canceled],
-    in_progress: [:completed, :canceled],
-    completed: [],
-    canceled: []
+    created: %i[created in_progress canceled],
+    in_progress: %i[in_progress completed canceled],
+    completed: %i[completed],
+    canceled: %i[canceled]
   }.freeze
 
   validate :valid_state_transition, on: :update
@@ -29,7 +29,7 @@ class Game < ApplicationRecord
   def valid_state_transition
     return if VALID_TRANSITIONS[state_was.to_sym].include?(state.to_sym)
 
-    errors.add(:state, 'Invalid state transition')
+    errors.add(:state, 'invalid state transition')
   end
 
   def self.allowed_sort_columns

@@ -28,16 +28,7 @@
         <% end %>
       <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
       </td>
-      <td scope="row">
-        <div class="btn-group">
-            <%= link_to edit_game_path(@game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-              <i class="bi bi-pencil-fill" style="color: #0d6efd;"></i>&nbsp;
-            <% end %>
-            <%= button_to game_path(@game), method: :delete, class:"btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-              <i class="bi bi-trash3-fill" style="color: #0d6efd;"></i>
-            <% end %>
-        </div>
-      </td>
+      <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
     </tr>
   </tbody>
 </table>

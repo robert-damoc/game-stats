@@ -24,6 +24,7 @@ class GamesController < ApplicationController
   # POST /games or /games.json
   def create
     @game = Game.new(game_params)
+    @game.state = 'created'
 
     if @game.save
       redirect_to game_url(@game), notice: 'Game was successfully created.'
