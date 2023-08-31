@@ -2,7 +2,15 @@ class Game < ApplicationRecord
   include Sortable
 
   MAX_PLAYERS_PER_GAME = 8
-  validates :game_players, length: {
+  VALID_TRANSITIONS = {
+    created: [:in_progress, :canceled],
+    in_progress: [:completed, :canceled],
+    completed: [],
+    canceled: []
+  }.freeze
+
+  validate :valid_state_transition, on: :update
+  validate :game_players, length: {
     maximum: MAX_PLAYERS_PER_GAME,
     message: 'There can be a maximum of 8 players in a game.'
   }
@@ -16,6 +24,12 @@ class Game < ApplicationRecord
     completed: 'completed',
     canceled: 'canceled'
   }, _prefix: true
+
+  def valid_state_transition
+    return if VALID_TRANSITIONS[state_was.to_sym].include?(state.to_sym)
+
+    errors.add(:state, 'Invalid state transition')
+  end
 
   def self.allowed_sort_columns
     %w[created_at id state]
