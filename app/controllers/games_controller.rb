@@ -39,24 +39,20 @@ class GamesController < ApplicationController
       to_delete = @game.player_ids - update_game_params[:player_ids].to_a
       @game.game_players.where(player_id: to_delete).map(&:destroy!)
     end
-
-    case params[:commit]
-    when 'Start Game'
-      if @game.state == 'created'
-        if @game.player_ids.count.between?(Game::MIN_PLAYERS_PER_GAME, Game::MAX_PLAYERS_PER_GAME)
+    if @game.update(update_game_params)
+      case params[:commit]
+      when 'Start Game'
+        if @game.state_created? && @game.player_ids.count.between?(Game::MIN_PLAYERS_PER_GAME, Game::MAX_PLAYERS_PER_GAME)
           @game.update(state: 'in_progress')
-        else
+        elsif @game.state_created?
           redirect_to @game, notice: 'Game must have between 2 and 8 players to start.'
           return
         end
+      when 'Cancel Game'
+        @game.update(state: 'canceled') if @game.state_in_progress? || @game.state_created?
+      when 'Complete Game'
+        @game.update(state: 'completed') if @game.state_in_progress?
       end
-    when 'Cancel Game'
-      @game.update(state: 'canceled') if @game.state == 'in_progress' || @game.state == 'created'
-    when 'Complete Game'
-      @game.update(state: 'completed') if @game.state == 'in_progress'
-    end
-
-    if @game.update(update_game_params)
       redirect_to game_url(@game), notice: 'Game was successfully updated.'
     else
       flash[:notice] = @game.errors.map(&:message).join(' ')

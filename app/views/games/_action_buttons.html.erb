@@ -4,7 +4,7 @@
     <%= f.hidden_field :commit, value: 'Cancel Game' if game.state == 'in_progress' || game.state == 'created' %>
     <%= f.hidden_field :commit, value: 'Complete Game' if game.state == 'in_progress' %>
 
-    <%= f.submit 'Start Game', class: 'btn btn-primary btn-sm' if game.state == 'created' %>
+    <%= f.submit 'Play Game', class: 'btn btn-primary btn-sm' if game.state == 'created' %>
     <%= f.submit 'Cancel Game', class: 'btn btn-danger btn-sm' if game.state == 'in_progress' || game.state == 'created' %>
     <%= f.submit 'Complete Game', class: 'btn btn-success btn-sm' if game.state == 'in_progress' %>
   <% end %>

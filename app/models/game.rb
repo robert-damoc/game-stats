@@ -16,7 +16,7 @@ class Game < ApplicationRecord
   validates :game_players, length: {
     maximum: MAX_PLAYERS_PER_GAME,
     message: 'There can be a maximum of 8 players in a game.'
-  }
+  }, on: %i[create update]
 
   has_many :game_players, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :game
   has_many :players, through: :game_players
@@ -31,7 +31,13 @@ class Game < ApplicationRecord
   def valid_state_transition
     return if VALID_TRANSITIONS[state_was.to_sym].include?(state.to_sym)
 
-    errors.add(:state, 'invalid state transition')
+    if state == 'in_progress'
+      unless player_ids.count.between?(Game::MIN_PLAYERS_PER_GAME, Game::MAX_PLAYERS_PER_GAME)
+        errors.add(:state, 'Invalid state transition. The game must have between 2 and 8 players to start.')
+      end
+    else
+      errors.add(:state, 'Invalid state transition')
+    end
   end
 
   def self.allowed_sort_columns
