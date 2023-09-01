@@ -1,20 +1,38 @@
-<div class="btn-group">
-  <%= form_for game, method: :put do |f| %>
-    <%= f.hidden_field :commit, value: 'Start Game' if game.state == 'created' %>
-    <%= f.hidden_field :commit, value: 'Cancel Game' if game.state == 'in_progress' || game.state == 'created' %>
-    <%= f.hidden_field :commit, value: 'Complete Game' if game.state == 'in_progress' %>
+<div class="btn-group game-actions">
+  <%# Show start_game button %>
+  <%= button_to game_path(game, { game: { state: :in_progress }, page: params[:page]}),
+                method: :patch,
+                disabled: !game.can_start?,
+                title: 'Start',
+                class:"text-decoration-none btn btn-empty btn-sm" do %>
+    <i class="bi bi-play-fill"></i>&nbsp;
+  <% end %>
 
-    <%= f.submit 'Start Game', class: 'btn btn-primary btn-sm' if game.state == 'created' %>
-    <%= f.submit 'Cancel Game', class: 'btn btn-danger btn-sm' if game.state == 'in_progress' || game.state == 'created' %>
-    <%= f.submit 'Complete Game', class: 'btn btn-success btn-sm' if game.state == 'in_progress' %>
+  <%# Show cancel_game button %>
+  <%= button_to game_path(game, { game: { state: :canceled }, page: params[:page] }),
+                method: :patch,
+                disabled: !game.can_cancel?,
+                title: 'Cancel',
+                class:"text-decoration-none btn btn-empty btn-sm" do %>
+    <i class="bi bi-x-circle-fill"></i>&nbsp;
   <% end %>
-  <%= link_to game_path(game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-    <i class="bi bi-eye-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
+
+  <%# Show completed_game button %>
+  <%= button_to game_path(game, { game: { state: :completed }, page: params[:page]}),
+                method: :patch,
+                disabled: !game.can_complete?,
+                title: 'Complete',
+                class:"text-decoration-none btn btn-empty btn-sm" do %>
+    <i class="bi bi-check-circle-fill"></i>&nbsp;
   <% end %>
-  <%= link_to edit_game_path(game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-    <i class="bi bi-pencil-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
+
+  <%= link_to game_path(game), class:"text-decoration-none btn btn-empty btn-sm", title: 'View' do %>
+    <i class="bi bi-eye-fill"></i>&nbsp;
   <% end %>
-  <%= button_to game_path(game), method: :delete, class:"btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-    <i class="bi bi-trash3-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
+  <%= link_to edit_game_path(game), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
+    <i class="bi bi-pencil-fill"></i>&nbsp;
+  <% end %>
+  <%= button_to game_path(game), method: :delete, class:"btn btn-empty btn-sm", title: 'Delete' do %>
+    <i class="bi bi-trash3-fill"></i>&nbsp;
   <% end %>
 </div>
