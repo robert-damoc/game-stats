@@ -13,7 +13,7 @@
       <tr>
         <td scope="row"><%= game.id.split("-").first %></td>
         <td scope="row"><%= game.state.humanize %></td>
-        <td scope="row"><%= game.game_players.count %>/<%= Game::MAX_PLAYERS_PER_GAME %></td>
+        <td scope="row"><%= game.game_players.size %>/<%= Game::MAX_PLAYERS_PER_GAME %></td>
         <td scope="row"><%= time_ago_in_words(game.created_at) %></td>
         <td scope="row"><%= render 'games/action_buttons', game: game %></td>
       </tr>

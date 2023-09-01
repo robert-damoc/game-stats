@@ -9,3 +9,20 @@
   color: inherit; /* Inherit the color from the parent element */
   cursor: pointer; /* Change the cursor to a pointer to indicate interactivity */
 }
+
+.game-actions i {
+  font-size: 1.1rem;
+  color: #0d6efd;
+}
+
+.game-actions button {
+  padding: 0.1rem;
+}
+
+.game-actions a {
+  padding: 0.1rem;
+}
+
+.game-actions [disabled="disabled"] i {
+  color: rgb(89, 145, 175);
+}

@@ -1,8 +1,6 @@
 class Game < ApplicationRecord
   include Sortable
 
-  before_update :valid_state_transition
-
   MAX_PLAYERS_PER_GAME = 8
   MIN_PLAYERS_PER_GAME = 2
   VALID_TRANSITIONS = {
@@ -15,8 +13,12 @@ class Game < ApplicationRecord
   validate :valid_state_transition, on: :update
   validates :game_players, length: {
     maximum: MAX_PLAYERS_PER_GAME,
-    message: 'There can be a maximum of 8 players in a game.'
-  }, on: %i[create update]
+    message: "There can be a maximum of #{MAX_PLAYERS_PER_GAME} players in a game."
+  }
+  validates :game_players, length: {
+    minimum: MIN_PLAYERS_PER_GAME,
+    message: "Minimum number of players to start the game is #{MIN_PLAYERS_PER_GAME}"
+  }, if: -> { state_in_progress? }
 
   has_many :game_players, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :game
   has_many :players, through: :game_players
@@ -28,16 +30,16 @@ class Game < ApplicationRecord
     canceled: 'canceled'
   }, _prefix: true
 
-  def valid_state_transition
-    return if VALID_TRANSITIONS[state_was.to_sym].include?(state.to_sym)
+  def can_start?
+    state_created? && game_players.count.between?(MIN_PLAYERS_PER_GAME, MAX_PLAYERS_PER_GAME)
+  end
 
-    if state == 'in_progress'
-      unless player_ids.count.between?(Game::MIN_PLAYERS_PER_GAME, Game::MAX_PLAYERS_PER_GAME)
-        errors.add(:state, 'Invalid state transition. The game must have between 2 and 8 players to start.')
-      end
-    else
-      errors.add(:state, 'Invalid state transition')
-    end
+  def can_complete?
+    state_in_progress?
+  end
+
+  def can_cancel?
+    state_created? || state_in_progress?
   end
 
   def self.allowed_sort_columns
@@ -50,5 +52,13 @@ class Game < ApplicationRecord
 
   def self.default_direction
     'desc'
+  end
+
+  private
+
+  def valid_state_transition
+    return if VALID_TRANSITIONS[state_was.to_sym].include?(state.to_sym)
+
+    errors.add(:state, 'invalid state transition')
   end
 end
