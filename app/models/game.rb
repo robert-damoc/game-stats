@@ -1,6 +1,8 @@
 class Game < ApplicationRecord
   include Sortable
 
+  before_update :valid_state_transition
+
   MAX_PLAYERS_PER_GAME = 8
   MIN_PLAYERS_PER_GAME = 2
   VALID_TRANSITIONS = {

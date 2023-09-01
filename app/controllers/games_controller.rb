@@ -23,8 +23,7 @@ class GamesController < ApplicationController
 
   # POST /games or /games.json
   def create
-    @game = Game.new(game_params)
-    @game.state = 'created'
+    @game = Game.new(create_game_params)
 
     if @game.save
       redirect_to game_url(@game), notice: 'Game was successfully created.'
@@ -37,11 +36,27 @@ class GamesController < ApplicationController
   # PATCH/PUT /games/1 or /games/1.json
   def update
     if @game.state_created?
-      to_delete = @game.player_ids - update_params[:player_ids]
+      to_delete = @game.player_ids - update_game_params[:player_ids].to_a
       @game.game_players.where(player_id: to_delete).map(&:destroy!)
     end
 
-    if @game.update(update_params)
+    case params[:commit]
+    when 'Start Game'
+      if @game.state == 'created'
+        if @game.player_ids.count.between?(Game::MIN_PLAYERS_PER_GAME, Game::MAX_PLAYERS_PER_GAME)
+          @game.update(state: 'in_progress')
+        else
+          redirect_to @game, notice: 'Game must have between 2 and 8 players to start.'
+          return
+        end
+      end
+    when 'Cancel Game'
+      @game.update(state: 'canceled') if @game.state == 'in_progress' || @game.state == 'created'
+    when 'Complete Game'
+      @game.update(state: 'completed') if @game.state == 'in_progress'
+    end
+
+    if @game.update(update_game_params)
       redirect_to game_url(@game), notice: 'Game was successfully updated.'
     else
       flash[:notice] = @game.errors.map(&:message).join(' ')
@@ -55,39 +70,21 @@ class GamesController < ApplicationController
     redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
 
-  def start_game
-    @game = Game.find(params[:id])
-    @game.update(state: 'in_progress')
-    redirect_to @game
-  end
-
-  def complete_game
-    @game = Game.find(params[:id])
-    @game.update(state: 'completed')
-    redirect_to @game
-  end
-
-  def cancel_game
-    @game = Game.find(params[:id])
-    @game.update(state: 'canceled')
-    redirect_to @game
-  end
-
   private
 
   def set_game
     @game = Game.includes(:players).find(params[:id])
   end
 
-  def game_params
-    params.require(:game).permit(:state, player_ids: [])
+  def create_game_params
+    params.require(:game).permit(player_ids: [])
   end
 
-  def update_params
+  def update_game_params
     if @game.state_created?
-      game_params
+      create_game_params
     else
-      params.require(:game).permit(:state)
+      params.require(:game).permit(:state, players_ids: [])
     end
   end
 end

@@ -1,20 +1,12 @@
 <div class="btn-group">
-  <% if game.state_created? %>
-    <% if game.game_players.count >= Game::MIN_PLAYERS_PER_GAME %>
-      <%= button_to start_game_game_path(game), method: :put, class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-        <i class="bi bi-play-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
-      <% end %>
-    <% end %>
-    <%= button_to cancel_game_game_path(game), method: :put, class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-      <i class="bi bi-x-circle-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
-    <% end %>
-  <% elsif game.state_in_progress?%>
-    <%= button_to cancel_game_game_path(game), method: :put, class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-      <i class="bi bi-x-circle-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
-    <% end %>
-    <%= button_to complete_game_game_path(game), method: :put, class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-      <i class="bi bi-check-circle-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
-    <% end %>
+  <%= form_for game, method: :put do |f| %>
+    <%= f.hidden_field :commit, value: 'Start Game' if game.state == 'created' %>
+    <%= f.hidden_field :commit, value: 'Cancel Game' if game.state == 'in_progress' || game.state == 'created' %>
+    <%= f.hidden_field :commit, value: 'Complete Game' if game.state == 'in_progress' %>
+
+    <%= f.submit 'Start Game', class: 'btn btn-primary btn-sm' if game.state == 'created' %>
+    <%= f.submit 'Cancel Game', class: 'btn btn-danger btn-sm' if game.state == 'in_progress' || game.state == 'created' %>
+    <%= f.submit 'Complete Game', class: 'btn btn-success btn-sm' if game.state == 'in_progress' %>
   <% end %>
   <%= link_to game_path(game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
     <i class="bi bi-eye-fill" style="font-size: 1.1rem; color: #0d6efd;"></i>&nbsp;
