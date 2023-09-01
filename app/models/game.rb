@@ -10,6 +10,7 @@ class Game < ApplicationRecord
     canceled: %i[canceled]
   }.freeze
 
+  after_update :reorder_game_players
   validate :valid_state_transition, on: :update
   validates :game_players, length: {
     maximum: MAX_PLAYERS_PER_GAME,
@@ -31,7 +32,7 @@ class Game < ApplicationRecord
   }, _prefix: true
 
   def can_start?
-    state_created? && game_players.count.between?(MIN_PLAYERS_PER_GAME, MAX_PLAYERS_PER_GAME)
+    state_created? && game_players.size.between?(MIN_PLAYERS_PER_GAME, MAX_PLAYERS_PER_GAME)
   end
 
   def can_complete?
@@ -60,5 +61,13 @@ class Game < ApplicationRecord
     return if VALID_TRANSITIONS[state_was.to_sym].include?(state.to_sym)
 
     errors.add(:state, 'invalid state transition')
+  end
+
+  def reorder_game_players
+    return if game_players.pluck(:position).sort == [*1..game_players.size]
+
+    game_players.each_with_index do |game_player, index|
+      game_player.update(position: index + 1)
+    end
   end
 end

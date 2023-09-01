@@ -29,15 +29,15 @@ class GamesController < ApplicationController
   end
 
   def update
-    if update_game_params[:player_ids]
-      to_delete = @game.player_ids - update_game_params[:player_ids].to_a
-      @game.game_players.where(player_id: to_delete).map(&:destroy!)
-    end
-
     if @game.update(update_game_params)
-      redirect_to games_url(page: params[:page]), notice: 'Game was successfully updated.'
+      if params[:page]
+        redirect_to games_url(page: params[:page]), notice: 'Game was successfully updated.'
+      else
+        redirect_to game_url(@game), notice: 'Game was successfully updated.'
+      end
     else
       flash[:notice] = @game.errors.map(&:message).join(' ')
+      @game.reload
       render :edit, status: :unprocessable_entity
     end
   end

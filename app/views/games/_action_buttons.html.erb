@@ -1,6 +1,6 @@
 <div class="btn-group game-actions">
   <%# Show start_game button %>
-  <%= button_to game_path(game, { game: { state: :in_progress }, page: params[:page]}),
+  <%= button_to game_path(game, { game: { state: :in_progress }, page: params[:page] }),
                 method: :patch,
                 disabled: !game.can_start?,
                 title: 'Start',
@@ -18,7 +18,7 @@
   <% end %>
 
   <%# Show completed_game button %>
-  <%= button_to game_path(game, { game: { state: :completed }, page: params[:page]}),
+  <%= button_to game_path(game, { game: { state: :completed }, page: params[:page] }),
                 method: :patch,
                 disabled: !game.can_complete?,
                 title: 'Complete',
