@@ -1,0 +1,38 @@
+<div class="btn-group game-actions">
+  <%# Show start_game button %>
+  <%= button_to game_path(game, { game: { state: :in_progress }, page: params[:page] }),
+                method: :patch,
+                disabled: !game.can_start?,
+                title: 'Start',
+                class:"text-decoration-none btn btn-empty btn-sm" do %>
+    <i class="bi bi-play-fill"></i>&nbsp;
+  <% end %>
+
+  <%# Show cancel_game button %>
+  <%= button_to game_path(game, { game: { state: :canceled }, page: params[:page] }),
+                method: :patch,
+                disabled: !game.can_cancel?,
+                title: 'Cancel',
+                class:"text-decoration-none btn btn-empty btn-sm" do %>
+    <i class="bi bi-x-circle-fill"></i>&nbsp;
+  <% end %>
+
+  <%# Show completed_game button %>
+  <%= button_to game_path(game, { game: { state: :completed }, page: params[:page] }),
+                method: :patch,
+                disabled: !game.can_complete?,
+                title: 'Complete',
+                class:"text-decoration-none btn btn-empty btn-sm" do %>
+    <i class="bi bi-check-circle-fill"></i>&nbsp;
+  <% end %>
+
+  <%= link_to game_path(game), class:"text-decoration-none btn btn-empty btn-sm", title: 'View' do %>
+    <i class="bi bi-eye-fill"></i>&nbsp;
+  <% end %>
+  <%= link_to edit_game_path(game), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
+    <i class="bi bi-pencil-fill"></i>&nbsp;
+  <% end %>
+  <%= button_to game_path(game), method: :delete, class:"btn btn-empty btn-sm", title: 'Delete' do %>
+    <i class="bi bi-trash3-fill"></i>&nbsp;
+  <% end %>
+</div>

@@ -1,21 +1,23 @@
 <h1>
-  <p style="float: left;">Game <%= @game.id.split("-").first %></p>
+  <p style="float: left;">
+    Game <%= @game.id.split("-").first %>
+    <a class="d-inline-flex align-items-center mb-2 text-body-emphasis text-decoration-none" href="/" aria-label="Bootstrap">
+      <span class="badge rounded-pill bg-info"><%= @game.state.humanize %></span>
+    </a>
+  </p>
   <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary" %></p>
 </h1>
 
 <table class="table table table-striped table-hover table-sm">
   <thead class="table-dark">
     <tr style="text-align: left">
-      <th scope="col">State</th>
-      <th scope="col">Created</th>
       <th scope="col">Players</th>
+      <th scope="col">Created</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody style="text-align: left">
     <tr>
-      <td scope="row"><%= @game.state.humanize %></td>
-      <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
       <td scope="row">
         <% if @game.game_players.any? %>
           <% @game.game_players.each do |player| %>
@@ -24,17 +26,9 @@
         <% else %>
           No players
         <% end %>
+      <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
       </td>
-      <td scope="row">
-        <div class="btn-group">
-            <%= link_to edit_game_path(@game), class:"text-decoration-none btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-              <i class="bi bi-pencil-fill" style="color: #0d6efd;"></i>&nbsp;
-            <% end %>
-            <%= button_to game_path(@game), method: :delete, class:"btn btn-empty btn-sm", style: "padding: 0.1rem !important;" do %>
-              <i class="bi bi-trash3-fill" style="color: #0d6efd;"></i>
-            <% end %>
-        </div>
-      </td>
+      <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
     </tr>
   </tbody>
 </table>
