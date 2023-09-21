@@ -23,7 +23,7 @@ class GamesController < ApplicationController
     if @game.save
       redirect_to games_url, notice: 'Game was successfully created.'
     else
-      flash[:notice] = @game.errors.map(&:message).join(' ')
+      flash.now[:notice] = @game.errors.map(&:message).join(' ')
       render :new, status: :unprocessable_entity
     end
   end
@@ -36,7 +36,7 @@ class GamesController < ApplicationController
         redirect_to game_url(@game), notice: 'Game was successfully updated.'
       end
     else
-      flash[:notice] = @game.errors.map(&:message).join(' ')
+      flash.now[:notice] = @game.errors.map(&:message).join(' ')
       @game.reload
       render :edit, status: :unprocessable_entity
     end
