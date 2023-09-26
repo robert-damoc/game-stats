@@ -1,12 +1,7 @@
 <%= form_with(model: player) do |form| %>
-  <% if player.errors.any? %>
-    <div class="alert alert-warning mt-1" role="alert">
-      <%= player.errors.full_messages.to_sentence.capitalize %>
-    </div>
-  <% end %>
-
   <%= form.label :name, "Name", class: "form-label" %>
   <%= form.text_field :name, auto_focus: true, class: "form-control" %>
+  <%= inline_error_for(:name, player) %>
 
   <%= link_to "Cancel", players_path, class: "btn btn-light" %>
 
