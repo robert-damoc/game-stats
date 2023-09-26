@@ -1,6 +1,6 @@
 <%= form_with(model: player) do |form| %>
   <% if player.errors.any? %>
-    <div class="alert alert-danger" role="alert">
+    <div class="alert alert-warning mt-1" role="alert">
       <%= player.errors.full_messages.to_sentence.capitalize %>
     </div>
   <% end %>

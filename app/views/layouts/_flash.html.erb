@@ -1,5 +1,14 @@
-<% flash.each do |_flash_type, message| %>
-  <div class="flash-message" data-controller="removals" >
+<% flash.each do |flash_type, message| %>
+  <% case flash_type %>
+  <% when 'alert' %>
+    <% message_klass = 'alert-warning' %>
+  <% when 'into' %>
+    <% message_klass = 'alert-info' %>
+  <% else %>
+    <% message_klass = 'alert-success' %>
+  <% end %>
+
+  <div class="alert <%= message_klass %>" role="alert" data-controller="removals" >
     <%= message %>
   </div>
 <% end %>
