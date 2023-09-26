@@ -1,13 +1,12 @@
 <%= form_with(model: player) do |form| %>
   <% if player.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(player.errors.count, "error") %> prohibited this player from being saved:</h2>
-
-      <ul>
-        <% player.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+    <div class="error-message">
+      <%= player.errors.full_messages.to_sentence.capitalize %>
     </div>
   <% end %>
+
+  <%= form.label :name, "Name", class: "form-label" %>
+  <%= form.text_field :name, class: "form-control" %>
+
+  <%= form.submit class: "btn btn-secondary" %>
 <% end %>

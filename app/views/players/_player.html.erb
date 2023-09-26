@@ -1,3 +1,12 @@
-<div id="<%= dom_id player %>">
-  <%= player.name %>
+<div class="player">
+  <%= link_to player.name, player_path(player) %>
+  <div class="actions">
+    <%= button_to "Delete",
+                  player_path(player),
+                  method: :delete,
+                  class: "btn btn-light" %>
+    <%= link_to "Edit",
+                edit_player_path(player),
+                class: "btn btn-light" %>
+  </div>
 </div>

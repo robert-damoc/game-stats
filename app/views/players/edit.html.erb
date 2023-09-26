@@ -1,14 +1,9 @@
-<h1>
-  <p style="float: left;">Editing player - <%= @player.name %></p>
-  <p style="float: right;"><%= link_to "Back to players", players_path, class: "btn btn-primary" %></p>
-</h1>
-<br/><br/>
-<%= form_with model: @player, url: player_path(@player), method: :put do |form| %>
-  <br/>
-  <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Name</label>
-    <input class="form-control" id= <%= form.text_field :name %>
-    <br/>
-    <%= form.submit 'Save', class:"btn btn-primary" %>
+<main class="container">
+  <%= link_to sanitize("&larr; Back to player"), player_path(@player) %>
+
+  <div class="header">
+    <h1>Edit player</h1>
   </div>
-<% end %>
+
+  <%= render "form", player: @player %>
+</main>

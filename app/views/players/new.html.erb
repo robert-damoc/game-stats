@@ -1,12 +1,9 @@
-<div style="display: flex; justify-content: space-between; align-items: center;">
-  <h1>New Player</h1>
-  <%= link_to "Back to players", players_path, class: "btn btn-primary" %>
-</div>
+<main class="container">
+  <%= link_to sanitize("&larr; Back to players"), players_path %>
 
-<%= form_with model: @player, url: players_path, method: :post do |form| %>
-  <div class="mb-3">
-    <%= form.label :name, "Name", class: "form-label" %>
-    <%= form.text_field :name, class: "form-control", id: "player_name" %>
+  <div class="header">
+    <h1>New player</h1>
   </div>
-  <%= form.submit 'Create player', class:"btn btn-primary" %>
-<% end %>
+
+  <%= render "form", player: @player %>
+</main>
