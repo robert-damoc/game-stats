@@ -3,4 +3,6 @@ class Player < ApplicationRecord
   has_many :games, through: :game_players
 
   validates :name, presence: true, length: { maximum: 30 }
+
+  broadcasts_to ->(_player) { 'players' }, inserts_by: :prepend
 end
