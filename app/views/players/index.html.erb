@@ -3,8 +3,13 @@
     <h1>Players</h1>
     <%= link_to "New player",
                 new_player_path,
+                data: { turbo_frame: dom_id(Player.new) },
                 class: "btn btn-primary" %>
   </div>
 
-  <%= render @players %>
+  <%= turbo_frame_tag Player.new %>
+
+  <%= turbo_frame_tag "players" do %>
+    <%= render @players %>
+  <% end %>
 </main>

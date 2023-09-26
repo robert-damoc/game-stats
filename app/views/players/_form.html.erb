@@ -6,7 +6,9 @@
   <% end %>
 
   <%= form.label :name, "Name", class: "form-label" %>
-  <%= form.text_field :name, class: "form-control" %>
+  <%= form.text_field :name, auto_focus: true, class: "form-control" %>
+
+  <%= link_to "Cancel", players_path, class: "btn btn-light" %>
 
   <%= form.submit class: "btn btn-secondary" %>
 <% end %>

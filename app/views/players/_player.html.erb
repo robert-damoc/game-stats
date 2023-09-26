@@ -1,12 +1,16 @@
-<div class="player">
-  <%= link_to player.name, player_path(player) %>
-  <div class="actions">
-    <%= button_to "Delete",
-                  player_path(player),
-                  method: :delete,
+<%= turbo_frame_tag player do %>
+  <div class="player">
+    <%= link_to player.name,
+                player_path(player),
+                data: { turbo_frame: "_top" } %>
+    <div class="actions">
+      <%= button_to "Delete",
+                    player_path(player),
+                    method: :delete,
+                    class: "btn btn-light" %>
+      <%= link_to "Edit",
+                  edit_player_path(player),
                   class: "btn btn-light" %>
-    <%= link_to "Edit",
-                edit_player_path(player),
-                class: "btn btn-light" %>
+    </div>
   </div>
-</div>
+<% end %>

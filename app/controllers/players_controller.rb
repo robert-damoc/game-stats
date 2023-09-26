@@ -2,10 +2,7 @@ class PlayersController < ApplicationController
   before_action :set_player, only: %i[show edit update destroy]
 
   def index
-    @sort = params[:sort] || Player.default_sort_column
-    @sort_dir = params[:sort_dir] || Player.default_direction
-
-    @players = Player.all.sort_table(@sort, @sort_dir)
+    @players = Player.all.order(created_at: :desc)
     @pagy, @players = pagy(@players)
   end
 
@@ -21,7 +18,10 @@ class PlayersController < ApplicationController
     @player = Player.new(player_params)
 
     if @player.save
-      redirect_to players_path, notice: 'Player was successfully created.'
+      respond_to do |format|
+        format.html { redirect_to players_path, notice: 'Player was successfully created.' }
+        format.turbo_stream
+      end
     else
       flash.now[:notice] = @player.errors.map(&:message).join(' ')
       render :new, status: :unprocessable_entity
@@ -40,7 +40,10 @@ class PlayersController < ApplicationController
   def destroy
     @player.destroy
 
-    redirect_to players_path, notice: 'Player was successfully destroyed.'
+    respond_to do |format|
+      format.html { redirect_to players_path, notice: 'Player was successfully destroyed.' }
+      format.turbo_stream
+    end
   end
 
   private
