@@ -19,8 +19,8 @@ class PlayersController < ApplicationController
 
     if @player.save
       respond_to do |format|
-        format.html { redirect_to players_path, notice: 'Player was successfully created.' }
-        format.turbo_stream { flash.now[:notice] = 'Player was successfully created.' }
+        format.html { redirect_to players_path, notice: "#{@player.name} was successfully created." }
+        format.turbo_stream { flash.now[:notice] = "#{@player.name} was successfully created." }
       end
     else
       flash.now[:notice] = @player.errors.map(&:message).join(' ')
@@ -30,7 +30,10 @@ class PlayersController < ApplicationController
 
   def update
     if @player.update(player_params)
-      redirect_to players_path, notice: 'Player was successfully updated.'
+      respond_to do |format|
+        format.html { redirect_to players_path, notice: "#{@player.name} was successfully updated." }
+        format.turbo_stream { flash.now[:notice] = "#{@player.name} was successfully updated." }
+      end
     else
       flash.now[:notice] = @player.errors.map(&:message).join(' ')
       render :edit, status: :unprocessable_entity
@@ -41,8 +44,8 @@ class PlayersController < ApplicationController
     @player.destroy
 
     respond_to do |format|
-      format.html { redirect_to players_path, notice: 'Player was successfully destroyed.' }
-      format.turbo_stream
+      format.html { redirect_to players_path, notice: "#{@player.name} was successfully removed." }
+      format.turbo_stream { flash.now[:notice] = "#{@player.name} was successfully removed." }
     end
   end
 
