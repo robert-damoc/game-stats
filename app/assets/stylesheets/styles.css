@@ -26,3 +26,130 @@
 .game-actions [disabled="disabled"] i {
   color: rgb(89, 145, 175);
 }
+
+.table {
+  display: grid;
+  grid-template-columns: repeat(4, 2fr) 1fr;
+  column-gap: 2rem;
+  align-items: bottom;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  border-collapse: collapse;
+}
+
+turbo-frame:last-child .table {
+  border-bottom: 1px solid #ccc;
+}
+
+turbo-frame:nth-child(even) .table {
+  background: #fafafa;
+}
+
+.datefield {
+  line-height: 1.12;
+}
+
+.pagy-nav,
+.pagy-nav-js {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.pagy-nav .page a,
+.pagy-nav .page.active,
+.pagy-nav .page.prev.disabled,
+.pagy-nav .page.next.disabled,
+.pagy-nav-js .page a,
+.pagy-nav-js .page.active,
+.pagy-nav-js .page.prev.disabled,
+.pagy-nav-js .page.next.disabled {
+  display: block;
+  border-radius: 4px;
+  padding: 1px 3px;
+  font-size: 0.875rem;
+  color: #858585;
+  font-weight: 600;
+  background-color: #eee;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+
+  &:hover {
+    background-color: #f6f6f6;
+  }
+
+  &:active {
+    background-color: #333;
+    color: #fff;
+  }
+}
+
+.pagy-nav .page.prev.disabled,
+.pagy-nav .page.next.disabled,
+.pagy-nav-js .page.prev.disabled,
+.pagy-nav-js .page.next.disabled {
+  color: #858585;
+  cursor: default;
+
+  &:hover {
+    color: #858585;
+    background-color: #eee;
+  }
+
+  &:active {
+    color: #858585;
+    background-color: #eee;
+  }
+}
+
+.pagy-nav .page.active,
+.pagy-nav-js .page.active {
+  color: #fff;
+  cursor: default;
+  background-color: #858585;
+
+  &:hover {
+    color: #fff;
+    background-color: #858585;
+  }
+
+  &:active {
+    color: #fff;
+    background-color: #858585;
+  }
+}
+
+.pagy-combo-nav-js {
+  display: flex;
+  max-width: max-content;
+  border-radius: 16px;
+  padding: 1px 3px;
+  font-size: 0.875rem;
+  color: #858585;
+  font-weight: 600;
+  background-color: #eee;
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11);
+}
+
+.pagy-combo-nav-js .pagy-combo-input {
+  background-color: #fff;
+  padding-left: 2px;
+  padding-right: 2px;
+  border-radius: 8px;
+}
+
+.pagy-combo-nav-js .page.prev,
+.pagy-combo-nav-js .page.next {
+  &:hover {
+    color: #454545;
+  }
+  &:active {
+    color: #454545;
+  }
+}
+
+.pagy-combo-nav-js .page.prev.disabled,
+.pagy-combo-nav-js .page.next.disabled {
+  color: #858585;
+  cursor: default;
+}
