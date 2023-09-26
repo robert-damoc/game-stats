@@ -9,7 +9,7 @@ module ApplicationHelper
     html = []
     if form_obj.errors[field].any?
       html << form_obj.errors[field].map do |msg|
-        tag.div(msg, class: 'text-danger m-0 p-0 text-sm-end mb-2')
+        tag.div(msg, class: 'text-danger m-0 p-0 text-sm-end position-fixed')
       end
     end
     html.join.html_safe # rubocop:disable Rails/OutputSafety
