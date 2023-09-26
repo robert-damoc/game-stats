@@ -23,7 +23,6 @@ class PlayersController < ApplicationController
         format.turbo_stream { flash.now[:notice] = "#{@player.name} was successfully created." }
       end
     else
-      flash.now[:notice] = @player.errors.map(&:message).join(' ')
       render :new, status: :unprocessable_entity
     end
   end
@@ -35,7 +34,6 @@ class PlayersController < ApplicationController
         format.turbo_stream { flash.now[:notice] = "#{@player.name} was successfully updated." }
       end
     else
-      flash.now[:notice] = @player.errors.map(&:message).join(' ')
       render :edit, status: :unprocessable_entity
     end
   end
