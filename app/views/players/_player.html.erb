@@ -1,16 +1,14 @@
 <%= turbo_frame_tag player do %>
-  <div class="player">
-    <%= link_to player.name,
-                player_path(player),
-                data: { turbo_frame: "_top" } %>
-    <div class="actions">
-      <%= button_to "Delete",
-                    player_path(player),
+  <div class="table w-100">
+    <div><%= player.id.split('-').first %></div>
+    <div><%= player.name %></div>
+    <div>
+      <%= link_to "Edit", edit_player_path(player), class: "btn btn-light d-inline-block border-secondary h-100" %>
+      <%= button_to "Delete", player_path(player),
                     method: :delete,
-                    class: "btn btn-light" %>
-      <%= link_to "Edit",
-                  edit_player_path(player),
-                  class: "btn btn-light" %>
+                    class: "btn btn-light d-inline-block border-secondary h-100",
+                    form_class: 'd-inline-block',
+                    form: { data: { turbo_confirm: 'Are you sure?' }} %>
     </div>
   </div>
 <% end %>

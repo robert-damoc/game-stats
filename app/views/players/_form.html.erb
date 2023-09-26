@@ -1,9 +1,13 @@
-<%= form_with(model: player) do |form| %>
-  <%= form.label :name, "Name", class: "form-label" %>
-  <%= form.text_field :name, auto_focus: true, class: "form-control" %>
-  <%= inline_error_for(:name, player) %>
-
-  <%= link_to "Cancel", players_path, class: "btn btn-light" %>
-
-  <%= form.submit class: "btn btn-secondary" %>
+<%= form_with(model: player, class: "table w-100") do |form| %>
+  <div class="d-block rounded-3 border border-secondary outline-none px-3 py-2">
+    <%= player.id&.split("-")&.first %>
+  </div>
+  <div>
+    <%= form.text_field :name, class: "d-block rounded-3 border border-secondary outline-none px-3 py-2" %>
+    <%= inline_error_for(:name, player) %>
+  </div>
+  <div>
+    <%= link_to "Cancel", players_path, class: "btn btn-light d-inline-block border border-secondary h-100" %>
+    <%= form.submit "Update", class: "btn btn-light d-inline-block border border-secondary h-100" %>
+  </div>
 <% end %>

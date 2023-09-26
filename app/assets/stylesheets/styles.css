@@ -34,6 +34,7 @@
   align-items: bottom;
   padding: 1rem;
   border: 1px solid #ccc;
+  margin-bottom: 0;
   border-bottom: none;
   border-collapse: collapse;
 }

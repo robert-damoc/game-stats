@@ -1,17 +1,25 @@
 <%= turbo_stream_from "players" %>
 
 <main class="container">
-  <div class="header">
-    <h1>Players</h1>
+  <div class="row justify-content-between align-items-center">
+    <h1 class="fw-bold">Players</h1>
     <%= link_to "New player",
                 new_player_path,
                 data: { turbo_frame: dom_id(Player.new) },
                 class: "btn btn-primary" %>
   </div>
 
-  <%= turbo_frame_tag Player.new %>
+  <div class="my-5 w-100">
+    <div class="table fw-bold w-100">
+      <div>Id</div>
+      <div>Name</div>
+      <div></div>
+    </div>
+    <%= turbo_frame_tag Player.new %>
 
-  <%= turbo_frame_tag "players" do %>
-    <%= render @players %>
-  <% end %>
+    <%= turbo_frame_tag "players" do %>
+      <%= render @players %>
+      <%== pagy_nav(@pagy, link_extra: 'data-turbo-action="advance"') %>
+    <% end %>
+  </div>
 </main>
