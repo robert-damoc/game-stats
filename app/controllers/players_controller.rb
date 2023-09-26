@@ -20,7 +20,7 @@ class PlayersController < ApplicationController
     if @player.save
       respond_to do |format|
         format.html { redirect_to players_path, notice: 'Player was successfully created.' }
-        format.turbo_stream
+        format.turbo_stream { flash.now[:notice] = 'Player was successfully created.' }
       end
     else
       flash.now[:notice] = @player.errors.map(&:message).join(' ')
