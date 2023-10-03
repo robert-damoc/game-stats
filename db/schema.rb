@@ -40,15 +40,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_29_095022) do
   end
 
   create_table "rounds", force: :cascade do |t|
-    t.uuid "game"
-    t.uuid "player"
+    t.uuid "game_id"
+    t.uuid "player_id"
     t.string "round_type", limit: 20, null: false
     t.integer "position"
     t.jsonb "scores"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_rounds_on_game_id"
+    t.index ["player_id"], name: "index_rounds_on_player_id"
   end
 
   add_foreign_key "game_players", "games"
   add_foreign_key "game_players", "players"
+  add_foreign_key "rounds", "games"
+  add_foreign_key "rounds", "players"
 end
