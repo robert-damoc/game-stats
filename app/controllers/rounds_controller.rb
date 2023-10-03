@@ -1,5 +1,5 @@
 class RoundsController < ApplicationController
-  before_action :set_round, only: %i[ show edit update destroy ]
+  before_action :set_round, only: %i[show edit update destroy]
 
   def index
     @rounds = Round.all
@@ -33,19 +33,17 @@ class RoundsController < ApplicationController
     end
   end
 
-  # DELETE /rounds/1 or /rounds/1.json
   def destroy
     @round.destroy
     redirect_to rounds_url, notice: 'Round was successfully destroyed.'
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+
     def set_round
       @round = Round.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def round_params
       params.fetch(:round, {})
     end
