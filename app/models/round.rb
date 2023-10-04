@@ -27,11 +27,8 @@ class Round < ApplicationRecord
   private
 
   def unique_round_type_per_game
-    if game_id && player_id
-      if Round.where(game_id: game_id, round_type: round_type).where.not(player_id: player_id).exists?
-        errors.add(:round_type, "has already been chosen by another player for this game")
-      end
+    if game.rounds.exists?(round_type: round_type, player_id: player_id)
+      errors.add(:round_type, "Already played #{round_type}. You can play every type of round only one time.")
     end
   end
-
 end
