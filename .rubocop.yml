@@ -27,6 +27,9 @@ Rails/Output:
   Exclude:
    - 'db/seeds.rb'
 
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
 RSpec/NestedGroups:
   Enabled: false
 
