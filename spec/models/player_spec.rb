@@ -32,9 +32,35 @@ describe Player do
       end
 
       context 'without name provided' do
-        let(:player_name) { Faker::Name.first_name }
+        let(:player_name) { Faker::Lorem.characters(number: 15) }
 
-        it 'does not raise ActiveRecord::RecordInvalid' do
+        it 'does not raise error' do
+          expect { described_class.create!(name: player_name) }.not_to raise_error
+        end
+
+        it 'creates the record' do
+          expect { described_class.create(name: player_name) }.to change(described_class, :count).by(1)
+        end
+      end
+    end
+
+    context 'when validating the name length' do
+      context 'when length is bigger than 30' do
+        let(:player_name) { Faker::Lorem.characters(number: 40) }
+
+        it 'raises ActiveRecord::RecordInvalid' do
+          expect { described_class.create!(name: player_name) }.to raise_error(ActiveRecord::RecordInvalid)
+        end
+
+        it 'does not create the record' do
+          expect { described_class.create(name: player_name) }.not_to change(described_class, :count)
+        end
+      end
+
+      context 'when length is smaller than 30' do
+        let(:player_name) { Faker::Lorem.characters(number: 20) }
+
+        it 'does not raise error' do
           expect { described_class.create!(name: player_name) }.not_to raise_error
         end
 
