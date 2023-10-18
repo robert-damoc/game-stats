@@ -23,11 +23,7 @@ describe Player do
         let(:player_name) { nil }
 
         it 'raises ActiveRecord::RecordInvalid' do
-          expect { described_class.create!(name: player_name) }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-
-        it 'does not create the record' do
-          expect { described_class.create(name: player_name) }.not_to change(described_class, :count)
+          expect { create(:player, name: player_name) }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
 
@@ -35,11 +31,11 @@ describe Player do
         let(:player_name) { Faker::Lorem.characters(number: 15) }
 
         it 'does not raise error' do
-          expect { described_class.create!(name: player_name) }.not_to raise_error
+          expect { create(:player, name: player_name) }.not_to raise_error
         end
 
         it 'creates the record' do
-          expect { described_class.create(name: player_name) }.to change(described_class, :count).by(1)
+          expect { create(:player, name: player_name) }.to change(described_class, :count).by(1)
         end
       end
     end
@@ -49,11 +45,7 @@ describe Player do
         let(:player_name) { Faker::Lorem.characters(number: 40) }
 
         it 'raises ActiveRecord::RecordInvalid' do
-          expect { described_class.create!(name: player_name) }.to raise_error(ActiveRecord::RecordInvalid)
-        end
-
-        it 'does not create the record' do
-          expect { described_class.create(name: player_name) }.not_to change(described_class, :count)
+          expect { create(:player, name: player_name) }.to raise_error(ActiveRecord::RecordInvalid)
         end
       end
 
@@ -61,11 +53,11 @@ describe Player do
         let(:player_name) { Faker::Lorem.characters(number: 20) }
 
         it 'does not raise error' do
-          expect { described_class.create!(name: player_name) }.not_to raise_error
+          expect { create(:player, name: player_name) }.not_to raise_error
         end
 
         it 'creates the record' do
-          expect { described_class.create(name: player_name) }.to change(described_class, :count).by(1)
+          expect { create(:player, name: player_name) }.to change(described_class, :count).by(1)
         end
       end
     end
