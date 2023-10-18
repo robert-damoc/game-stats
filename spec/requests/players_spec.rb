@@ -9,7 +9,7 @@ describe 'Players' do
     let(:params) { {} }
     let(:expected_pagy_vars) do
       {
-        page:,
+        page: pagy_page,
         items: Pagy::DEFAULT[:items],
         count: pagy_count,
         in: pagy_in
@@ -17,7 +17,7 @@ describe 'Players' do
     end
 
     context 'when there are no players' do
-      let(:page) { 1 }
+      let(:pagy_page) { 1 }
       let(:pagy_count) { 0 }
       let(:pagy_in) { 0 }
 
@@ -29,11 +29,13 @@ describe 'Players' do
     end
 
     context 'when providing invalid page number' do
-      before do
-        create_list(:player, 2)
-      end
+      let(:params) { { page: 2 } }
 
-      # TODO: Finish this spec
+      before { create_list(:player, 2) }
+
+      it do
+        expect { get_players }.to raise_error(Pagy::OverflowError)
+      end
     end
 
     context "when there are more than #{Pagy::DEFAULT[:items]} players" do
@@ -46,7 +48,7 @@ describe 'Players' do
       end
 
       context 'without explicit page number' do
-        let(:page) { 1 }
+        let(:pagy_page) { 1 }
         let(:pagy_count) { players_count }
         let(:pagy_in) { Pagy::DEFAULT[:items] }
 
@@ -58,7 +60,7 @@ describe 'Players' do
       context 'with explicit page number' do
         let(:params) { { page: 2 } }
 
-        let(:page) { 2 }
+        let(:pagy_page) { 2 }
         let(:pagy_count) { players_count }
         let(:pagy_in) { players_count - Pagy::DEFAULT[:items] }
 
@@ -71,7 +73,7 @@ describe 'Players' do
     context "when there are less than #{Pagy::DEFAULT[:items]} players" do
       let(:players_count) { Pagy::DEFAULT[:items] - 1 }
 
-      let(:page) { 1 }
+      let(:pagy_page) { 1 }
       let(:pagy_count) { players_count }
       let(:pagy_in) { players_count }
 
