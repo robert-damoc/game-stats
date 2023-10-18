@@ -27,6 +27,9 @@ Rails/Output:
   Exclude:
    - 'db/seeds.rb'
 
+RSpec/NestedGroups:
+  Enabled: false
+
 Style/ClassAndModuleChildren:
   Exclude:
     - 'test/channels/application_cable/connection_test.rb'
