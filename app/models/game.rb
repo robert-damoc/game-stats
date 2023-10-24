@@ -23,7 +23,6 @@ class Game < ApplicationRecord
 
   has_many :game_players, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :game
   has_many :players, through: :game_players
-  has_many :rounds, dependent: :destroy
 
   enum state: {
     created: 'created',

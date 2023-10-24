@@ -3,10 +3,9 @@ class Round < ApplicationRecord
 
   validates :round_type, presence: true
 
-  after_validation :ensure_uniqueness
+  validate :unique_round_for_player_in_game
 
-  belongs_to :game
-  belongs_to :player
+  belongs_to :game_player
 
   enum round_type: {
     rentz_minus: 'Rentz -',
@@ -19,10 +18,13 @@ class Round < ApplicationRecord
     diamonds: 'Diamonds'
   }
 
-  def ensure_uniqueness
-    return unless Round.where(player_id:, game_id:, round_type:).where.not(id:).any?
-
-    errors.add(:base, 'Round with the same (player_id, game_id, round_type) already exists!')
-    raise ActiveRecord::RecordInvalid, self
+  def unique_round_for_player_in_game
+    if Round.where(game_player_id:, round_type:)
+            .where.not(id:)
+            .joins(:game_player)
+            .where(game_players: { game_id: game_player.game_id })
+            .any?
+      errors.add(:base, 'Round with the same (player_id, game_id, round_type) already exists!')
+    end
   end
 end

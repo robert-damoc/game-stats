@@ -1,6 +1,7 @@
 class GamePlayer < ApplicationRecord
   belongs_to :game, inverse_of: :game_players
   belongs_to :player, inverse_of: :game_players
+  has_many :rounds, dependent: :destroy
 
   acts_as_list scope: :game
 
