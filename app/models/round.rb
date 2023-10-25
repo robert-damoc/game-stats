@@ -1,5 +1,5 @@
 class Round < ApplicationRecord
-  acts_as_list scope: :game_player
+  before_create :set_position
 
   validates :round_type, presence: true
 
@@ -26,5 +26,16 @@ class Round < ApplicationRecord
             .any?
       errors.add(:base, 'Round with the same (player_id, game_id, round_type) already exists!')
     end
+  end
+
+  private
+
+  def set_position
+    last_position = Round
+                    .joins(game_player: :game)
+                    .where(game_players: { game_id: game_player.game_id })
+                    .maximum(:position) || 0
+
+    self.position = last_position + 1
   end
 end
