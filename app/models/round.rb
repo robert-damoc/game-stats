@@ -1,5 +1,5 @@
 class Round < ApplicationRecord
-  acts_as_list scope: :game
+  acts_as_list scope: :game_player
 
   validates :round_type, presence: true
 

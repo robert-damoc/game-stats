@@ -15,8 +15,8 @@ Game.find_each do |game|
     game.game_players.create(player:)
   end
 end
-puts 'Started seeding Rounds'
 
+puts 'Started seeding Rounds'
 GamePlayer.find_each do |game_player|
   3.times do
     round_type = Round.round_types.keys.sample
