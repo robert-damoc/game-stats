@@ -1,1 +1,1 @@
-json.partial! "rounds/round", round: @round
+json.partial! 'rounds/round', round: @round
