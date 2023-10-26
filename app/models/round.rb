@@ -3,7 +3,8 @@ class Round < ApplicationRecord
   before_destroy :update_positions
 
   validates :round_type, presence: true
-  validate :unique_round_for_player_in_game
+  validates :round_type, uniqueness: { scope: :game_player_id,
+                                       message: 'Round already played!' }
 
   belongs_to :game_player
   has_one :game, through: :game_player
@@ -26,31 +27,12 @@ class Round < ApplicationRecord
 
   private
 
-  def unique_round_for_player_in_game
-    if Round.where(game_player_id:, round_type:)
-            .where.not(id:)
-            .joins(:game_player)
-            .where(game_players: { game_id: game_player.game_id })
-            .any?
-      errors.add(:base, 'Round with the same (player_id, game_id, round_type) already exists!')
-    end
-  end
-
   def set_position
-    last_position = game.rounds.where.not(id: nil).maximum(:position) || 0
+    last_position = game_player.game.rounds.where.not(id: nil).maximum(:position) || 0
     self.position = last_position + 1
   end
 
   def update_positions
-    if last_in_game_player_list?
-      next_round = game.rounds.order(:created_at).last
-      next_round&.update(position:)
-    else
-      game.rounds.where('rounds.position > ?', position).map(&:decrement_position)
-    end
-  end
-
-  def last_in_game_player_list?
-    game.rounds.order(:position).last == self
+    game.rounds.where('rounds.position > ?', position).map(&:decrement_position)
   end
 end
