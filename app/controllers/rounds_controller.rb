@@ -1,17 +1,16 @@
 class RoundsController < ApplicationController
   before_action :set_round, only: %i[edit update destroy]
   before_action :set_game_player
-  before_action :set_round, only: [:edit, :update, :destroy]
+  before_action :set_round, only: %i[edit update destroy]
 
   def new
-    @round = @game.rounds.new # Accessing rounds through game
+    @round = @game.rounds.new
   end
 
-  def edit
-  end
+  def edit;  end
 
   def create
-    @round = @game.rounds.new(round_params) # Accessing rounds through game
+    @round = @game.rounds.new(round_params)
 
     if @round.save
       redirect_to game_path(@game), notice: 'Round was successfully created.'
@@ -59,7 +58,6 @@ class RoundsController < ApplicationController
   end
 
   def set_round
-    @round = @game.rounds.find(params[:id]) # Accessing rounds through game
+    @round = @game.rounds.find(params[:id])
   end
 end
-
