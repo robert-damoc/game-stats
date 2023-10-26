@@ -28,7 +28,7 @@ class Round < ApplicationRecord
   private
 
   def set_position
-    last_position = game_player.game.rounds.where.not(id: nil).maximum(:position) || 0
+    last_position = game.rounds.where.not(id: nil).maximum(:position) || 0
     self.position = last_position + 1
   end
 
