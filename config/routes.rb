@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resources :rounds
   resources :players
-  resources :games
+  resources :games do
+    resources :rounds, only: %i[new create edit update destroy]
+  end
 
   root 'home#index'
 end

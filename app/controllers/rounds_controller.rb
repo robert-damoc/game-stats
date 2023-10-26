@@ -2,7 +2,7 @@ class RoundsController < ApplicationController
   before_action :set_round, only: %i[edit update destroy]
 
   def new
-    @round = Round.new
+    @round = @game_player.rounds.new
   end
 
   def edit; end
@@ -14,21 +14,25 @@ class RoundsController < ApplicationController
     if @round.save
       redirect_to game_round_path(@game_player.game, @round), notice: 'Round was successfully created.'
     else
-      render :new, status: :unprocessable_entity
+      render :new
     end
   end
 
   def update
+    @round = @game_player.rounds.find(params[:id])
+
     if @round.update(round_params)
-      redirect_to round_url(@round), notice: 'Round was successfully updated.'
+      redirect_to game_path(@game_player.game), notice: 'Round was successfully updated.'
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
+    @round = @game_player.rounds.find(params[:id])
     @round.destroy
-    redirect_to rounds_url, notice: 'Round was successfully destroyed.'
+
+    redirect_to game_path(@game_player.game), notice: 'Round was successfully destroyed.'
   end
 
   private
@@ -39,5 +43,9 @@ class RoundsController < ApplicationController
 
   def round_params
     params.require(:round).permit(:game_player_id, :round_type, :position, :scores)
+  end
+
+  def set_game_player
+    @game_player = GamePlayer.find_by(player_id: params[:player_id], game_id: params[:game_id])
   end
 end
