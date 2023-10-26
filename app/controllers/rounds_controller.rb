@@ -1,14 +1,13 @@
 class RoundsController < ApplicationController
   before_action :set_round, only: %i[edit update destroy]
   before_action :set_game_player
+  before_action :set_round, only: [:edit, :update, :destroy]
 
   def new
     @round = @game_player.rounds.new
   end
 
-  def edit
-    @round = @game_player.rounds.find(params[:id])
-  end
+  def edit; end
 
   def create
     @round = @game_player.rounds.new(round_params)
@@ -22,16 +21,23 @@ class RoundsController < ApplicationController
 
   def update
     @round = @game_player.rounds.find(params[:id])
+    player_id = params[:player_id]
+    updated_scores = params[:round][:scores]
 
-    if @round.update(round_params)
-      redirect_to game_path(@game_player.game), notice: 'Round was successfully updated.'
+    current_scores = @round.scores[player_id.to_s] || {}
+
+    current_scores.merge!(updated_scores)
+
+    @round.scores[player_id.to_s] = current_scores
+
+    if @round.save
+      redirect_to game_path(@game_player.game), notice: 'Scores updated successfully.'
     else
       render :edit, status: :unprocessable_entity
     end
   end
 
   def destroy
-    @round = @game_player.rounds.find(params[:id])
     @round.destroy
 
     redirect_to game_path(@game_player.game), notice: 'Round was successfully destroyed.'
@@ -51,7 +57,7 @@ class RoundsController < ApplicationController
     @game_player = GamePlayer.find_by(player_id: params[:player_id], game_id: params[:game_id])
   end
 
-  def set_game
-    @game = @game_player.game if @game_player
+  def set_round
+    @round = @game_player.rounds.find(params[:id])
   end
 end
