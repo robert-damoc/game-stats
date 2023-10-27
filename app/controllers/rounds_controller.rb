@@ -7,7 +7,7 @@ class RoundsController < ApplicationController
     @round = @game.rounds.new
   end
 
-  def edit;  end
+  def edit; end
 
   def create
     @round = @game.rounds.new(round_params)
