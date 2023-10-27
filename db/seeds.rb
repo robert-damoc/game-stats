@@ -16,4 +16,11 @@ Game.find_each do |game|
   end
 end
 
+puts 'Started seeding Rounds'
+GamePlayer.find_each do |game_player|
+  Round.round_types.keys.sample(3).each do |round_type|
+    game_player.rounds.create(round_type:)
+  end
+end
+
 puts 'Done!'
