@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2023_10_26_133128) do
-=======
-ActiveRecord::Schema[7.0].define(version: 2023_09_29_095022) do
->>>>>>> 678934c (create round table)
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"

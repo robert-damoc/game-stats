@@ -1,7 +1,6 @@
 class RoundsController < ApplicationController
   before_action :set_round, only: %i[edit update destroy]
   before_action :set_game_player
-  before_action :set_round, only: %i[edit update destroy]
 
   def new
     @round = @game.rounds.new
@@ -43,10 +42,6 @@ class RoundsController < ApplicationController
   end
 
   private
-
-  def set_round
-    @round = Round.find(params[:id])
-  end
 
   def round_params
     params.require(:round).permit(:game_player_id, :round_type, :position, :scores)
