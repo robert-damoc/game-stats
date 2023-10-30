@@ -11,6 +11,15 @@
     <%= f.collection_select :game_player_id, @game.game_players, :id, :name_with_position %>
   </div>
 
+    <div class="field">
+    <%= f.fields_for :scores do |g| %>
+      <% @game.game_players.each do |game_player| %>
+        <%= g.label "#{game_player.id}", game_player.player.name %>
+        <%= g.text_field "#{game_player.id}", @round.scores || { game_player.id.to_s => 0 } %>
+      <% end %>
+    <% end %>
+  </div>
+
   <div class="actions">
     <%= f.submit "Create Round" %>
   </div>

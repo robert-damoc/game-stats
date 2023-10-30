@@ -9,7 +9,7 @@ class Round < ApplicationRecord
   belongs_to :game_player
   has_one :game, through: :game_player
 
-  # serialize :scores, Hash
+  store_accessor :scores
 
   enum round_type: {
     rentz_minus: 'Rentz -',
