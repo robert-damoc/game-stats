@@ -41,15 +41,17 @@
         <th>Position</th>
         <th>Round Type</th>
         <th>Player</th>
+        <th>Scores</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
-      <% @game.rounds.each do |round| %>
+      <% @game.rounds.sort_by(&:position).each do |round| %>
         <tr>
-        <td><%= round.position   %></td>
+        <td><%= round.position %></td>
           <td><%= round.round_type %></td>
           <td><%= round.game_player.player.name %></td>
+          <td><%= round.scores %></td>
           <td>
             <%= link_to 'Edit', edit_game_round_path(@game, round), class: 'btn btn-primary btn-sm' %>
             <%= button_to 'Destroy', game_round_path(@game, round), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>

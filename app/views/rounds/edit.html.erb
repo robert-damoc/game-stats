@@ -7,39 +7,11 @@
   </div>
 
   <div class="field">
-    <%= f.label :game_player_id, "Choosing player" %>
-    <%= f.text_field :game_player_id, readonly: true, value: @round.game_player_id %>
+    <%= f.label :game_player_id, "Select Player" %>
+    <%= f.collection_select :game_player_id, @game.game_players, :id, :name_with_position %>
   </div>
-
-  <div class="field">
-    <%= f.label :position, "Position" %>
-    <%= f.text_field :position, readonly: true, value: @round.position %>
-  </div>
-
-<table>
-  <thead>
-    <tr>
-      <th>Player</th>
-      <th>Current Score</th>
-      <th>New Score</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @game.players.each do |player| %>
-      <tr>
-        <td><%= player.name %></td>
-        <td><%= @round.scores[player.id.to_s].is_a?(Hash) ? @round.scores[player.id.to_s].values.sum : 0 %></td>
-
-        <td class="new-score">
-          <%= f.hidden_field :game_player_id, value: player.id %>
-          <%= f.text_field "scores[#{player.id}]", { value: nil, min: -1600, max: 1600 } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
 
   <div class="actions">
-    <%= f.submit "Edit Round" %>
+    <%= f.submit "Create Round" %>
   </div>
 <% end %>
