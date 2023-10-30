@@ -30,7 +30,6 @@ class RoundsController < ApplicationController
 
   def destroy
     @round.destroy
-
     redirect_to game_path(@game), notice: 'Round was successfully destroyed.'
   end
 
