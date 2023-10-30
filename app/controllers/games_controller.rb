@@ -54,12 +54,12 @@ class GamesController < ApplicationController
   end
 
   def create_game_params
-    params.require(:game).permit(player_ids: [])
+    params.require(:game).permit(:rounds, player_ids: [])
   end
 
   def update_game_params
     if @game.state_created?
-      params.require(:game).permit(:state, player_ids: [])
+      params.require(:game).permit(:state, :rounds, player_ids: [])
     else
       params.require(:game).permit(:state)
     end

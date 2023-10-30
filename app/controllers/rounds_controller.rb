@@ -1,6 +1,8 @@
 class RoundsController < ApplicationController
-  before_action :set_round, only: %i[edit update destroy]
-  before_action :set_game_player
+  # before_action :set_game_player
+  before_action :set_game
+  before_action :set_round, only: [:edit, :update, :destroy]
+
 
   def new
     @round = @game.rounds.new
@@ -28,6 +30,11 @@ class RoundsController < ApplicationController
 
     @round.scores[player_id.to_s] = current_scores
 
+    @game.game_players.each do |game_player|
+      player_id = game_player.player_id.to_s
+      @round.scores[player_id] ||= { 'score' => 0 }
+    end
+
     if @round.save
       redirect_to game_path(@game), notice: 'Scores updated successfully.'
     else
@@ -47,9 +54,12 @@ class RoundsController < ApplicationController
     params.require(:round).permit(:game_player_id, :round_type, :position, :scores)
   end
 
-  def set_game_player
-    @game_player = GamePlayer.find_by(player_id: params[:player_id], game_id: params[:game_id])
-    @game = @game_player.game if @game_player
+  # def set_game_player
+  #   @game_player = GamePlayer.find_by(player_id: params[:player_id], game_id: params[:game_id])
+  # end
+
+  def set_game
+    @game = Game.find_by(id: params[:game_id])
   end
 
   def set_round
