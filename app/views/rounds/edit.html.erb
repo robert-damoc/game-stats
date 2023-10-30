@@ -1,10 +1,45 @@
-<h1>Editing round</h1>
+<h1>Edit Round</h1>
 
-<%= render "form", round: @round %>
+<%= form_for [@game, @round] do |f| %>
+  <div class="field">
+    <%= f.label :round_type, "Round Type" %>
+    <%= f.select :round_type, Round.round_types.keys %>
+  </div>
 
-<br>
+  <div class="field">
+    <%= f.label :game_player_id, "Choosing player" %>
+    <%= f.text_field :game_player_id, readonly: true, value: @round.game_player_id %>
+  </div>
 
-<div>
-  <%= link_to "Show this round", @round %> |
-  <%= link_to "Back to rounds", rounds_path %>
-</div>
+  <div class="field">
+    <%= f.label :position, "Position" %>
+    <%= f.text_field :position, readonly: true, value: @round.position %>
+  </div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Player</th>
+      <th>Current Score</th>
+      <th>New Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @game.players.each do |player| %>
+      <tr>
+        <td><%= player.name %></td>
+        <td><%= @round.scores[player.id.to_s].is_a?(Hash) ? @round.scores[player.id.to_s].values.sum : 0 %></td>
+
+        <td class="new-score">
+          <%= f.hidden_field :game_player_id, value: player.id %>
+          <%= f.text_field "scores[#{player.id}]", { value: nil, min: -1600, max: 1600 } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+  <div class="actions">
+    <%= f.submit "Edit Round" %>
+  </div>
+<% end %>
