@@ -52,7 +52,7 @@
           <td><%= round.game_player.player.name %></td>
           <td>
             <%= link_to 'Edit', edit_game_round_path(@game, round), class: 'btn btn-primary btn-sm' %>
-            <%= link_to 'Destroy', game_round_path(@game, round), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+            <%= button_to 'Destroy', game_round_path(@game, round), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
           </td>
         </tr>
       <% end %>
