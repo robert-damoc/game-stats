@@ -1,10 +1,26 @@
-<h1>Editing round</h1>
+<h1>Edit Round</h1>
 
-<%= render "form", round: @round %>
+<%= form_for [@game, @round] do |f| %>
+  <div class="field">
+    <%= f.label :round_type, "Round Type" %>
+    <%= f.select :round_type, Round.round_types.keys %>
+  </div>
 
-<br>
+  <div class="field">
+    <%= f.label :game_player_id, "Select Player" %>
+    <%= f.collection_select :game_player_id, @game.game_players, :id, :name_with_position %>
+  </div>
 
-<div>
-  <%= link_to "Show this round", @round %> |
-  <%= link_to "Back to rounds", rounds_path %>
-</div>
+    <div class="field">
+    <%= f.fields_for :scores do |g| %>
+      <% @game.game_players.each do |game_player| %>
+        <%= g.label "#{game_player.id}", game_player.player.name %>
+        <%= g.text_field "#{game_player.id}", @round.scores || { game_player.id.to_s => 0 } %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Create Round" %>
+  </div>
+<% end %>
