@@ -32,7 +32,30 @@
     </tr>
   </tbody>
 </table>
-<h2>Rounds</h2>
+
+<h2 class="text-center">Rounds</h2>
+
+<table class="table table-striped table-bordered mx-auto" style="max-width: 800px;">
+  <thead class="table-dark border border-white">
+    <tr>
+      <th scope="col" style="width: 200px;"></th>
+      <% @game.game_players.each do |player| %>
+        <th scope="col" style="width: 100px;"><%= player.player.name %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% Round.round_types.values.each do |round| %>
+      <tr>
+        <td class="border border-dark"><%= round.humanize %></td>
+        <% @game.game_players.each do |player| %>
+          <td class="border border-dark" style="background-color: <%= @game.rounds.where(round_type: round, game_player: player).exists? ? '#0dcaf0' : 'none' %>"></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 
 <% if @game.rounds.any? %>
   <table class="table table-striped table-hover">
@@ -40,7 +63,7 @@
       <tr>
         <th>Position</th>
         <th>Round Type</th>
-        <th>Player</th>
+        <th>Choosing Player</th>
         <th>Scores</th>
         <th>Actions</th>
       </tr>
@@ -49,17 +72,29 @@
       <% @game.rounds.sort_by(&:position).each do |round| %>
         <tr>
         <td><%= round.position %></td>
-          <td><%= round.round_type %></td>
+          <td><%= round.round_type.humanize %></td>
           <td><%= round.game_player.player.name %></td>
           <td><%= round.scores %></td>
           <td>
-            <%= link_to 'Edit', edit_game_round_path(@game, round), class: 'btn btn-primary btn-sm' %>
-            <%= button_to 'Destroy', game_round_path(@game, round), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger btn-sm' %>
+            <div class="btn-group game-actions">
+              <%= link_to edit_game_round_path(@game, round), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
+                <i class="bi bi-pencil-fill"></i>&nbsp;
+              <% end %>
+              <%= button_to game_round_path(@game, round), method: :delete, class:"btn btn-empty btn-sm", title: 'Delete' do %>
+                <i class="bi bi-trash3-fill"></i>&nbsp;
+              <% end %>
+            </div>
           </td>
         </tr>
       <% end %>
     </tbody>
   </table>
 <% else %>
-  No rounds available for this game.
+  No rounds played for this game.
 <% end %>
+
+<%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty game-actions" do %>
+  <i class="bi bi-plus-square-fill" style="font-size: 3em;"></i>&nbsp;
+<% end %>
+
+
