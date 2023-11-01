@@ -12,10 +12,10 @@ class Round < ApplicationRecord
   store_accessor :scores
 
   enum round_type: {
-    rentz_minus: 'Rentz -',
-    rentz_plus: 'Rentz +',
     totale_minus: 'Totale -',
     totale_plus: 'Totale +',
+    rentz_minus: 'Rentz -',
+    rentz_plus: 'Rentz +',
     king: 'King of hearts',
     ten: 'Ten of clubs',
     queens: 'Queens',
