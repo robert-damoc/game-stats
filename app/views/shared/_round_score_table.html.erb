@@ -1,5 +1,5 @@
 <table class="table table-striped table-bordered mx-auto" style="max-width: 870px;">
-  <%= render 'shared/round_table_header' %>
+  <%= render 'shared/round_table_header', table_name: 'Score', show_button: true %>
   <tbody>
     <% @game.rounds.sort_by(&:position).each do |round| %>
       <tr>
@@ -14,13 +14,13 @@
             <%= player_score || 0 %>
           </td>
         <% end %>
-        <td class="border border-dark">
+        <td class="border border-dark text-center align-middle">
           <div class="btn-group game-actions">
             <%= link_to edit_game_round_path(@game, round), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
-              <i class="bi bi-pencil-fill"></i>&nbsp;
+              <i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;
             <% end %>
             <%= button_to game_round_path(@game, round), method: :delete, class:"btn btn-empty btn-sm", title: 'Delete' do %>
-              <i class="bi bi-trash3-fill"></i>&nbsp;
+              <i class="bi bi-trash3-fill"></i>
             <% end %>
           </div>
         </td>

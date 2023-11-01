@@ -33,13 +33,6 @@
   </tbody>
 </table>
 
-<div class="d-flex justify-content-between align-items-center">
-  <h2 class="mx-auto">Rounds</h2>
-  <%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty game-actions" do %>
-    <i class="bi bi-plus-square-fill" style="font-size: 2.5em;"></i>&nbsp;
-  <% end %>
-</div>
-
 <%= render 'shared/round_type_table' %>
 
 <% if @game.rounds.any? %>
