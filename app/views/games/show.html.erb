@@ -34,77 +34,15 @@
 </table>
 
 <div class="d-flex justify-content-between align-items-center">
-  <h2>Rounds</h2>
+  <h2 class="mx-auto">Rounds</h2>
   <%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty game-actions" do %>
     <i class="bi bi-plus-square-fill" style="font-size: 2.5em;"></i>&nbsp;
   <% end %>
 </div>
 
-
-<table class="table table-striped table-bordered mx-auto" style="max-width: 870px;">
-  <thead class="table-dark border border-white text-center">
-    <tr>
-      <th scope="col" style="width: 200px;"></th>
-      <% @game.game_players.each do |player| %>
-        <th scope="col" style="width: 100px;"><%= player.player.name %></th>
-      <% end %>
-      <th scope="col" style="width: 70px;"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% Round.round_types.values.each do |round| %>
-      <tr>
-        <td class="border border-dark"><%= round.humanize %></td>
-        <% @game.game_players.each do |player| %>
-          <td class="border border-dark" style="background-color: <%= @game.rounds.where(round_type: round, game_player: player).exists? ? '#0dcaf0' : 'none' %>"></td>
-        <% end %>
-        <td  class="border border-dark"></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<%= render 'shared/round_type_table' %>
 
 <% if @game.rounds.any? %>
-<table class="table table-striped table-bordered mx-auto" style="max-width: 870px;">
-  <thead class="table-dark border border-white text-center">
-    <tr>
-      <th scope="col" style="width: 200px;"></th>
-      <% @game.game_players.each do |player| %>
-        <th scope="col" style="width: 100px;"><%= player.player.name %></th>
-      <% end %>
-      <th scope="col" style="width: 70px;"></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @game.rounds.sort_by(&:position).each do |round| %>
-      <tr>
-        <td class="border border-dark"><%= round.round_type.humanize %></td>
-        <% @game.game_players.each do |player| %>
-          <td class="border border-dark text-center ">
-            <% player_scores = round.scores || {} %>
-            <% player_score = player_scores[player.id.to_s] if player_scores.present? %>
-            <%= player_score || 0 %>
-          </td>
-        <% end %>
-        <td class="border border-dark">
-          <div class="btn-group game-actions">
-            <%= link_to edit_game_round_path(@game, round), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
-              <i class="bi bi-pencil-fill"></i>&nbsp;
-            <% end %>
-            <%= button_to game_round_path(@game, round), method: :delete, class:"btn btn-empty btn-sm", title: 'Delete' do %>
-              <i class="bi bi-trash3-fill"></i>&nbsp;
-            <% end %>
-          </div>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<% else %>
-  No rounds played for this game.
+  <%= render 'shared/round_score_table' %>
+  <%= render 'shared/round_total_score_table' %>
 <% end %>
-
-
-
-
-

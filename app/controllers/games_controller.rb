@@ -9,7 +9,9 @@ class GamesController < ApplicationController
     @pagy, @games = pagy(@games)
   end
 
-  def show; end
+  def show
+    player_total_score
+  end
 
   def new
     @game = Game.new
@@ -62,6 +64,19 @@ class GamesController < ApplicationController
       params.require(:game).permit(:state, player_ids: [])
     else
       params.require(:game).permit(:state)
+    end
+  end
+
+  def player_total_score
+    @player_totals = {}
+
+    @game.game_players.each do |player|
+      total_score = @game.rounds.sum do |round|
+        player_scores = round.scores || {}
+        player_scores[player.id.to_s].to_i
+      end
+
+      @player_totals[player.id] = total_score
     end
   end
 end

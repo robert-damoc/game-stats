@@ -1,0 +1,9 @@
+<thead class="table-dark border border-white text-center">
+  <tr>
+    <th scope="col" style="width: 200px;"></th>
+    <% @game.game_players.each do |player| %>
+      <th scope="col" style="width: 100px;"><%= player.player.name %></th>
+    <% end %>
+    <th scope="col" style="width: 70px;"></th>
+  </tr>
+</thead>
