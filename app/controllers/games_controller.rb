@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: %i[show edit update destroy]
+  before_action :set_game, only: %i[edit update destroy]
 
   def index
     @sort = params[:sort] || Game.default_sort_column
@@ -10,6 +10,7 @@ class GamesController < ApplicationController
   end
 
   def show
+    @game = Game.includes(:players, game_players: :rounds).find(params[:id])
     player_total_score
   end
 

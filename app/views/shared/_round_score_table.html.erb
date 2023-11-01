@@ -3,9 +3,12 @@
   <tbody>
     <% @game.rounds.sort_by(&:position).each do |round| %>
       <tr>
-        <td class="border border-dark"><%= round.round_type.humanize %></td>
+        <td class="border border-dark">
+          <strong><%= round.round_type.humanize %></strong><br/>
+          <span style="font-size: 0.8em;"><%= round.game_player.player.name %></span>
+        </td>
         <% @game.game_players.each do |player| %>
-          <td class="border border-dark text-center ">
+          <td class="border border-dark text-center align-middle">
             <% player_scores = round.scores || {} %>
             <% player_score = player_scores[player.id.to_s] if player_scores.present? %>
             <%= player_score || 0 %>
