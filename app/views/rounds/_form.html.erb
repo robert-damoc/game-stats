@@ -1,17 +1,36 @@
-<%= form_with(model: round) do |form| %>
-  <% if round.errors.any? %>
+<%= form_for [@game, @round] do |f| %>
+  <% if @round.errors.any? %>
     <div style="color: red">
-      <h2><%= pluralize(round.errors.count, "error") %> prohibited this round from being saved:</h2>
+      <h2><%= pluralize(@round.errors.count, "error") %> prohibited this round from being saved:</h2>
 
       <ul>
-        <% round.errors.each do |error| %>
+        <% @round.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-  <div>
-    <%= form.submit %>
+  <div class="field">
+    <%= f.label :round_type, "Round Type" %>
+    <%= f.select :round_type, Round.round_types.keys %>
+  </div>
+
+  <div class="field">
+    <%= f.label :game_player_id, "Select Player" %>
+    <%= f.collection_select :game_player_id, @game.game_players, :id, :name_with_position %>
+  </div>
+
+    <div class="field">
+    <%= f.fields_for :scores do |g| %>
+      <% @game.game_players.each do |game_player| %>
+        <%= g.label "#{game_player.id}", game_player.player.name %>
+        <%= g.text_field "#{game_player.id}", @round.scores || { game_player.id.to_s => 0 } %>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Edit Round" %>
   </div>
 <% end %>
