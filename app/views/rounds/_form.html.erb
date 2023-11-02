@@ -1,36 +1,48 @@
-<%= form_for [@game, @round] do |f| %>
-  <% if @round.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(@round.errors.count, "error") %> prohibited this round from being saved:</h2>
+<%= form_for [@game, @round] do |form| %>
 
-      <ul>
-        <% @round.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :round_type, "Round Type" %>
-    <%= f.select :round_type, Round.round_types.keys %>
-  </div>
-
-  <div class="field">
-    <%= f.label :game_player_id, "Select Player" %>
-    <%= f.collection_select :game_player_id, @game.game_players, :id, :name_with_position %>
-  </div>
+<table class="table table table-striped table-hover table-sm">
+  <thead class="table-dark">
+    <tr style="text-align: left">
+      <th scope="col">Round Type</th>
+      <th scope="col">Players</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td scope="row">
+        <div>
+          <%= form.collection_check_boxes :round_type, Round.round_types.values, :to_s, :to_s do |f| %>
+            <div>
+              <%= f.check_box %>
+              <%= f.label %>
+            </div>
+          <% end %>
+        </div>
+      </td>
+      <td scope="row">
+        <div>
+          <%= form.collection_check_boxes :game_player_id, @game.game_players, :id, :name_with_position do |f| %>
+            <div>
+              <%= f.check_box %>
+              <%= f.label %>
+            </div>
+          <% end %>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
     <div class="field">
-    <%= f.fields_for :scores do |g| %>
+    <%= form.fields_for :scores do |f| %>
       <% @game.game_players.each do |game_player| %>
-        <%= g.label "#{game_player.id}", game_player.player.name %>
-        <%= g.text_field "#{game_player.id}", @round.scores || { game_player.id.to_s => 0 } %>
+        <%= f.label "#{game_player.id}", game_player.player.name %>
+        <%= f.text_field "#{game_player.id}", @round.scores || { game_player.id.to_s => 0 } %>
       <% end %>
     <% end %>
   </div>
 
   <div class="actions">
-    <%= f.submit "Edit Round" %>
+    <%= form.submit "Save", class: 'btn btn-primary' %>
   </div>
 <% end %>
