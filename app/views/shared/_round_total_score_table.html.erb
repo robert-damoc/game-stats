@@ -2,10 +2,10 @@
   <tbody class="border border-dark fs-5">
     <tr>
       <td scope="col" style="width: 200px;">Total</td>
-      <% @game.game_players.each do |player| %>
-        <td scope="col" style="width: 100px; text-align: center"><%= @player_totals[player.id] || 0 %></td>
+      <% @game.game_players.each do |game_player| %>
+        <td scope="col" style="width: 100px; text-align: center"><%= @player_totals[game_player.id] || 0 %></td>
       <% end %>
-      <% if edit_button %>
+      <% if edit_page %>
         <td scope="col" style="width: 70px;"></td>
       <% end %>
     </tr>

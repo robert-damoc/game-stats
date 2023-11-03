@@ -2,10 +2,10 @@
   <thead class="table-dark border border-white text-center align-middle">
     <tr>
       <th scope="col" style="width: 200px; font-size: 1.5em;">Rounds</th>
-      <% @game.game_players.each do |player| %>
-        <th scope="col" style="width: 100px;"><%= player.player.name %></th>
+      <% @game.game_players.each do |game_player| %>
+        <th scope="col" style="width: 100px;"><%= game_player.player.name %></th>
       <% end %>
-      <% if edit_button %>
+      <% if edit_page %>
         <th scope="col" style="width: 70px;">
           <% if add_round_button %>
             <%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty", title: 'New Round' do %>
@@ -19,11 +19,11 @@
   <tbody>
     <% Round.round_types.each do |round_type_key, round_type_value| %>
       <tr>
-        <td class="border border-dark"><%= round_type_value.humanize %></td>
-        <% @game.game_players.each do |player| %>
-          <td class="border border-dark" style="background-color: <%= player.rounds.any? { |round| round.round_type == round_type_key } ? '#0dcaf0' : 'none' %>"></td>
+        <td class="border border-dark"><%= round_type_value %></td>
+        <% @game.game_players.each do |game_player| %>
+          <td class="border border-dark" style="background-color: <%= game_player.rounds.any? { |round| round.round_type == round_type_key } ? '#0dcaf0' : 'none' %>"></td>
         <% end %>
-        <% if edit_button %>
+        <% if edit_page %>
           <td class="border border-dark"></td>
         <% end %>
       </tr>

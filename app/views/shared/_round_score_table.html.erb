@@ -2,10 +2,10 @@
   <thead class="table-dark border border-white text-center align-middle">
     <tr>
       <th scope="col" style="width: 200px; font-size: 1.5em;">Score</th>
-      <% @game.game_players.each do |player| %>
-        <th scope="col" style="width: 100px;"><%= player.player.name %></th>
+      <% @game.game_players.each do |game_player| %>
+        <th scope="col" style="width: 100px;"><%= game_player.player.name %></th>
       <% end %>
-      <% if edit_button %>
+      <% if edit_page %>
       <th scope="col" style="width: 70px;">
         <% if add_round_button %>
           <%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty", title: 'New Round' do %>
@@ -20,27 +20,27 @@
     <% @game.rounds.sort_by(&:position).each do |round| %>
       <tr>
         <td class="border border-dark">
-          <strong><%= round.round_type.humanize %></strong><br/>
+          <strong><%= Round.round_types[round.round_type] %></strong><br/>
           <span style="font-size: 0.8em;"><%= round.game_player.player.name %></span>
         </td>
-        <% @game.game_players.each do |player| %>
+        <% @game.game_players.each do |game_player| %>
           <td class="border border-dark">
             <% player_scores = round.scores || {} %>
-            <% player_score = player_scores[player.id.to_s] if player_scores.present? %>
+            <% player_score = player_scores[game_player.id.to_s] if player_scores.present? %>
             <%= player_score || 0 %>
           </td>
         <% end %>
-        <% if edit_button %>
-        <td class="border border-dark">
-          <div class="btn-group game-actions">
-            <%= link_to edit_game_round_path(@game, round), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
-              <i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;
-            <% end %>
-            <%= button_to game_round_path(@game, round), method: :delete, class:"btn btn-empty btn-sm", title: 'Delete' do %>
-              <i class="bi bi-trash3-fill"></i>
-            <% end %>
-          </div>
-        </td>
+        <% if edit_page %>
+          <td class="border border-dark">
+            <div class="btn-group game-actions">
+              <%= link_to edit_game_round_path(@game, round), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
+                <i class="bi bi-pencil-fill"></i>&nbsp;&nbsp;
+              <% end %>
+              <%= button_to game_round_path(@game, round), method: :delete, class:"btn btn-empty btn-sm", title: 'Delete' do %>
+                <i class="bi bi-trash3-fill"></i>
+              <% end %>
+            </div>
+          </td>
         <% end %>
       </tr>
     <% end %>

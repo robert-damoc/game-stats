@@ -10,10 +10,7 @@
     <tbody>
       <tr>
         <td scope="row">
-          <%= form.collection_radio_buttons :round_type,
-                                            Round.round_types.keys.map { |k| OpenStruct.new(value: k, label: Round.round_types[k]) },
-                                            :value,
-                                            :label do |f| %>
+          <%= form.collection_radio_buttons :round_type, Round.round_types.values, :to_s, :to_s, checked: Round.round_types[@round.round_type] do |f| %>
             <div>
               <%= f.radio_button %>
               <%= f.label %>
