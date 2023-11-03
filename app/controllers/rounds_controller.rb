@@ -12,7 +12,7 @@ class RoundsController < ApplicationController
     @round = @game.rounds.new(round_params)
 
     if @round.save
-      redirect_to game_path(@game), notice: 'Round was successfully created.'
+      redirect_to edit_game_path(@game), notice: 'Round was successfully created.'
     else
       flash.now[:notice] = @round.errors.map(&:message).join(' ')
       render :new, status: :unprocessable_entity
@@ -21,7 +21,7 @@ class RoundsController < ApplicationController
 
   def update
     if @round.update(round_params)
-      redirect_to game_path(@game), notice: 'Scores updated successfully.'
+      redirect_to edit_game_path(@game), notice: 'Scores updated successfully.'
     else
       flash.now[:notice] = @round.errors.map(&:message).join(' ')
       render :edit, status: :unprocessable_entity
@@ -30,7 +30,7 @@ class RoundsController < ApplicationController
 
   def destroy
     @round.destroy
-    redirect_to game_path(@game), notice: 'Round was successfully destroyed.'
+    redirect_to edit_game_path(@game), notice: 'Round was successfully destroyed.'
   end
 
   private
