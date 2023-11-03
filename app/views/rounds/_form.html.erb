@@ -5,42 +5,39 @@
     <tr style="text-align: left">
       <th scope="col">Round Type</th>
       <th scope="col">Players</th>
+      <th scope="col">Scores</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td scope="row">
-        <div>
-          <%= form.collection_check_boxes :round_type, Round.round_types.values, :to_s, :to_s do |f| %>
-            <div>
-              <%= f.check_box %>
-              <%= f.label %>
-            </div>
-          <% end %>
-        </div>
+        <%= form.collection_radio_buttons :round_type, Round.round_types.values, :to_s, :to_s do |f| %>
+          <div>
+            <%= f.radio_button %>
+            <%= f.label %>
+          </div>
+        <% end %>
       </td>
       <td scope="row">
-        <div>
-          <%= form.collection_check_boxes :game_player_id, @game.game_players, :id, :name_with_position do |f| %>
+        <%= form.collection_radio_buttons :game_player_id, @game.game_players, :id, :name_with_position do |f| %>
+          <div class="radio-group">
+            <%= f.radio_button %>
+            <%= f.label %>
+          </div>
+        <% end %>
+      </td>
+      <td scope="row">
+        <%= form.fields_for :scores do |f| %>
+          <% @game.game_players.each do |game_player| %>
             <div>
-              <%= f.check_box %>
-              <%= f.label %>
+              <%= f.text_field "#{game_player.id}", value: (@round.scores[game_player.id.to_s] || 0) %>
             </div>
           <% end %>
-        </div>
+        <% end %>
       </td>
     </tr>
   </tbody>
 </table>
-
-    <div class="field">
-    <%= form.fields_for :scores do |f| %>
-      <% @game.game_players.each do |game_player| %>
-        <%= f.label "#{game_player.id}", game_player.player.name %>
-        <%= f.text_field "#{game_player.id}", @round.scores || { game_player.id.to_s => 0 } %>
-      <% end %>
-    <% end %>
-  </div>
 
   <div class="actions">
     <%= form.submit "Save", class: 'btn btn-primary' %>
