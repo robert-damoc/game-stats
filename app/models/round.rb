@@ -1,6 +1,7 @@
 class Round < ApplicationRecord
   before_create :set_position
   before_destroy :update_positions
+  after_initialize :set_default_scores
 
   validates :round_type, presence: true
   validates :round_type, uniqueness: { scope: :game_player_id,
@@ -36,5 +37,9 @@ class Round < ApplicationRecord
 
   def update_positions
     game.rounds.where('rounds.position > ?', position).map(&:decrement_position)
+  end
+
+  def set_default_scores
+    self.scores ||= {}
   end
 end
