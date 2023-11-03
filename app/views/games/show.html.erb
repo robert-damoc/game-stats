@@ -24,9 +24,9 @@
   </tbody>
 </table>
 
-<%= render 'shared/round_type_table' %>
+<%= render 'shared/round_type_table', edit_button: false, add_round_button: false %>
 
 <% if @game.rounds.any? %>
-  <%= render 'shared/round_total_score_table' %>
-  <%= render 'shared/round_score_table' %>
+  <%= render 'shared/round_total_score_table', edit_button: false %>
+  <%= render 'shared/round_score_table', edit_button: false, add_round_button: true %>
 <% end %>

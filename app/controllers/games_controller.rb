@@ -18,7 +18,9 @@ class GamesController < ApplicationController
     @game = Game.new
   end
 
-  def edit; end
+  def edit
+    player_total_score
+  end
 
   def create
     @game = Game.new(create_game_params)

@@ -8,19 +8,19 @@
 </h1>
 
 <%= form_with(model: @game, local: true) do |form| %>
-  <table class="table table table-striped table-hover table-sm">
-    <thead class="table-dark">
-      <tr style="text-align: left">
-        <th scope="col">Selected Players</th>
-        <th scope="col">Unselected Players</th>
-        <th scope="col">Created</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody style="text-align: left">
-      <tr>
-        <td>
-          <% if @game.state_created? %>
+  <% if @game.state_created? %>
+    <table class="table table table-striped table-hover table-sm">
+      <thead class="table-dark">
+        <tr style="text-align: left">
+          <th scope="col">Selected Players</th>
+          <th scope="col">Unselected Players</th>
+          <th scope="col">Created</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody style="text-align: left">
+        <tr>
+          <td>
             <div>
               <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |b| %>
                 <div>
@@ -29,14 +29,8 @@
                 </div>
               <% end %>
             </div>
-          <% else %>
-            <% @game.game_players.each do |player| %>
-              <div><%= player.name_with_position %></div>
-            <% end %>
-          <% end %>
-        </td>
-        <td>
-          <% if @game.state_created? %>
+          </td>
+          <td>
             <div>
               <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |b|%>
                 <div>
@@ -45,14 +39,39 @@
                 </div>
               <% end %>
             </div>
-          <% else %>
-            Cannot add more players.
-          <% end %>
-        </td>
-        <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
-        <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
-      </tr>
-    </tbody>
-  </table>
-  <%= form.submit "Save", class: "btn btn-primary" %>
+          </td>
+          <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
+          <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
+        </tr>
+      </tbody>
+    </table>
+  <% else %>
+    <table class="table table table-striped table-hover table-sm mx-auto" style="max-width: 1100px;">
+      <thead class="table-dark text-center align-middle">
+        <tr>
+          <th scope="col">Created</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-center align-middle">
+        <tr>
+          <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
+          </td>
+          <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
+        </tr>
+      </tbody>
+    </table>
+  <% end %>
+  <%= render 'shared/round_type_table', edit_button: true, add_round_button: false %>
+
+  <% if @game.rounds.any? %>
+    <%= render 'shared/round_total_score_table', edit_button: true %>
+    <%= render 'shared/round_score_table', edit_button: true, add_round_button: true %>
+  <% end %>
+
+  <div class="d-flex justify-content-center">
+    <%= form.submit "Save", class: "btn btn-primary" %>
+  </div>
 <% end %>
+
+
