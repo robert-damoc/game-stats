@@ -8,24 +8,15 @@
   <p style="float: right;"><%= link_to "Back to games", games_path, class: "btn btn-primary" %></p>
 </h1>
 
-<table class="table table table-striped table-hover table-sm">
-  <thead class="table-dark">
-    <tr style="text-align: left">
-      <th scope="col">Players</th>
+<table class="table table table-striped table-hover table-sm mx-auto" style="max-width: 1100px;">
+  <thead class="table-dark text-center align-middle">
+    <tr>
       <th scope="col">Created</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
-  <tbody style="text-align: left">
+  <tbody class="text-center align-middle">
     <tr>
-      <td scope="row">
-        <% if @game.game_players.any? %>
-          <% @game.game_players.each do |player| %>
-            <div><%= player.name_with_position %></div>
-          <% end %>
-        <% else %>
-          No players
-        <% end %>
       <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
       </td>
       <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
