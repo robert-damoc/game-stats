@@ -1,7 +1,7 @@
 class Round < ApplicationRecord
+  after_initialize :set_default_scores
   before_create :set_position
   before_destroy :update_positions
-  after_initialize :set_default_scores
 
   validates :round_type, presence: true
   validates :round_type, uniqueness: { scope: :game_player_id,
