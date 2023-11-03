@@ -1,43 +1,42 @@
 <%= form_for [@game, @round] do |form| %>
-
-<table class="table table table-striped table-hover table-sm">
-  <thead class="table-dark">
-    <tr style="text-align: left">
-      <th scope="col">Round Type</th>
-      <th scope="col">Players</th>
-      <th scope="col">Scores</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td scope="row">
-        <%= form.collection_radio_buttons :round_type, Round.round_types.values, :to_s, :to_s do |f| %>
-          <div>
-            <%= f.radio_button %>
-            <%= f.label %>
-          </div>
-        <% end %>
-      </td>
-      <td scope="row">
-        <%= form.collection_radio_buttons :game_player_id, @game.game_players, :id, :name_with_position do |f| %>
-          <div class="radio-group">
-            <%= f.radio_button %>
-            <%= f.label %>
-          </div>
-        <% end %>
-      </td>
-      <td scope="row">
-        <%= form.fields_for :scores do |f| %>
-          <% @game.game_players.each do |game_player| %>
+  <table class="table table table-striped table-hover table-sm">
+    <thead class="table-dark">
+      <tr style="text-align: left">
+        <th scope="col">Round Type</th>
+        <th scope="col">Players</th>
+        <th scope="col">Scores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="row">
+          <%= form.collection_radio_buttons :round_type, Round.round_types.values, :to_s, :to_s do |f| %>
             <div>
-              <%= f.text_field "#{game_player.id}", value: (@round.scores[game_player.id.to_s] || 0) %>
+              <%= f.radio_button %>
+              <%= f.label %>
             </div>
           <% end %>
-        <% end %>
-      </td>
-    </tr>
-  </tbody>
-</table>
+        </td>
+        <td scope="row">
+          <%= form.collection_radio_buttons :game_player_id, @game.game_players, :id, :name_with_position do |f| %>
+            <div class="radio-group">
+              <%= f.radio_button %>
+              <%= f.label %>
+            </div>
+          <% end %>
+        </td>
+        <td scope="row">
+          <%= form.fields_for :scores do |f| %>
+            <% @game.game_players.each do |game_player| %>
+              <div>
+                <%= f.text_field "#{game_player.id}", value: (@round.scores[game_player.id.to_s] || 0) %>
+              </div>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
   <div class="actions">
     <%= form.submit "Save", class: 'btn btn-primary' %>
