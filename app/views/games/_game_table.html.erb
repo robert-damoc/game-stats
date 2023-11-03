@@ -16,7 +16,7 @@
         <td scope="row"><%= game.state.humanize %></td>
         <td scope="row"><%= game.game_players.size %>/<%= Game::MAX_PLAYERS_PER_GAME %></td>
         <td scope="row"><%= time_ago_in_words(game.created_at) %></td>
-        <td scope="row"><%= link_to "Create New Round", new_game_round_path(game_id: game.id) %></td>
+        <td scope="row"><%= game.rounds.size %>/<%= Round.round_types.size * game.game_players.size %></td>
         <td scope="row"><%= render 'games/action_buttons', game: game %></td>
       </tr>
     <% end %>
