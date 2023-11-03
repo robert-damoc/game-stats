@@ -1,6 +1,6 @@
 class Round < ApplicationRecord
-  after_initialize :set_default_scores
   before_create :set_position
+  after_initialize :set_default_scores
   before_destroy :update_positions
 
   validates :round_type, presence: true
