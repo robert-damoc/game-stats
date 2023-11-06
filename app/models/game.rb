@@ -21,7 +21,7 @@ class Game < ApplicationRecord
     message: "Minimum number of players to start the game is #{MIN_PLAYERS_PER_GAME}"
   }, if: -> { state_in_progress? }
 
-  has_many :game_players, -> { order(position: :asc) }, dependent: :destroy, inverse_of: :game
+  has_many :game_players, -> { order(position: :asc) }, dependent: :delete_all, inverse_of: :game
   has_many :players, through: :game_players
   has_many :rounds, through: :game_players
 
