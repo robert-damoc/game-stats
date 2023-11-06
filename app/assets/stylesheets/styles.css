@@ -26,3 +26,11 @@
 .game-actions [disabled="disabled"] i {
   color: rgb(89, 145, 175);
 }
+
+.new_round .field_with_errors {
+  display: inline;
+}
+
+.edit_round .field_with_errors {
+  display: inline;
+}
