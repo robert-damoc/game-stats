@@ -5,7 +5,7 @@ class GamesController < ApplicationController
     @sort = params[:sort] || Game.default_sort_column
     @sort_dir = params[:sort_dir] || Game.default_direction
 
-    @games = Game.includes(:game_players).all.sort_table(@sort, @sort_dir)
+    @games = Game.includes(:rounds, :game_players).all.sort_table(@sort, @sort_dir)
     @pagy, @games = pagy(@games)
   end
 
