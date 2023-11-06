@@ -9,7 +9,7 @@
 
 <%= form_with(model: @game, local: true) do |form| %>
   <% if @game.state_created? %>
-    <table class="table table table-striped table-hover table-sm">
+    <table class="table table table-striped table-hover table-sm mx-auto" style="max-width: 1100px;">
       <thead class="table-dark">
         <tr style="text-align: left">
           <th scope="col">Selected Players</th>
@@ -63,7 +63,7 @@
     </table>
   <% end %>
 
-  <%= render 'shared/round_type_table', edit_page: true, add_round_button: false %>
+  <%= render 'shared/round_type_table', edit_page: true %>
   <%= render 'shared/round_total_score_table', edit_page: true %>
   <%= render 'shared/round_score_table', edit_page: true, add_round_button: true %>
 

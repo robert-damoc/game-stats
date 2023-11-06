@@ -1,32 +1,29 @@
 <table class="table table-striped table-bordered mx-auto text-center align-middle" style="max-width: 1100px;">
   <thead class="table-dark border border-white text-center align-middle">
     <tr>
-      <th scope="col" style="width: 200px; font-size: 1.5em;">Rounds</th>
+      <th scope="col" style="width: 200px; font-size: 1.5em;">
+        <%= @game.state == 'created' ? 'Players' : 'Rounds' %></th>
       <% @game.game_players.each do |game_player| %>
         <th scope="col" style="width: 100px;"><%= game_player.player.name %></th>
       <% end %>
-      <% if edit_page %>
-        <th scope="col" style="width: 70px;">
-          <% if add_round_button %>
-            <%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty", title: 'New Round' do %>
-              <i class="bi bi-plus-square-fill text-white" style="font-size: 1.5em;"></i>&nbsp;
-            <% end %>
-          <% end %>
-        </th>
+      <% if edit_page && @game.state == 'in_progress' %>
+        <th scope="col" style="width: 70px;"></th>
       <% end %>
     </tr>
   </thead>
-  <tbody>
-    <% Round.round_types.each do |round_type_key, round_type_value| %>
-      <tr>
-        <td class="border border-dark"><%= round_type_value %></td>
-        <% @game.game_players.each do |game_player| %>
-          <td class="border border-dark" style="background-color: <%= game_player.rounds.any? { |round| round.round_type == round_type_key } ? '#0dcaf0' : 'none' %>"></td>
-        <% end %>
-        <% if edit_page %>
-          <td class="border border-dark"></td>
-        <% end %>
-      </tr>
-    <% end %>
-  </tbody>
+  <% unless @game.state == 'created' %>
+    <tbody>
+      <% Round.round_types.each do |round_type_key, round_type_value| %>
+        <tr>
+          <td class="border border-dark"><%= round_type_value %></td>
+          <% @game.game_players.each do |game_player| %>
+            <td class="border border-dark" style="background-color: <%= game_player.rounds.any? { |round| round.round_type == round_type_key } ? '#0dcaf0' : 'none' %>"></td>
+          <% end %>
+          <% if edit_page && @game.state == 'in_progress' %>
+            <td class="border border-dark"></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  <% end %>
 </table>
