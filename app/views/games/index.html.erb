@@ -8,4 +8,7 @@
 
 <%= render 'games/game_table' %>
 
-<%== pagy_bootstrap_nav(@pagy) %>
+<% if @pagy.count > Pagy::DEFAULT[:items] %>
+  <%== pagy_bootstrap_nav(@pagy) %>
+<% end %>
+
