@@ -4,10 +4,14 @@
 </h1>
 
 <br/><br/><br/>
-<%== pagy_info(@pagy, item_name: 'games'.pluralize(@pagy.count)) %>
+<% if @players.any? %>
+  <%== pagy_info(@pagy, item_name: 'games'.pluralize(@pagy.count)) %>
 
-<%= render 'player_table' %>
+  <%= render 'player_table' %>
 
-<% if @pagy.count > Pagy::DEFAULT[:items] %>
-  <%== pagy_bootstrap_nav(@pagy) %>
+  <% if @pagy.count > Pagy::DEFAULT[:items] %>
+    <%== pagy_bootstrap_nav(@pagy) %>
+  <% end %>
+<% else %>
+  <h5 class="text-center">No players yet!</h5>
 <% end %>
