@@ -11,12 +11,22 @@
 <table class="table table table-striped table-hover table-sm mx-auto" style="max-width: 1100px;">
   <thead class="table-dark text-center align-middle">
     <tr>
+      <% if @game.state_created? %>
+        <th scope="col">Players</th>
+      <% end %>
       <th scope="col">Created</th>
       <th scope="col">Actions</th>
     </tr>
   </thead>
   <tbody class="text-center align-middle">
     <tr>
+      <% if @game.state_created? %>
+        <td scope="row">
+            <% @game.players.each do |player| %>
+              <%= player.name %><br>
+            <% end %>
+        </td>
+      <% end %>
       <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
       </td>
       <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
@@ -24,9 +34,8 @@
   </tbody>
 </table>
 
-<%= render 'shared/round_type_table', edit_page: false %>
-
-<% if @game.rounds.any? %>
+<% if !@game.state_created? %>
+  <%= render 'shared/round_type_table', edit_page: false %>
   <%= render 'shared/round_total_score_table', edit_page: false %>
   <%= render 'shared/round_score_table', edit_page: false, add_round_button: true %>
 <% end %>

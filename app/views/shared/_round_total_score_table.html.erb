@@ -5,7 +5,7 @@
       <% @game.game_players.each do |game_player| %>
         <td class="border border-info border-5" scope="col" style="width: 100px; text-align: center"><%= @player_totals[game_player.id] || 0 %></td>
       <% end %>
-      <% if edit_page && @game.state == 'in_progress' %>
+      <% if edit_page && @game.state_in_progress? %>
         <td class="border border-info border-5" scope="col" style="width: 70px;"></td>
       <% end %>
     </tr>

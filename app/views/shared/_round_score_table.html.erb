@@ -5,14 +5,14 @@
       <% @game.game_players.each do |game_player| %>
         <th scope="col" style="width: 100px;"><%= game_player.player.name %></th>
       <% end %>
-      <% if edit_page && @game.state == 'in_progress' %>
-      <th scope="col" style="width: 70px;">
-        <% if add_round_button %>
-          <%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty", title: 'New Round' do %>
-            <i class="bi bi-plus-square-fill text-white" style="font-size: 1.5em;"></i>&nbsp;
+      <% if edit_page && @game.state_in_progress? %>
+        <th scope="col" style="width: 70px;">
+          <% if add_round_button %>
+            <%= link_to new_game_round_path(@game), class:"text-decoration-none btn btn-empty", title: 'New Round' do %>
+              <i class="bi bi-plus-square-fill text-white" style="font-size: 1.5em;"></i>&nbsp;
+            <% end %>
           <% end %>
-        <% end %>
-      </th>
+        </th>
       <% end %>
     </tr>
   </thead>
@@ -30,7 +30,7 @@
             <%= player_score || 0 %>
           </td>
         <% end %>
-        <% if edit_page && @game.state == 'in_progress' %>
+        <% if edit_page && @game.state_in_progress? %>
           <td class="border border-dark">
             <div class="btn-group game-actions">
               <%= link_to edit_game_round_path(@game, round), class:"text-decoration-none btn btn-empty btn-sm", title: 'Edit' do %>
