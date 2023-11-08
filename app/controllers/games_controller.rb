@@ -49,7 +49,6 @@ class GamesController < ApplicationController
 
   def destroy
     @game.game_players.destroy_all
-    @game.rounds.destroy_all
     @game.destroy
     redirect_to games_url, notice: 'Game was successfully destroyed.'
   end
@@ -66,7 +65,7 @@ class GamesController < ApplicationController
 
   def update_game_params
     if @game.state_created?
-      params.require(:game).permit(:state, player_ids: [])
+      params.require(:game).permit(:state, player_ids: [], game_players_attributes: %i[id position])
     else
       params.require(:game).permit(:state)
     end

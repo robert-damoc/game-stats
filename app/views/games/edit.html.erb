@@ -13,6 +13,7 @@
       <thead class="table-dark">
         <tr style="text-align: left">
           <th scope="col">Selected Players</th>
+          <th scope="col">Position</th>
           <th scope="col">Unselected Players</th>
           <th scope="col">Created</th>
           <th scope="col">Actions</th>
@@ -22,20 +23,32 @@
         <tr>
           <td>
             <div>
-              <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |b| %>
+              <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |f| %>
                 <div>
-                  <%= b.check_box %>
-                  <%= b.label %>
+                  <%= f.check_box %>
+                  <%= f.label %>
                 </div>
               <% end %>
             </div>
           </td>
+          <td scope="row">
+            <table class="score-table">
+              <tbody>
+                <%= form.fields_for :game_players do |f| %>
+                  <tr>
+                    <td><%= f.object.player.name %></td>
+                    <td><%= f.number_field :position, min: 1, max: @game.game_players.size, class: "number-field" %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </td>
           <td>
             <div>
-              <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |b|%>
+              <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |f|%>
                 <div>
-                  <%= b.check_box %>
-                  <%= b.label %>
+                  <%= f.check_box %>
+                  <%= f.label %>
                 </div>
               <% end %>
             </div>
@@ -45,6 +58,10 @@
         </tr>
       </tbody>
     </table>
+
+    <div class="d-flex justify-content-center">
+      <%= form.submit "Save", class: "btn btn-primary" %>
+    </div>
   <% else %>
     <table class="table table table-striped table-hover table-sm mx-auto" style="max-width: 1100px;">
       <thead class="table-dark text-center align-middle">
@@ -65,8 +82,4 @@
     <%= render 'shared/round_total_score_table', edit_page: true %>
     <%= render 'shared/round_score_table', edit_page: true, add_round_button: true %>
   <% end %>
-
-  <div class="d-flex justify-content-center">
-    <%= form.submit "Save", class: "btn btn-primary" %>
-  </div>
 <% end %>

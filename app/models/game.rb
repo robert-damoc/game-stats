@@ -11,6 +11,7 @@ class Game < ApplicationRecord
   }.freeze
 
   after_update :reorder_game_players
+
   validate :valid_state_transition, on: :update
   validates :game_players, length: {
     maximum: MAX_PLAYERS_PER_GAME,
@@ -24,6 +25,8 @@ class Game < ApplicationRecord
   has_many :game_players, -> { order(position: :asc) }, dependent: :delete_all, inverse_of: :game
   has_many :players, through: :game_players
   has_many :rounds, through: :game_players
+
+  accepts_nested_attributes_for :game_players
 
   enum state: {
     created: 'created',
