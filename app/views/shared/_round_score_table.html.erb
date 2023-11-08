@@ -17,7 +17,7 @@
     </tr>
   </thead>
   <tbody>
-    <% @game.rounds.sort_by(&:position).each do |round| %>
+    <% @game.rounds.sort_by(&:position).reverse.each do |round| %>
       <tr>
         <td class="border border-dark">
           <strong><%= Round.round_types[round.round_type] %></strong><br/>

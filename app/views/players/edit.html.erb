@@ -6,8 +6,8 @@
 <%= form_with model: @player, url: player_path(@player), method: :put do |form| %>
   <br/>
   <div class="mb-3">
-    <label for="exampleFormControlInput1" class="form-label">Name</label>
-    <input class="form-control" id= <%= form.text_field :name %>
+    <label for="name" class="form-label">Name</label>
+    <%= form.text_field :name, class: "form-control", id: "name" %>
     <br/>
     <%= form.submit 'Save', class:"btn btn-primary" %>
   </div>
