@@ -15,7 +15,8 @@
       <tr>
         <td class="border border-dark"><%= round_type_value %></td>
         <% @game.game_players.each do |game_player| %>
-          <td class="border border-dark" style="background-color: <%= game_player.rounds.any? { |round| round.round_type == round_type_key } ? '#0dcaf0' : 'none' %>"></td>
+          <% round_played = game_player.rounds.any? { |round| round.round_type == round_type_key } %>
+          <td class="border border-dark <%= 'bg-info' if round_played %>"></td>
         <% end %>
         <% if edit_page && @game.state_in_progress? %>
           <td class="border border-dark"></td>

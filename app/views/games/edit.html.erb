@@ -37,7 +37,7 @@
                 <%= form.fields_for :game_players do |f| %>
                   <tr>
                     <td><%= f.object.player.name %></td>
-                    <td><%= f.number_field :position, min: 1, max: @game.game_players.size, class: "number-field" %></td>
+                    <td><%= f.number_field :position, min: 1, max: @game.game_players.size%></td>
                   </tr>
                 <% end %>
               </tbody>

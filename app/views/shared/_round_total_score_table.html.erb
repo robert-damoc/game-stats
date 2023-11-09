@@ -1,12 +1,12 @@
 <table class="table table-bordered mx-auto text-center align-middle" style="max-width: 1100px;">
-  <tbody class="border border-info border-5 fs-3 fw-bold">
+  <tbody class="border border-dark border-4 fs-3 fw-bold">
     <tr>
-      <td class="border border-info border-5" scope="col" style="width: 200px;">Total</td>
+      <td class="border border-dark border-4" scope="col" style="width: 200px;">Total</td>
       <% @game.game_players.each do |game_player| %>
-        <td class="border border-info border-5" scope="col" style="width: 100px; text-align: center"><%= @player_totals[game_player.id] || 0 %></td>
+        <td class="border border-dark border-4" scope="col" style="width: 100px; text-align: center"><%= @player_totals[game_player.id] || 0 %></td>
       <% end %>
       <% if edit_page && @game.state_in_progress? %>
-        <td class="border border-info border-5" scope="col" style="width: 70px;"></td>
+        <td class="border border-dark border-4" scope="col" style="width: 70px;"></td>
       <% end %>
     </tr>
   </tbody>
