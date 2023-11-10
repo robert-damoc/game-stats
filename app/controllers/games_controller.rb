@@ -35,11 +35,7 @@ class GamesController < ApplicationController
 
   def update
     if @game.update(update_game_params)
-      if params[:page]
-        redirect_to games_url(page: params[:page]), notice: 'Game was successfully updated.'
-      else
-        redirect_to game_url(@game), notice: 'Game was successfully updated.'
-      end
+      redirect_to edit_game_url(@game), notice: 'Game was successfully updated.'
     else
       flash.now[:notice] = @game.errors.map(&:message).join(' ')
       @game.reload
