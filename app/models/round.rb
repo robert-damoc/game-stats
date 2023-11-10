@@ -6,6 +6,7 @@ class Round < ApplicationRecord
   validates :round_type, presence: true
   validates :round_type, uniqueness: { scope: :game_player_id,
                                        message: 'Round already played!' }
+    validate :scores_sum_validation
 
   belongs_to :game_player
   has_one :game, through: :game_player
@@ -41,5 +42,100 @@ class Round < ApplicationRecord
 
   def set_default_scores
     self.scores ||= {}
+  end
+
+  def scores_sum_validation
+    return if scores.blank?
+
+    expected_score = case round_type
+                     when 'totale_minus'
+                       expected_score_for_totale_minus
+                     when 'totale_plus'
+                       expected_score_for_totale_plus
+                     when 'rentz_minus'
+                       expected_score_for_rentz_minus
+                     when 'rentz_plus'
+                       expected_score_for_rentz_plus
+                     when 'king'
+                       -400
+                     when 'ten', 'queens'
+                       400
+                     when 'diamonds'
+                       expected_score_for_diamonds
+                     end
+
+    actual_score = scores.values.sum(&:to_i)
+
+    return if actual_score == expected_score
+
+    errors.add(
+      :scores,
+      "Total score should be #{expected_score} for round type '#{round_type}'. Current score is #{actual_score}."
+    )
+  end
+
+  def expected_score_for_totale_minus
+    case game.game_players.count
+    when 3
+      -1500
+    when 4
+      -1600
+    when 5
+      -1700
+    when 6
+      -1800
+    end
+  end
+
+  def expected_score_for_totale_plus
+    case game.game_players.count
+    when 3
+      1500
+    when 4
+      1600
+    when 5
+      1700
+    when 6
+      1800
+    end
+  end
+
+  def expected_score_for_rentz_minus
+    case game.game_players.count
+    when 3
+      -1200
+    when 4
+      -2400
+    when 5
+      -4000
+    when 6
+      -6000
+    end
+  end
+
+  def expected_score_for_rentz_plus
+    case game.game_players.count
+    when 3
+      1200
+    when 4
+      2400
+    when 5
+      4000
+    when 6
+      6000
+    end
+  end
+
+  def expected_score_for_diamonds
+    case game.game_players.count
+    when 3
+      -300
+    when 4
+      -400
+    when 5
+      -500
+    when 6
+      -600
+    end
   end
 end
