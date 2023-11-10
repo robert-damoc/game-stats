@@ -70,7 +70,7 @@ class Round < ApplicationRecord
 
     errors.add(
       :scores,
-      "Total score should be #{expected_score} for round type '#{round_type}'. Current score is #{actual_score}."
+      "Total score should be #{expected_score} for round type '#{Round.round_types[round_type]}'. Current score is #{actual_score}."
     )
   end
 
