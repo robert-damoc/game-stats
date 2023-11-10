@@ -1,17 +1,51 @@
-<%= form_with(model: round) do |form| %>
-  <% if round.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(round.errors.count, "error") %> prohibited this round from being saved:</h2>
+<%= form_for [@game, @round] do |form| %>
+  <table class="table table table-striped table-hover table-sm">
+    <thead class="table-dark">
+      <tr style="text-align: left">
+        <th scope="col">Round Type</th>
+        <th scope="col">Players</th>
+        <th scope="col">Scores</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td scope="row">
+          <%= form.collection_radio_buttons :round_type, Round.round_types.values, :to_s, :to_s, checked: Round.round_types[@round.round_type] do |f| %>
+            <div>
+              <%= f.radio_button %>
+              <%= f.label %>
+            </div>
+          <% end %>
+        </td>
+        <td scope="row">
+          <%= form.collection_radio_buttons :game_player_id, @game.game_players, :id, :name_with_position do |f| %>
+            <div >
+              <%= f.radio_button %>
+              <%= f.label %>
+            </div>
+          <% end %>
+        </td>
+        <td scope="row">
+          <table class="score-table">
+          <tbody>
+            <%= form.fields_for :scores do |f| %>
+              <% @game.game_players.each do |game_player| %>
+                <tr>
+                  <td><%= game_player.player.name %></td>
+                  <td>
+                    <%= f.text_field "#{game_player.id}", value: (@round.scores[game_player.id.to_s] || 0) %>
+                  </td>
+                </tr>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
-      <ul>
-        <% round.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div>
-    <%= form.submit %>
+  <div class="actions">
+    <%= form.submit "Save", class: 'btn btn-primary' %>
   </div>
 <% end %>

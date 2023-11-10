@@ -26,7 +26,7 @@ class PlayersController < ApplicationController
     @player = Player.new(player_params)
 
     if @player.save
-      redirect_to player_url(@player), notice: 'Player was successfully created.'
+      redirect_to players_url, notice: 'Player was successfully created.'
     else
       flash.now[:notice] = @player.errors.map(&:message).join(' ')
       render :new, status: :unprocessable_entity
@@ -49,7 +49,6 @@ class PlayersController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to players_url, notice: 'Player was successfully destroyed.' }
-      format.json { head :no_content }
     end
   end
 

@@ -1,18 +1,8 @@
-<h1>New Round</h1>
+<h1>
+  <p style="float: left;">
+    New Round
+  </p>
+  <p style="float: right;"><%= link_to "Back to game", edit_game_path(@game), class: "btn btn-primary" %></p>
+</h1>
 
-<%= form_for [@game, @round] do |f| %>
-  <div class="field">
-    <%= f.label :round_type, "Round Type" %>
-    <%= f.select :round_type, Round.round_types.keys %>
-  </div>
-
-  <div class="field">
-    <%= f.label :game_player_id, "Select Player" %>
-    <%= f.collection_select :game_player_id, @game.game_players, :id, :name_with_position %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "Create Round" %>
-  </div>
-<% end %>
-
+<%= render 'form' %>

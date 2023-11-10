@@ -1,4 +1,5 @@
 class Round < ApplicationRecord
+  after_initialize :set_default_scores
   before_create :set_position
   before_destroy :update_positions
 
@@ -12,10 +13,10 @@ class Round < ApplicationRecord
   store_accessor :scores
 
   enum round_type: {
-    rentz_minus: 'Rentz -',
-    rentz_plus: 'Rentz +',
     totale_minus: 'Totale -',
     totale_plus: 'Totale +',
+    rentz_minus: 'Rentz -',
+    rentz_plus: 'Rentz +',
     king: 'King of hearts',
     ten: 'Ten of clubs',
     queens: 'Queens',
@@ -36,5 +37,9 @@ class Round < ApplicationRecord
 
   def update_positions
     game.rounds.where('rounds.position > ?', position).map(&:decrement_position)
+  end
+
+  def set_default_scores
+    self.scores ||= {}
   end
 end

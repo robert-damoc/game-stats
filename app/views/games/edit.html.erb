@@ -1,7 +1,6 @@
 <h1>
   <p style="float: left;">
-    Editing Game <%= @game.id.split("-").first %>
-    <a class="d-inline-flex align-items-center mb-2 text-body-emphasis text-decoration-none" href="/" aria-label="Bootstrap">
+    Edit Game <%= @game.id.split("-").first %>
       <span class="badge rounded-pill bg-info"><%= @game.state.humanize %></span>
     </a>
   </p>
@@ -9,51 +8,78 @@
 </h1>
 
 <%= form_with(model: @game, local: true) do |form| %>
-  <table class="table table table-striped table-hover table-sm">
-    <thead class="table-dark">
-      <tr style="text-align: left">
-        <th scope="col">Selected Players</th>
-        <th scope="col">Unselected Players</th>
-        <th scope="col">Created</th>
-        <th scope="col">Actions</th>
-      </tr>
-    </thead>
-    <tbody style="text-align: left">
-      <tr>
-        <td>
-          <% if @game.state_created? %>
+  <% if @game.state_created? %>
+    <table class="table table table-striped table-hover table-sm mx-auto" style="max-width: 1100px;">
+      <thead class="table-dark">
+        <tr style="text-align: left">
+          <th scope="col">Selected Players</th>
+          <th scope="col">Position</th>
+          <th scope="col">Unselected Players</th>
+          <th scope="col">Created</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody style="text-align: left">
+        <tr>
+          <td>
             <div>
-              <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |b| %>
+              <%= form.collection_check_boxes :player_ids, @game.game_players, :player_id, :name_with_position do |f| %>
                 <div>
-                  <%= b.check_box %>
-                  <%= b.label %>
+                  <%= f.check_box %>
+                  <%= f.label %>
                 </div>
               <% end %>
             </div>
-          <% else %>
-            <% @game.game_players.each do |player| %>
-              <div><%= player.name_with_position %></div>
-            <% end %>
-          <% end %>
-        </td>
-        <td>
-          <% if @game.state_created? %>
+          </td>
+          <td scope="row">
+            <table class="score-table">
+              <tbody>
+                <%= form.fields_for :game_players do |f| %>
+                  <tr>
+                    <td><%= f.object.player.name %></td>
+                    <td><%= f.number_field :position, min: 1, max: @game.game_players.size%></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </td>
+          <td>
             <div>
-              <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |b|%>
+              <%= form.collection_check_boxes :player_ids, Player.where.not(id: @game.players.pluck(:id)), :id, :name do |f|%>
                 <div>
-                  <%= b.check_box %>
-                  <%= b.label %>
+                  <%= f.check_box %>
+                  <%= f.label %>
                 </div>
               <% end %>
             </div>
-          <% else %>
-            Cannot add more players.
-          <% end %>
-        </td>
-        <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
-        <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
-      </tr>
-    </tbody>
-  </table>
-  <%= form.submit "Save", class: "btn btn-primary" %>
+          </td>
+          <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
+          <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="d-flex justify-content-center">
+      <%= form.submit "Save", class: "btn btn-primary" %>
+    </div>
+  <% else %>
+    <table class="table table table-striped table-hover table-sm mx-auto" style="max-width: 1100px;">
+      <thead class="table-dark text-center align-middle">
+        <tr>
+          <th scope="col">Created</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-center align-middle">
+        <tr>
+          <td scope="row"><%= time_ago_in_words(@game.created_at) %></td>
+          </td>
+          <td scope="row"><%= render 'games/action_buttons', game: @game %></td>
+        </tr>
+      </tbody>
+    </table>
+    <%= render 'shared/round_type_table', edit_page: true %>
+    <%= render 'shared/round_total_score_table', edit_page: true %>
+    <%= render 'shared/round_score_table', edit_page: true, add_round_button: true %>
+  <% end %>
 <% end %>
