@@ -1,17 +1,15 @@
 class Round < ApplicationRecord
-  POSITIVE_VALUE = 400
-  NEGATIVE_VALUE = -400
-  POSITIVE_DIAMONDS = 50
-  NEGATIVE_DIAMONDS = -50
+  STANDARD_VALUE = 400
+  DIAMONDS_VALUE = 50
 
   after_initialize :set_default_scores
+  before_validation :validate_scores, on: :update
   before_create :set_position
   before_destroy :update_positions
 
   validates :round_type, presence: true
   validates :round_type, uniqueness: { scope: :game_player_id,
                                        message: 'Round already played!' }
-  validate :validate_scores
 
   belongs_to :game_player
   has_one :game, through: :game_player
@@ -52,66 +50,82 @@ class Round < ApplicationRecord
   def validate_scores
     case round_type
     when 'king'
-      validate_round_type_score(NEGATIVE_VALUE, (0..NEGATIVE_VALUE).step(-400).to_a, -400)
+      validate_king_scores
     when 'ten'
-      validate_round_type_score(POSITIVE_VALUE, (0..POSITIVE_VALUE).step(400).to_a, 400)
+      validate_ten_scores
     when 'queens'
-      validate_round_type_score(NEGATIVE_VALUE, (0..NEGATIVE_VALUE).step(-100).to_a, 100)
+      validate_queens_scores
     when 'diamonds'
-      expected_value = NEGATIVE_DIAMONDS * game.game_players.count * 2
-      validate_round_type_score(expected_value, (0..NEGATIVE_VALUE).step(-50).to_a, -50)
+      validate_diamonds_scores
     when 'totale_minus', 'totale_plus'
-      validate_totale_scores(round_type)
+      validate_totale_scores
     when 'rentz_minus', 'rentz_plus'
-      validate_rentz_scores(round_type)
+      validate_rentz_scores
     end
   end
 
-  def validate_totale_scores(round_type)
+  def validate_round_type_score(expected_value, allowed_values, step_value)
+    total_score = scores.values.sum(&:to_i)
+
+    return if total_score == expected_value && scores.values.all? { |score| allowed_values.include?(score.to_i) }
+
+    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'. " \
+                        "Total score should be #{expected_value}. " \
+                        "Use only multiples of #{step_value} from 0 to #{expected_value}.")
+  end
+
+  def validate_king_scores
+    validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-STANDARD_VALUE).to_a, -STANDARD_VALUE)
+  end
+
+  def validate_ten_scores
+    validate_round_type_score(STANDARD_VALUE, (0..STANDARD_VALUE).step(STANDARD_VALUE).to_a, STANDARD_VALUE)
+  end
+
+  def validate_queens_scores
+    validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-100).to_a, -100)
+  end
+
+  def validate_diamonds_scores
+    expected_value = -DIAMONDS_VALUE * game.game_players.count * 2
+    validate_round_type_score(expected_value, (0..-STANDARD_VALUE).step(-DIAMONDS_VALUE).to_a, -DIAMONDS_VALUE)
+  end
+
+  def validate_totale_scores
     if round_type == 'totale_plus'
-      expected_value = (POSITIVE_VALUE * 3) + (POSITIVE_DIAMONDS * game.game_players.count * 2)
+      expected_value = (STANDARD_VALUE * 3) + (DIAMONDS_VALUE * game.game_players.count * 2)
       allowed_values = (0..expected_value).step(50).to_a
       validate_round_type_score(expected_value, allowed_values, 50)
     else
-      expected_value = (NEGATIVE_VALUE * 3) + (NEGATIVE_DIAMONDS * game.game_players.count * 2)
+      expected_value = -(STANDARD_VALUE * 3) - (DIAMONDS_VALUE * game.game_players.count * 2)
       allowed_values = (0..expected_value).step(-50).to_a
       validate_round_type_score(expected_value, allowed_values, -50)
     end
   end
 
-  def validate_rentz_scores(round_type)
-    expected_value = calculate_rentz_expected_value(round_type)
+  def validate_rentz_scores
+    expected_value = calculate_rentz_expected_value
     step_value = round_type == 'rentz_plus' ? 400 : -400
     allowed_values = (0..expected_value).step(step_value).to_a
     player_scores = scores.values.map(&:to_i)
 
-    unless player_scores.uniq.length == player_scores.length
+    if player_scores.uniq.length == player_scores.length
+      validate_round_type_score(expected_value, allowed_values, step_value)
+    else
       errors.add(:scores, 'Each player should have a unique score.')
     end
-
-    validate_round_type_score(expected_value, allowed_values, step_value)
   end
 
-  def calculate_rentz_expected_value(round_type)
+  def calculate_rentz_expected_value
     case game.game_players.count
     when 3
-      round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE * 3
+      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 3
     when 4
-      round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE * 6
+      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 6
     when 5
-      round_type == 'rentz_plus' ? POSITIVE_VALUE * 2 : NEGATIVE_VALUE * 10
+      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 10
     when 6
-      round_type == 'rentz_plus' ? POSITIVE_VALUE * 3 : NEGATIVE_VALUE * 15
+      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 15
     end
-  end
-
-  def validate_round_type_score(expected_value, allowed_values, step)
-    total_score = scores.values.sum(&:to_i)
-
-    return if total_score == expected_value && scores.values.all? { |score| allowed_values.include?(score.to_i) }
-
-    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'.\n" \
-                        "Total score should be #{expected_value}.\n" \
-                        "Use only multiples of #{step} from 0 to #{expected_value}.")
   end
 end
