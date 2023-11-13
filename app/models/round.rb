@@ -4,7 +4,6 @@ class Round < ApplicationRecord
   POSITIVE_DIAMONDS = 50
   NEGATIVE_DIAMONDS = -50
 
-
   after_initialize :set_default_scores
   before_create :set_position
   before_destroy :update_positions
@@ -61,16 +60,22 @@ class Round < ApplicationRecord
     when 'diamonds'
       expected_value = NEGATIVE_DIAMONDS * game.game_players.count * 2
       validate_round_type_score(expected_value, (0..NEGATIVE_VALUE).step(-50).to_a, -50)
-    when 'totale_minus'
-      expected_value = (NEGATIVE_VALUE * 3) + (NEGATIVE_DIAMONDS * game.game_players.count * 2)
-      allowed_values = (0..expected_value).step(-50).to_a
-      validate_round_type_score(expected_value, allowed_values, -50)
-    when 'totale_plus'
+    when 'totale_minus', 'totale_plus'
+      validate_totale_scores(round_type)
+    when 'rentz_minus', 'rentz_plus'
+      validate_rentz_scores(round_type)
+    end
+  end
+
+  def validate_totale_scores(round_type)
+    if round_type == 'totale_plus'
       expected_value = (POSITIVE_VALUE * 3) + (POSITIVE_DIAMONDS * game.game_players.count * 2)
       allowed_values = (0..expected_value).step(50).to_a
       validate_round_type_score(expected_value, allowed_values, 50)
-    when 'rentz_minus', 'rentz_plus'
-      validate_rentz_scores(round_type)
+    else
+      expected_value = (NEGATIVE_VALUE * 3) + (NEGATIVE_DIAMONDS * game.game_players.count * 2)
+      allowed_values = (0..expected_value).step(-50).to_a
+      validate_round_type_score(expected_value, allowed_values, -50)
     end
   end
 
