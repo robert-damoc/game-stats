@@ -49,29 +49,13 @@ class Round < ApplicationRecord
 
   def validate_scores
     case round_type
-    when 'king'
-      validate_king_scores
-    when 'ten'
-      validate_ten_scores
-    when 'queens'
-      validate_queens_scores
-    when 'diamonds'
-      validate_diamonds_scores
-    when 'totale_minus', 'totale_plus'
-      validate_totale_scores
-    when 'rentz_minus', 'rentz_plus'
-      validate_rentz_scores
+    when 'king' then validate_king_scores
+    when 'ten' then validate_ten_scores
+    when 'queens' then alidate_queens_scores
+    when 'diamonds' then validate_diamonds_scores
+    when 'totale_minus', 'totale_plus' then validate_totale_scores
+    when 'rentz_minus', 'rentz_plus' then validate_rentz_scores
     end
-  end
-
-  def validate_round_type_score(expected_value, allowed_values, step_value)
-    total_score = scores.values.sum(&:to_i)
-
-    return if total_score == expected_value && scores.values.all? { |score| allowed_values.include?(score.to_i) }
-
-    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'. " \
-                        "Total score should be #{expected_value}. " \
-                        "Use only multiples of #{step_value} from 0 to #{expected_value}.")
   end
 
   def validate_king_scores
@@ -127,5 +111,15 @@ class Round < ApplicationRecord
     when 6
       (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 15
     end
+  end
+
+  def validate_round_type_score(expected_value, allowed_values, step_value)
+    total_score = scores.values.sum(&:to_i)
+
+    return if total_score == expected_value && scores.values.all? { |score| allowed_values.include?(score.to_i) }
+
+    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'. " \
+                        "Total score should be #{expected_value}. " \
+                        "Use only multiples of #{step_value} from 0 to #{expected_value}.")
   end
 end
