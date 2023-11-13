@@ -80,18 +80,29 @@ class Round < ApplicationRecord
   end
 
   def validate_rentz_scores(round_type)
-    expected_value = case game.game_players.count
-                     when 3
-                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 3
-                     when 4
-                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 6
-                     when 5
-                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 10
-                     when 6
-                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 15
-                     end
-    allowed_values = (0..expected_value).step(round_type == 'rentz_plus' ? 400 : -400).to_a
-    validate_round_type_score(expected_value, allowed_values, round_type == 'rentz_plus' ? 400 : -400)
+    expected_value = calculate_rentz_expected_value(round_type)
+    step_value = round_type == 'rentz_plus' ? 400 : -400
+    allowed_values = (0..expected_value).step(step_value).to_a
+    player_scores = scores.values.map(&:to_i)
+
+    unless player_scores.uniq.length == player_scores.length
+      errors.add(:scores, 'Each player should have a unique score.')
+    end
+
+    validate_round_type_score(expected_value, allowed_values, step_value)
+  end
+
+  def calculate_rentz_expected_value(round_type)
+    case game.game_players.count
+    when 3
+      round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE * 3
+    when 4
+      round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE * 6
+    when 5
+      round_type == 'rentz_plus' ? POSITIVE_VALUE * 2 : NEGATIVE_VALUE * 10
+    when 6
+      round_type == 'rentz_plus' ? POSITIVE_VALUE * 3 : NEGATIVE_VALUE * 15
+    end
   end
 
   def validate_round_type_score(expected_value, allowed_values, step)
