@@ -1,4 +1,10 @@
 class Round < ApplicationRecord
+  POSITIVE_VALUE = 400
+  NEGATIVE_VALUE = -400
+  POSITIVE_DIAMONDS = 50
+  NEGATIVE_DIAMONDS = -50
+
+
   after_initialize :set_default_scores
   before_create :set_position
   before_destroy :update_positions
@@ -6,7 +12,7 @@ class Round < ApplicationRecord
   validates :round_type, presence: true
   validates :round_type, uniqueness: { scope: :game_player_id,
                                        message: 'Round already played!' }
-    validate :scores_sum_validation
+  validate :validate_scores
 
   belongs_to :game_player
   has_one :game, through: :game_player
@@ -44,98 +50,52 @@ class Round < ApplicationRecord
     self.scores ||= {}
   end
 
-  def scores_sum_validation
-    return if scores.blank?
+  def validate_scores
+    case round_type
+    when 'king'
+      validate_round_type_score(NEGATIVE_VALUE, (0..NEGATIVE_VALUE).step(-400).to_a, -400)
+    when 'ten'
+      validate_round_type_score(POSITIVE_VALUE, (0..POSITIVE_VALUE).step(400).to_a, 400)
+    when 'queens'
+      validate_round_type_score(NEGATIVE_VALUE, (0..NEGATIVE_VALUE).step(-100).to_a, 100)
+    when 'diamonds'
+      expected_value = NEGATIVE_DIAMONDS * game.game_players.count * 2
+      validate_round_type_score(expected_value, (0..NEGATIVE_VALUE).step(-50).to_a, -50)
+    when 'totale_minus'
+      expected_value = (NEGATIVE_VALUE * 3) + (NEGATIVE_DIAMONDS * game.game_players.count * 2)
+      allowed_values = (0..expected_value).step(-50).to_a
+      validate_round_type_score(expected_value, allowed_values, -50)
+    when 'totale_plus'
+      expected_value = (POSITIVE_VALUE * 3) + (POSITIVE_DIAMONDS * game.game_players.count * 2)
+      allowed_values = (0..expected_value).step(50).to_a
+      validate_round_type_score(expected_value, allowed_values, 50)
+    when 'rentz_minus', 'rentz_plus'
+      validate_rentz_scores(round_type)
+    end
+  end
 
-    expected_score = case round_type
-                     when 'totale_minus'
-                       expected_score_for_totale_minus
-                     when 'totale_plus'
-                       expected_score_for_totale_plus
-                     when 'rentz_minus'
-                       expected_score_for_rentz_minus
-                     when 'rentz_plus'
-                       expected_score_for_rentz_plus
-                     when 'king'
-                       -400
-                     when 'ten', 'queens'
-                       400
-                     when 'diamonds'
-                       expected_score_for_diamonds
+  def validate_rentz_scores(round_type)
+    expected_value = case game.game_players.count
+                     when 3
+                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 3
+                     when 4
+                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 6
+                     when 5
+                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 10
+                     when 6
+                       (round_type == 'rentz_plus' ? POSITIVE_VALUE : NEGATIVE_VALUE) * 15
                      end
-
-    actual_score = scores.values.sum(&:to_i)
-
-    return if actual_score == expected_score
-
-    errors.add(
-      :scores,
-      "Total score should be #{expected_score} for round type '#{Round.round_types[round_type]}'. Current score is #{actual_score}."
-    )
+    allowed_values = (0..expected_value).step(round_type == 'rentz_plus' ? 400 : -400).to_a
+    validate_round_type_score(expected_value, allowed_values, round_type == 'rentz_plus' ? 400 : -400)
   end
 
-  def expected_score_for_totale_minus
-    case game.game_players.count
-    when 3
-      -1500
-    when 4
-      -1600
-    when 5
-      -1700
-    when 6
-      -1800
-    end
-  end
+  def validate_round_type_score(expected_value, allowed_values, step)
+    total_score = scores.values.sum(&:to_i)
 
-  def expected_score_for_totale_plus
-    case game.game_players.count
-    when 3
-      1500
-    when 4
-      1600
-    when 5
-      1700
-    when 6
-      1800
-    end
-  end
+    return if total_score == expected_value && scores.values.all? { |score| allowed_values.include?(score.to_i) }
 
-  def expected_score_for_rentz_minus
-    case game.game_players.count
-    when 3
-      -1200
-    when 4
-      -2400
-    when 5
-      -4000
-    when 6
-      -6000
-    end
-  end
-
-  def expected_score_for_rentz_plus
-    case game.game_players.count
-    when 3
-      1200
-    when 4
-      2400
-    when 5
-      4000
-    when 6
-      6000
-    end
-  end
-
-  def expected_score_for_diamonds
-    case game.game_players.count
-    when 3
-      -300
-    when 4
-      -400
-    when 5
-      -500
-    when 6
-      -600
-    end
+    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'.\n" \
+                        "Total score should be #{expected_value}.\n" \
+                        "Use only multiples of #{step} from 0 to #{expected_value}.")
   end
 end
