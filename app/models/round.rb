@@ -78,29 +78,25 @@ class Round < ApplicationRecord
   def validate_totale_scores
     if round_type == 'totale_plus'
       expected_value = (STANDARD_VALUE * 3) + (DIAMONDS_VALUE * game.game_players.count * 2)
-      allowed_values = (0..expected_value).step(50).to_a
-      validate_round_type_score(expected_value, allowed_values, 50)
+      validate_round_type_score(expected_value, (0..expected_value).step(50).to_a, 50)
     else
       expected_value = -(STANDARD_VALUE * 3) - (DIAMONDS_VALUE * game.game_players.count * 2)
-      allowed_values = (0..expected_value).step(-50).to_a
-      validate_round_type_score(expected_value, allowed_values, -50)
+      validate_round_type_score(expected_value, (0..expected_value).step(-50).to_a, -50)
     end
   end
 
   def validate_rentz_scores
-    expected_value = calculate_rentz_expected_value
     step_value = round_type == 'rentz_plus' ? 400 : -400
-    allowed_values = (0..expected_value).step(step_value).to_a
     player_scores = scores.values.map(&:to_i)
 
     if player_scores.uniq.length == player_scores.length
-      validate_round_type_score(expected_value, allowed_values, step_value)
+      validate_round_type_score(rentz_expected_value, (0..expected_value).step(step_value).to_a, step_value)
     else
       errors.add(:scores, 'Each player should have a unique score.')
     end
   end
 
-  def calculate_rentz_expected_value
+  def rentz_expected_value
     case game.game_players.count
     when 3
       (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 3
