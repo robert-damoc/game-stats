@@ -98,14 +98,10 @@ class Round < ApplicationRecord
 
   def rentz_expected_value
     case game.game_players.count
-    when 3
-      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 3
-    when 4
-      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 6
-    when 5
-      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 10
-    when 6
-      (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 15
+    when 3 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 3
+    when 4 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 6
+    when 5 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 10
+    when 6 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 15
     end
   end
 
