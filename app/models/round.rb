@@ -49,25 +49,13 @@ class Round < ApplicationRecord
 
   def validate_scores
     case round_type
-    when 'king' then validate_king_scores
-    when 'ten' then validate_ten_scores
-    when 'queens' then alidate_queens_scores
+    when 'king' then validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-STANDARD_VALUE).to_a, -STANDARD_VALUE)
+    when 'ten' then validate_round_type_score(STANDARD_VALUE, (0..STANDARD_VALUE).step(STANDARD_VALUE).to_a, STANDARD_VALUE)
+    when 'queens' then validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-100).to_a, -100)
     when 'diamonds' then validate_diamonds_scores
     when 'totale_minus', 'totale_plus' then validate_totale_scores
     when 'rentz_minus', 'rentz_plus' then validate_rentz_scores
     end
-  end
-
-  def validate_king_scores
-    validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-STANDARD_VALUE).to_a, -STANDARD_VALUE)
-  end
-
-  def validate_ten_scores
-    validate_round_type_score(STANDARD_VALUE, (0..STANDARD_VALUE).step(STANDARD_VALUE).to_a, STANDARD_VALUE)
-  end
-
-  def validate_queens_scores
-    validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-100).to_a, -100)
   end
 
   def validate_diamonds_scores
@@ -76,21 +64,18 @@ class Round < ApplicationRecord
   end
 
   def validate_totale_scores
-    if round_type == 'totale_plus'
-      expected_value = (STANDARD_VALUE * 3) + (DIAMONDS_VALUE * game.game_players.count * 2)
-      validate_round_type_score(expected_value, (0..expected_value).step(50).to_a, 50)
-    else
-      expected_value = -(STANDARD_VALUE * 3) - (DIAMONDS_VALUE * game.game_players.count * 2)
-      validate_round_type_score(expected_value, (0..expected_value).step(-50).to_a, -50)
-    end
+    expected_value = (STANDARD_VALUE * 3) + (DIAMONDS_VALUE * game.game_players.count * 2)
+    step_value = round_type == 'totale_plus' ? 50 : -50
+    validate_round_type_score(expected_value, (0..expected_value).step(step_value).to_a, step_value)
   end
 
   def validate_rentz_scores
+    expected_value = rentz_expected_value
     step_value = round_type == 'rentz_plus' ? 400 : -400
     player_scores = scores.values.map(&:to_i)
 
     if player_scores.uniq.length == player_scores.length
-      validate_round_type_score(rentz_expected_value, (0..expected_value).step(step_value).to_a, step_value)
+      validate_round_type_score(expected_value, (0..expected_value).step(step_value).to_a, step_value)
     else
       errors.add(:scores, 'Each player should have a unique score.')
     end
