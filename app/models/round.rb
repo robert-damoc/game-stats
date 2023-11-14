@@ -49,18 +49,24 @@ class Round < ApplicationRecord
 
   def validate_scores
     case round_type
-    when 'king' then validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-STANDARD_VALUE).to_a, -STANDARD_VALUE)
-    when 'ten' then validate_round_type_score(STANDARD_VALUE, (0..STANDARD_VALUE).step(STANDARD_VALUE).to_a, STANDARD_VALUE)
-    when 'queens' then validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-100).to_a, -100)
-    when 'diamonds' then validate_diamonds_scores
-    when 'totale_minus', 'totale_plus' then validate_totale_scores
-    when 'rentz_minus', 'rentz_plus' then validate_rentz_scores
+    when 'king'
+      validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-STANDARD_VALUE).to_a, -400)
+    when 'ten'
+      validate_round_type_score(STANDARD_VALUE, (0..STANDARD_VALUE).step(STANDARD_VALUE).to_a, 400)
+    when 'queens'
+      validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-100).to_a, -100)
+    when 'diamonds'
+      validate_diamonds_scores
+    when 'totale_minus', 'totale_plus'
+      validate_totale_scores
+    when 'rentz_minus', 'rentz_plus'
+      validate_rentz_scores
     end
   end
 
   def validate_diamonds_scores
     expected_value = -DIAMONDS_VALUE * game.game_players.count * 2
-    validate_round_type_score(expected_value, (0..-STANDARD_VALUE).step(-DIAMONDS_VALUE).to_a, -DIAMONDS_VALUE)
+    validate_round_type_score(expected_value, (0..-STANDARD_VALUE).step(-DIAMONDS_VALUE).to_a, -50)
   end
 
   def validate_totale_scores
