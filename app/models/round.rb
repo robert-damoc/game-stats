@@ -1,5 +1,6 @@
 class Round < ApplicationRecord
   STANDARD_VALUE = 400
+  QUEENS_VALUE = 100
   DIAMONDS_VALUE = 50
 
   after_initialize :set_default_scores
@@ -50,13 +51,14 @@ class Round < ApplicationRecord
   def validate_scores
     case round_type
     when 'king'
-      validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-STANDARD_VALUE).to_a, -400)
+      validate_round_type_score(-STANDARD_VALUE, -STANDARD_VALUE)
     when 'ten'
-      validate_round_type_score(STANDARD_VALUE, (0..STANDARD_VALUE).step(STANDARD_VALUE).to_a, 400)
+      validate_round_type_score(STANDARD_VALUE, STANDARD_VALUE)
     when 'queens'
-      validate_round_type_score(-STANDARD_VALUE, (0..-STANDARD_VALUE).step(-100).to_a, -100)
+      validate_round_type_score(-STANDARD_VALUE, QUEENS_VALUE)
     when 'diamonds'
-      validate_diamonds_scores
+      expected_value = -DIAMONDS_VALUE * game.game_players.count * 2
+      validate_round_type_score(expected_value, -DIAMONDS_VALUE)
     when 'totale_minus', 'totale_plus'
       validate_totale_scores
     when 'rentz_minus', 'rentz_plus'
@@ -64,45 +66,41 @@ class Round < ApplicationRecord
     end
   end
 
-  def validate_diamonds_scores
-    expected_value = -DIAMONDS_VALUE * game.game_players.count * 2
-    validate_round_type_score(expected_value, (0..-STANDARD_VALUE).step(-DIAMONDS_VALUE).to_a, -50)
-  end
-
   def validate_totale_scores
     expected_value = (STANDARD_VALUE * 3) + (DIAMONDS_VALUE * game.game_players.count * 2)
-    step_value = round_type == 'totale_plus' ? 50 : -50
-    validate_round_type_score(expected_value, (0..expected_value).step(step_value).to_a, step_value)
+    step_value = round_type == 'totale_plus' ? DIAMONDS_VALUE : -DIAMONDS_VALUE
+    validate_round_type_score(expected_value, step_value)
   end
 
   def validate_rentz_scores
-    expected_value = rentz_expected_value
-    step_value = round_type == 'rentz_plus' ? 400 : -400
+    sign = (round_type == 'rentz_plus' ? 1 : -1)
+    expected_value = sign * STANDARD_VALUE * game.game_players.count * (game.game_players.count - 1) / 2
+    step_value = sign * STANDARD_VALUE
+
     player_scores = scores.values.map(&:to_i)
 
     if player_scores.uniq.length == player_scores.length
-      validate_round_type_score(expected_value, (0..expected_value).step(step_value).to_a, step_value)
+      validate_round_type_score(expected_value, step_value)
     else
       errors.add(:scores, 'Each player should have a unique score.')
     end
   end
 
-  def rentz_expected_value
-    case game.game_players.count
-    when 3 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 3
-    when 4 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 6
-    when 5 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 10
-    when 6 then (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE) * 15
+  def validate_round_type_score(expected_value, step_value)
+    total_score = scores.values.sum(&:to_i)
+
+    return if valid_score?(total_score, expected_value, step_value)
+
+    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'.")
+    errors.add(:scores, "Total score should be #{expected_value}.") unless total_score == expected_value
+    errors.add(:scores, "Use only multiples of #{step_value}.") unless scores.values.all? do |score|
+      (score.to_i - expected_value).modulo(step_value).zero?
     end
   end
 
-  def validate_round_type_score(expected_value, allowed_values, step_value)
-    total_score = scores.values.sum(&:to_i)
-
-    return if total_score == expected_value && scores.values.all? { |score| allowed_values.include?(score.to_i) }
-
-    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'. " \
-                        "Total score should be #{expected_value}. " \
-                        "Use only multiples of #{step_value} from 0 to #{expected_value}.")
+  def valid_score?(total_score, expected_value, step_value)
+    total_score == expected_value && scores.values.all? do |score|
+      (score.to_i - expected_value).modulo(step_value).zero?
+    end
   end
 end
