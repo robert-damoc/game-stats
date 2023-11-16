@@ -50,57 +50,63 @@ class Round < ApplicationRecord
 
   def validate_scores
     case round_type
-    when 'king'
-      validate_round_type_score(-STANDARD_VALUE, -STANDARD_VALUE)
-    when 'ten'
-      validate_round_type_score(STANDARD_VALUE, STANDARD_VALUE)
-    when 'queens'
-      validate_round_type_score(-STANDARD_VALUE, QUEENS_VALUE)
+    when 'ten' then validate_round_type_score(STANDARD_VALUE, STANDARD_VALUE)
+    when 'king' then validate_round_type_score(-STANDARD_VALUE, -STANDARD_VALUE)
+    when 'queens' then validate_round_type_score(-STANDARD_VALUE, -QUEENS_VALUE)
+    when 'totale_minus', 'totale_plus' then validate_totale_scores
+    when 'rentz_minus', 'rentz_plus' then validate_rentz_scores
     when 'diamonds'
       expected_value = -DIAMONDS_VALUE * game.game_players.count * 2
       validate_round_type_score(expected_value, -DIAMONDS_VALUE)
-    when 'totale_minus', 'totale_plus'
-      validate_totale_scores
-    when 'rentz_minus', 'rentz_plus'
-      validate_rentz_scores
     end
   end
 
   def validate_totale_scores
     expected_value = (STANDARD_VALUE * 3) + (DIAMONDS_VALUE * game.game_players.count * 2)
-    step_value = round_type == 'totale_plus' ? DIAMONDS_VALUE : -DIAMONDS_VALUE
-    validate_round_type_score(expected_value, step_value)
+    if round_type == 'totale_plus'
+      validate_round_type_score(expected_value, DIAMONDS_VALUE)
+    else
+      validate_round_type_score(-expected_value, -DIAMONDS_VALUE)
+    end
   end
 
   def validate_rentz_scores
-    sign = (round_type == 'rentz_plus' ? 1 : -1)
-    expected_value = sign * STANDARD_VALUE * game.game_players.count * (game.game_players.count - 1) / 2
-    step_value = sign * STANDARD_VALUE
+    step_value = (round_type == 'rentz_plus' ? STANDARD_VALUE : -STANDARD_VALUE)
+    expected_value = step_value * game.game_players.count * (game.game_players.count - 1) / 2
 
-    player_scores = scores.values.map(&:to_i)
+    validate_rentz_unique_scores(expected_value, step_value)
+  end
 
-    if player_scores.uniq.length == player_scores.length
-      validate_round_type_score(expected_value, step_value)
-    else
-      errors.add(:scores, 'Each player should have a unique score.')
-    end
+  def validate_rentz_unique_scores(expected_value, step_value)
+    return errors.add(:scores, 'Each player should have a unique score.') unless
+      scores.values.map(&:to_i).uniq.length == scores.values.map(&:to_i).length
+
+    validate_round_type_score(expected_value, step_value)
   end
 
   def validate_round_type_score(expected_value, step_value)
     total_score = scores.values.sum(&:to_i)
 
-    return if valid_score?(total_score, expected_value, step_value)
-
-    errors.add(:scores, "Invalid score for '#{Round.round_types[round_type]}'.")
-    errors.add(:scores, "Total score should be #{expected_value}.") unless total_score == expected_value
-    errors.add(:scores, "Use only multiples of #{step_value}.") unless scores.values.all? do |score|
-      (score.to_i - expected_value).modulo(step_value).zero?
-    end
+    validate_total_score?(total_score, expected_value)
+    validate_individual_scores(expected_value, step_value)
   end
 
-  def valid_score?(total_score, expected_value, step_value)
-    total_score == expected_value && scores.values.all? do |score|
-      (score.to_i - expected_value).modulo(step_value).zero?
-    end
+  def validate_total_score?(total_score, expected_value)
+    return true if total_score == expected_value
+
+    errors.add(:scores, "Total score should be #{expected_value}.")
+    false
+  end
+
+  def validate_individual_scores(expected_value, step_value)
+    validate_step_values = scores.values.all? { |score| (score.to_i - expected_value).modulo(step_value).zero? }
+    validate_individual_values = scores.values.all? { |score| score.to_i <= expected_value }
+
+    return true if validate_step_values && validate_individual_values
+
+    errors.add(:scores, "Use only multiples of #{step_value}.") unless validate_step_values
+    errors.add(:scores, "Each score should be at most #{expected_value}.") unless validate_individual_values
+
+    false
   end
 end
