@@ -50,38 +50,38 @@ class Round < ApplicationRecord
 
   def validate_scores
     case round_type
-    when 'ten' then validate_round_type_score(STANDARD_VALUE, STANDARD_VALUE)
-    when 'king' then validate_round_type_score(-STANDARD_VALUE, -STANDARD_VALUE)
-    when 'queens' then validate_round_type_score(-STANDARD_VALUE, -QUEENS_VALUE)
-    when 'totale_minus' then validate_totale_scores(-STANDARD_VALUE, -DIAMONDS_VALUE)
-    when 'totale_plus' then validate_totale_scores(STANDARD_VALUE, DIAMONDS_VALUE)
-    when 'rentz_minus' then validate_rentz_scores(-STANDARD_VALUE)
-    when 'rentz_plus'  then validate_rentz_scores(STANDARD_VALUE)
-    when 'diamonds' then validate_diamonds_scores(-DIAMONDS_VALUE)
+    when 'ten' then validate_round_type_score(expected_value: STANDARD_VALUE, step_value: STANDARD_VALUE)
+    when 'king' then validate_round_type_score(expected_value: -STANDARD_VALUE, step_value: -STANDARD_VALUE)
+    when 'queens' then validate_round_type_score(expected_value: -STANDARD_VALUE, step_value: -QUEENS_VALUE)
+    when 'totale_minus' then validate_totale_scores(standard_value: -STANDARD_VALUE, step_value: -DIAMONDS_VALUE)
+    when 'totale_plus' then validate_totale_scores(standard_value: STANDARD_VALUE, step_value: DIAMONDS_VALUE)
+    when 'rentz_minus' then validate_rentz_scores(step_value: -STANDARD_VALUE)
+    when 'rentz_plus'  then validate_rentz_scores(step_value: STANDARD_VALUE)
+    when 'diamonds' then validate_diamonds_scores(step_value: -DIAMONDS_VALUE)
     end
   end
 
-  def validate_diamonds_scores(step_value)
+  def validate_diamonds_scores(step_value:)
     expected_value = step_value * game.game_players.count * 2
-    validate_round_type_score(expected_value, step_value)
+    validate_round_type_score(expected_value:, step_value:)
   end
 
-  def validate_totale_scores(standard_value, step_value)
+  def validate_totale_scores(standard_value:, step_value:)
     expected_value = (standard_value * 3) + (step_value * game.game_players.count * 2)
-    validate_round_type_score(expected_value, step_value)
+    validate_round_type_score(expected_value:, step_value:)
   end
 
-  def validate_rentz_scores(step_value)
+  def validate_rentz_scores(step_value:)
     expected_value = step_value * game.game_players.count * (game.game_players.count - 1) / 2
 
     return errors.add(:scores, 'Each player should have a unique score.') unless
     scores.values.map(&:to_i).uniq.length == scores.values.map(&:to_i).length
 
-    validate_round_type_score(expected_value, step_value)
+    validate_round_type_score(expected_value:, step_value:)
   end
 
-  def validate_round_type_score(expected_value, step_value)
-    valid_total_score(expected_value)
+  def validate_round_type_score(expected_value:, step_value:)
+    valid_total_score(expected_value:)
     valid_step_values = scores.values.all? do |score|
       (score.to_i - expected_value).modulo(step_value).zero?
     end
@@ -93,7 +93,7 @@ class Round < ApplicationRecord
     errors.add(:scores, "Score should be 0 or have the same sign as #{step_value}.") unless valid_sign_score
   end
 
-  def valid_total_score(expected_value)
+  def valid_total_score(expected_value:)
     return if scores.values.sum(&:to_i) == expected_value
 
     errors.add(:scores, "Total score should be #{expected_value}.")
