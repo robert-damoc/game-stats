@@ -1,24 +1,20 @@
-# README
+# About
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Web abb used for keeping score for `rentz` card game, also it will provide statistics about games, players and scores saved in the database.
 
-Things you may want to cover:
+It was created with Ruby on Rails using as database PostreSQL.
+Version used are: Ruby 3.2.2 and Rails 7.0.8.
 
-* Ruby version
+# Setup
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Install Ruby and Rails on macOS
+1. Install Homebrew (if not already installed)
+  * /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+2. Install Ruby using rbenv via Homebrew
+`brew install rbenv`
+`rbenv init`
+3. Install Ruby
+rbenv install 3.2.2
+rbenv global 3.2.2
+4. Install Rails
+gem install rails -v 7.0.8
