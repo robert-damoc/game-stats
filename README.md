@@ -9,19 +9,19 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
 
 1. Go to the RubyInstaller website https://rubyinstaller.org/. Download the appropriate RubyInstaller for your operating system an folow the instalion steps.
 2. To verify that Ruby is installed correctly, open a terminal window and type the following command:
-    ruby -v
+    `ruby -v`
 3. To install Rails type in your terminal window the following command
-    gem install rails -v 7.0.8
+    `gem install rails -v 7.0.8`
 4. Go to the PostgreSQL website https://www.postgresql.org/download/. Download the appropriate PostgreSQL installer for your operating system and folow the instalation steps.
 5. Install bundler:
-    gem install bundler
+    `gem install bundler`
 6. Install the project's dependencies:
-    bundle install
+    `bundle install`
 7. Create and setup the database:
-    rails db:create
-    rails db:migrate
+    `rails db:create`
+    `rails db:migrate`
 8. Open server:
-    rails s
+    `rails s`
 9. Open application in browser at: http://localhost:3000
 
 # Instructions
@@ -32,14 +32,3 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
 4. Start inserting rounds from `+` icon on the scores table.
 5. Input score on every round by editing the round on the score table.
 6. Complete or cancel the game by clicking the corresponding icons on actions column
-
-# Round Points
-
-* Diamonds       -50 every Diamond
-* Queens         -100 every Queen
-* Ten of Clubs   +400
-* King of Hearts -400
-* Rentz plus     first player out 0, second  player out +400, third player out +800 and so on.
-* Rentz minus    last player out 0, second to last player out -400, third to last player out -800 and so on.
-* Totale plus    +50 every Hand and +50 every Diamond and +100 every Queen and +400 for the Ten of Clubs
-* Totale minus   -50 every Hand and -50 every Diamond and -100 every Queen and -400 for the King of Hearts
