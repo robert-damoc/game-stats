@@ -18,3 +18,4 @@ rbenv install 3.2.2
 rbenv global 3.2.2
 4. Install Rails
 gem install rails -v 7.0.8
+
