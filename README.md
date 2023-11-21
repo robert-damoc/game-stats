@@ -7,15 +7,17 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
 
 # Setup
 
-Install Ruby and Rails on macOS
-1. Install Homebrew (if not already installed)
-  * /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-2. Install Ruby using rbenv via Homebrew
-`brew install rbenv`
-`rbenv init`
-3. Install Ruby
-rbenv install 3.2.2
-rbenv global 3.2.2
-4. Install Rails
-gem install rails -v 7.0.8
-
+1. Go to the RubyInstaller website https://rubyinstaller.org/ and download the appropriate RubyInstaller for your operating system.
+2. Once the download is complete, run the RubyInstaller executable.
+3. To verify that Ruby is installed correctly, open a terminal window and type the following command:
+      ruby -v
+4. To install Rails type in your terminal window the following command
+      gem install rails -v 7.0.8
+5. Go to the PostgreSQL website https://www.postgresql.org/download/ and download the appropriate PostgreSQL installer for your operating system.
+6. Install bundler:
+      gem install bundler
+7. Install the project's dependencies:
+      bundle install
+8. Create and setup the database:
+      rails db:create
+      rails db:migrate
