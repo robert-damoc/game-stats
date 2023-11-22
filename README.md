@@ -1,4 +1,5 @@
 # Game-stats
+<img src="./readme_images/game_example.png" title="Edit" width="400">
 
 ## About
 
@@ -10,33 +11,38 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
 ## Setup
 
 1. Go to the [RubyInstaller website](https://rubyinstaller.org/). Download the appropriate RubyInstaller for your operating system an folow the instalion steps.
-2. To verify that Ruby is installed correctly, open a terminal window and type the following command:
-    ```
+1. To verify that Ruby is installed correctly, open a terminal window and type the following command:
+    ```sh
     ruby -v
     ```
-3. To install Rails type in your terminal window the following command
-    ```
+1. To install Rails type in your terminal window the following command
+    ```sh
     gem install rails -v 7.0.8
     ```
-4. Go to the [PostgreSQL website](https://www.postgresql.org/download/). Download the appropriate PostgreSQL installer for your operating system and folow the instalation steps.
-5. Install bundler:
-```
-gem install bundler
-```
-6. Install the project's dependencies:
-```
-bundle install
-```
-7. Create and setup the database:
-```
-rails db:create
-rails db:migrate
-```
-8. Open server:
-```
-rails s
-```
-9. Open application in browser at: [Game-stats](http://localhost:3000)
+1. Go to the [PostgreSQL website](https://www.postgresql.org/download/). Download the appropriate PostgreSQL installer for your operating system and folow the instalation steps.
+1. Install bundler:
+    ```sh
+    gem install bundler
+    ```
+
+1. Install the project's dependencies:
+    ```sh
+    bundle install
+    ```
+1. Create and setup the database:
+    ```sh
+    rails db:create
+    rails db:migrate
+    ```
+1. Add seeds if needed.
+    ```sh
+    rails db:seeds
+    ```
+1. Open server:
+    ```sh
+    rails s
+    ```
+1. Open application in browser at: [Game-stats](http://localhost:3000)
 
 ## Instructions
 
