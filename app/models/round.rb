@@ -6,8 +6,8 @@ class Round < ApplicationRecord
   ROUND_DESCRIPTION = {
     totale_minus: 'Sum of King, Diamonds, Queens and Tricks (each Trick -50)',
     totale_plus: 'Sum of Ten, Diamonds, Queens and Tricks (each Trick +50)',
-    rentz_minus: 'Scores: 0, -400, -800, -1200, ...',
-    rentz_plus: 'Scores: 0, +400, +800, +1200, ...',
+    rentz_minus: 'Scores from last: 0, -400, -800, -1200, ...',
+    rentz_plus: 'Scores from first: 0, +400, +800, +1200, ...',
     king: '-400 for King of Hearts',
     ten: '+400 for Ten of Clubs',
     queens: '-100 each Queen',
