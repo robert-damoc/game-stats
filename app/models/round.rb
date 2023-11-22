@@ -3,6 +3,17 @@ class Round < ApplicationRecord
   QUEENS_VALUE = 100
   DIAMONDS_VALUE = 50
 
+  ROUND_DESCRIPTION = {
+    totale_minus: 'test1',
+    totale_plus: 'test2',
+    rentz_minus: 'test3',
+    rentz_plus: 'test4',
+    king: '-400 for King of Hearts',
+    ten: '+400 for Ten of Clubs',
+    queens: '-100 for every Queen',
+    diamonds: ' -50 for every Diamond'
+  }.freeze
+
   after_initialize :set_default_scores
   before_validation :validate_scores, on: :update
   before_create :set_position
