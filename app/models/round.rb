@@ -4,14 +4,14 @@ class Round < ApplicationRecord
   DIAMONDS_VALUE = 50
 
   ROUND_DESCRIPTION = {
-    totale_minus: 'test1',
-    totale_plus: 'test2',
-    rentz_minus: 'test3',
-    rentz_plus: 'test4',
+    totale_minus: 'Sum of King, Diamonds, Queens and Tricks (each Trick -50)',
+    totale_plus: 'Sum of Ten, Diamonds, Queens and Tricks (each Trick +50)',
+    rentz_minus: 'Scores: 0, -400, -800, -1200, ...',
+    rentz_plus: 'Scores: 0, +400, +800, +1200, ...',
     king: '-400 for King of Hearts',
     ten: '+400 for Ten of Clubs',
-    queens: '-100 for every Queen',
-    diamonds: ' -50 for every Diamond'
+    queens: '-100 each Queen',
+    diamonds: ' -50 each Diamond'
   }.freeze
 
   after_initialize :set_default_scores
