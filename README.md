@@ -10,7 +10,7 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
 
 ## Setup
 
-1. Go to the [RubyInstaller website](https://rubyinstaller.org/). Download the appropriate RubyInstaller for your operating system an folow the instalion steps.
+1. Go to the [Rbenv](https://github.com/rbenv/rbenv) and folow the installation steps of Ruby.
 1. To verify that Ruby is installed correctly, open a terminal window and type the following command:
     ```sh
     ruby -v
@@ -46,9 +46,16 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
 
 ## Instructions
 
-1. Create players. Enter the players page: http://localhost:3000/players and create players that will play the game.
-2. Create game. Enter the games page: http://localhost:3000/games and create a game also adding the players to the game.
-3. Start the game. Click on play icon on actions column.
-4. Start inserting rounds from `+` icon on the scores table.
-5. Input score on every round by editing the round on the score table.
-6. Complete or cancel the game by clicking the corresponding icons on actions column
+* Create players.
+<img src="./readme_images/1_add_player.jpeg" title="Add players" width="400">
+* Create game and add the players.
+<img src="./readme_images/2_add_game.jpeg" title="Add game" width="400">
+<img src="./readme_images/3_choose_game_players.jpeg" title="Add players to game" width="400">
+* Start the game.
+<img src="./readme_images/4_start_game.jpeg" title="Start game" width="400">
+* Start round.
+<img src="./readme_images/2_add_game.jpeg" title="Add game" width="400">
+* Input score on every round by editing the round on the score table.
+<img src="./readme_images/5_start_round.jpeg" title="Add round" width="400">
+* Complete or cancel the game by clicking the corresponding icons on actions column
+<img src="./readme_images/2_add_game.jpeg" title="Add game" width="400">
