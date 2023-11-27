@@ -5,11 +5,10 @@
 
 Web aplication used for keeping score of `rentz` card game, also it will provide statistics about games, players and scores saved in the database.
 
-It was created with Ruby on Rails using as database PostreSQL.
-Version used are: Ruby 3.2.2 and Rails 7.0.8.
+It was created with Ruby on Rails (Ruby 3.2.2 and Rails 7.0.8) using as database PostreSQL.
 
 ## Setup
-
+1. Clone the repository.
 1. Go to the [Rbenv](https://github.com/rbenv/rbenv) and folow the installation steps of Ruby.
 1. To verify that Ruby is installed correctly, open a terminal window and type the following command:
     ```sh
@@ -24,7 +23,6 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
     ```sh
     gem install bundler
     ```
-
 1. Install the project's dependencies:
     ```sh
     bundle install
@@ -44,18 +42,31 @@ Version used are: Ruby 3.2.2 and Rails 7.0.8.
     ```
 1. Open application in browser at: [Game-stats](http://localhost:3000)
 
-## Instructions
+## Usage
 
 * Create players.
 <img src="./readme_images/1_add_player.jpeg" title="Add players" width="400">
+
 * Create game and add the players.
 <img src="./readme_images/2_add_game.jpeg" title="Add game" width="400">
 <img src="./readme_images/3_choose_game_players.jpeg" title="Add players to game" width="400">
+
 * Start the game.
 <img src="./readme_images/4_start_game.jpeg" title="Start game" width="400">
+
 * Start round.
-<img src="./readme_images/2_add_game.jpeg" title="Add game" width="400">
+<img src="./readme_images/5_start_round.jpeg" title="Add game" width="400">
+
+* Choose round_type and player
+<img src="./readme_images/6_choose_round_and_player.jpeg" title="Add round" width="400">
+
 * Input score on every round by editing the round on the score table.
-<img src="./readme_images/5_start_round.jpeg" title="Add round" width="400">
-* Complete or cancel the game by clicking the corresponding icons on actions column
-<img src="./readme_images/2_add_game.jpeg" title="Add game" width="400">
+<img src="./readme_images/7_edit_round.jpeg" title="Add round" width="400">
+<img src="./readme_images/8_insert_score.jpeg" title="Add round" width="400">
+
+* Complete or cancel the game
+<img src="./readme_images/9_cancel_or_complete_game.jpeg" title="Add game" width="400">
+
+## Work in progress
+
+I will next implement `hotwire` to be more efficient on using it.
