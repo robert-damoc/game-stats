@@ -66,7 +66,3 @@ It was created with Ruby on Rails (Ruby 3.2.2 and Rails 7.0.8) using as database
 
 * Complete or cancel the game
 <img src="./readme_images/9_cancel_or_complete_game.jpeg" title="Add game" width="400">
-
-## Work in progress
-
-I will next implement `hotwire` to be more efficient on using it.
