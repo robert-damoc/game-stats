@@ -160,6 +160,58 @@ describe 'Players' do
     end
   end
 
+  describe 'POST /players' do
+    subject(:create_player) { post players_path, params: }
+
+    let(:assigned_player) { assigns(:player) }
+    let(:params) { { player: { name: nil } } }
+
+    context 'when params is empty' do
+      it do
+        aggregate_failures do
+          expect { create_player }.not_to change(Player, :count)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(flash.now[:notice]).to eq "can't be blank"
+          expect(assigned_player.errors.full_messages).to include("Name can't be blank")
+          expect(assigned_player).not_to be_persisted
+        end
+      end
+    end
+
+    context 'when name is too long' do
+      let(:params) { { player: { name: 'a' * 31 } } }
+
+      it do
+        aggregate_failures do
+          expect { create_player }.not_to change(Player, :count)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(flash.now[:notice]).to eq(
+            'is too long (maximum is 30 characters)'
+          )
+          expect(assigned_player.errors.full_messages).to include(
+            'Name is too long (maximum is 30 characters)'
+          )
+          expect(assigned_player).not_to be_persisted
+        end
+      end
+    end
+
+    context 'when name is valid' do
+      let(:params) { { player: { name: Faker::Name.first_name[...30] } } }
+
+      it do
+        aggregate_failures do
+          expect { create_player }.to change(Player, :count).by(1)
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to(players_url)
+          expect(flash.now[:notice]).to eq 'Player was successfully created.'
+          expect(assigned_player.errors).to be_empty
+          expect(assigned_player).to be_persisted
+        end
+      end
+    end
+  end
+
   describe 'DELETE /players/:id' do
     subject(:delete_player) { delete player_path(id) }
 
@@ -181,7 +233,11 @@ describe 'Players' do
 
       it do
         delete_player
-        expect(response).to have_http_status(:found)
+
+        aggregate_failures do
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to(players_url)
+        end
       end
 
       it do
