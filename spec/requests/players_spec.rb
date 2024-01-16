@@ -159,4 +159,71 @@ describe 'Players' do
       it { expect(assigned_player).to be_nil }
     end
   end
+
+  describe 'DELETE /players/:id' do
+    subject(:delete_player) { delete player_path(id) }
+
+    let(:assigned_player) { assigns(:player) }
+
+    context 'when player exists' do
+      let(:actual_player) { create(:player) }
+      let(:id) { actual_player.id }
+
+      it do
+        actual_player
+
+        aggregate_failures do
+          expect { delete_player }.to change(Player, :count).by(-1)
+          expect { assigned_player.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          expect(flash[:notice]).to eq 'Player was successfully destroyed.'
+        end
+      end
+
+      it do
+        delete_player
+        expect(response).to have_http_status(:found)
+      end
+
+      it do
+        delete_player
+        expect(assigned_player).to eq actual_player
+      end
+    end
+
+    context 'when id is not UUID' do
+      let(:id) { '1' }
+
+      it do
+        expect { delete_player }.not_to change(Player, :count)
+      end
+
+      it do
+        delete_player
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it do
+        delete_player
+        expect(assigned_player).to be_nil
+      end
+    end
+
+    context 'when player does not exist' do
+      let(:id) { SecureRandom.uuid }
+
+      it do
+        expect { delete_player }.not_to change(Player, :count)
+      end
+
+      it do
+        delete_player
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it do
+        delete_player
+        expect(assigned_player).to be_nil
+      end
+    end
+  end
 end

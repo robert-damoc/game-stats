@@ -27,6 +27,9 @@ Rails/Output:
   Exclude:
    - 'db/seeds.rb'
 
+RSpec/ExampleLength:
+  Enabled: false
+
 RSpec/MultipleMemoizedHelpers:
   Enabled: false
 
