@@ -118,4 +118,34 @@ describe 'Players' do
       it { expect(assigned_player).to be_nil }
     end
   end
+
+  describe 'GET /player/:id/edit' do
+    subject(:get_edit_player) { get edit_player_path(id) }
+
+    let(:assigned_player) { assigns(:player) }
+
+    before { get_edit_player }
+
+    context 'when player exists' do
+      let(:actual_player) { create(:player) }
+      let(:id) { actual_player.id }
+
+      it { expect(response).to have_http_status(:ok) }
+      it { expect(assigned_player).to eq actual_player }
+    end
+
+    context 'when id is not UUID' do
+      let(:id) { '1' }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_player).to be_nil }
+    end
+
+    context 'when player does not exist' do
+      let(:id) { SecureRandom.uuid }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_player).to be_nil }
+    end
+  end
 end
