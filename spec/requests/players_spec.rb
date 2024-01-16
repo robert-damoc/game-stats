@@ -89,7 +89,7 @@ describe 'Players' do
     end
   end
 
-  describe 'GET /player/:id' do
+  describe 'GET /players/:id' do
     subject(:get_player) { get player_path(id) }
 
     let(:assigned_player) { assigns(:player) }
@@ -119,7 +119,18 @@ describe 'Players' do
     end
   end
 
-  describe 'GET /player/:id/edit' do
+  describe 'GET /players/new' do
+    subject(:get_new_player) { get new_player_path }
+
+    let(:assigned_player) { assigns(:player) }
+
+    before { get_new_player }
+
+    it { expect(response).to have_http_status(:ok) }
+    it { expect(assigned_player).to be_a Player }
+  end
+
+  describe 'GET /players/:id/edit' do
     subject(:get_edit_player) { get edit_player_path(id) }
 
     let(:assigned_player) { assigns(:player) }
