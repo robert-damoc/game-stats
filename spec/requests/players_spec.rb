@@ -212,6 +212,75 @@ describe 'Players' do
     end
   end
 
+  describe 'PUT /players/:id' do
+    subject(:update_player) { put player_path(id), params: }
+
+    let(:assigned_player) { assigns(:player) }
+    let(:params) { { player: { name: nil } } }
+
+    let(:actual_player) { create(:player, name: initial_name) }
+    let(:id) { actual_player.id }
+    let(:initial_name) { 'initial name' }
+
+    before { update_player }
+
+    context 'when params is empty' do
+      it do
+        aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(flash.now[:notice]).to eq "can't be blank"
+          expect(assigned_player.errors.full_messages).to include("Name can't be blank")
+          expect(assigned_player.reload.name).to eq initial_name
+        end
+      end
+    end
+
+    context 'when name is too long' do
+      let(:params) { { player: { name: 'a' * 31 } } }
+
+      it do
+        aggregate_failures do
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(flash.now[:notice]).to eq(
+            'is too long (maximum is 30 characters)'
+          )
+          expect(assigned_player.errors.full_messages).to include(
+            'Name is too long (maximum is 30 characters)'
+          )
+          expect(assigned_player.reload.name).to eq initial_name
+        end
+      end
+    end
+
+    context 'when name is valid' do
+      let(:params) { { player: { name: Faker::Name.first_name[...30] } } }
+
+      it do
+        aggregate_failures do
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to(player_url)
+          expect(flash.now[:notice]).to eq 'Player was successfully updated.'
+          expect(assigned_player.errors).to be_empty
+          expect(assigned_player.reload.name).to eq params[:player][:name]
+        end
+      end
+    end
+
+    context 'when id is not UUID' do
+      let(:id) { '1' }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_player).to be_nil }
+    end
+
+    context 'when player does not exist' do
+      let(:id) { SecureRandom.uuid }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_player).to be_nil }
+    end
+  end
+
   describe 'DELETE /players/:id' do
     subject(:delete_player) { delete player_path(id) }
 
