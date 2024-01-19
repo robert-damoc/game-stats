@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Players' do
+describe 'Games' do
   describe 'GET /games' do
     subject(:get_games) { get games_path, params: }
 
@@ -31,9 +31,7 @@ describe 'Players' do
     context 'when providing invalid page number' do
       let(:params) { { page: 2 } }
 
-      before do
-        create_list(:game, 2)
-      end
+      before { create_list(:game, 2) }
 
       it do
         expect { get_games }.to raise_error(Pagy::OverflowError)
@@ -90,5 +88,44 @@ describe 'Players' do
       it { expect(assigned_pagy.as_json).to include(expected_pagy_vars) }
     end
   end
-end
 
+  describe 'GET /games/:id' do
+    subject(:get_game) { get game_path(id) }
+
+    let(:assigned_game) { assigns(:game) }
+    let(:assigned_player_totals) { assigns(:player_totals) }
+
+    before { get_game }
+
+    context 'when game exists' do
+      let(:game) { create(:game) }
+      let(:id) { game.id }
+
+      it { expect(response).to have_http_status(:ok) }
+      it { expect(assigned_game).to eq game }
+      it { expect(assigned_player_totals).to be_empty }
+
+      it 'calculates player totals correctly' do
+        game.game_players.each do |player|
+          expect(assigned_player_totals[player.id]).to eq(player_total_score(game, player))
+        end
+      end
+    end
+
+    context 'when id is not UUID' do
+      let(:id) { '1' }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_game).to be_nil }
+      it { expect(assigned_player_totals).to be_nil }
+    end
+
+    context 'when game does not exist' do
+      let(:id) { SecureRandom.uuid }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_game).to be_nil }
+      it { expect(assigned_player_totals).to be_nil }
+    end
+  end
+end
