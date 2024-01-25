@@ -137,4 +137,38 @@ describe 'Games' do
     it { expect(response).to have_http_status(:ok) }
     it { expect(assigned_game).to be_a Game }
   end
+
+  describe 'GET /games/:id/edit' do
+    subject(:get_edit_game) { get edit_game_path(id) }
+
+    let(:assigned_game) { assigns(:game) }
+    let(:assigned_player_totals) { assigns(:player_totals) }
+
+    before { get_edit_game }
+
+    context 'when game exists' do
+      let(:actual_game) { create(:game) }
+      let(:id) { actual_game.id }
+
+      it { expect(response).to have_http_status(:ok) }
+      it { expect(assigned_game).to eq actual_game }
+      it { expect(assigned_player_totals).to be_empty }
+    end
+
+    context 'when id is not UUID' do
+      let(:id) { '1' }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_game).to be_nil }
+      it { expect(assigned_player_totals).to be_nil }
+    end
+
+    context 'when game does not exist' do
+      let(:id) { SecureRandom.uuid }
+
+      it { expect(response).to have_http_status(:not_found) }
+      it { expect(assigned_game).to be_nil }
+      it { expect(assigned_player_totals).to be_nil }
+    end
+  end
 end
