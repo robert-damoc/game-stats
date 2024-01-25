@@ -33,9 +33,7 @@ describe 'Games' do
 
       before { create_list(:game, 2) }
 
-      it do
-        expect { get_games }.to raise_error(Pagy::OverflowError)
-      end
+      it { expect { get_games }.to raise_error(Pagy::OverflowError) }
     end
 
     context "when there are more than #{Pagy::DEFAULT[:items]} games" do
@@ -127,5 +125,16 @@ describe 'Games' do
       it { expect(assigned_game).to be_nil }
       it { expect(assigned_player_totals).to be_nil }
     end
+  end
+
+  describe 'GET /games/new' do
+    subject(:get_new_game) { get new_game_path }
+
+    let(:assigned_game) { assigns(:game) }
+
+    before { get_new_game }
+
+    it { expect(response).to have_http_status(:ok) }
+    it { expect(assigned_game).to be_a Game }
   end
 end
