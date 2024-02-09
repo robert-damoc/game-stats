@@ -171,4 +171,71 @@ describe 'Games' do
       it { expect(assigned_player_totals).to be_nil }
     end
   end
+
+  describe 'POST /games' do
+    subject(:create_game) { post games_path, params: }
+
+    let(:assigned_game) { assigns(:game) }
+
+    context 'when player_ids are empty' do
+      let(:params) { { game: { player_ids: [] } } }
+
+      it do
+        aggregate_failures do
+          expect { create_game }.to change(Game, :count).by(1)
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to(games_url)
+          expect(flash.now[:notice]).to eq 'Game was successfully created.'
+          expect(assigned_game.errors).to be_empty
+          expect(assigned_game).to be_persisted
+        end
+      end
+    end
+
+    context 'when player_ids are invalid' do
+      let(:params) { { game: { player_ids: ['invalid_id'] } } }
+
+      it do
+        aggregate_failures do
+          expect { create_game }.not_to change(Game, :count)
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
+    context 'when player_ids are valid and within limit' do
+      let(:valid_player_ids) { Array.new(Game::MAX_PLAYERS_PER_GAME) { create(:player).id } }
+      let(:params) { { game: { player_ids: valid_player_ids } } }
+
+      it do
+        aggregate_failures do
+          expect { create_game }.to change(Game, :count).by(1)
+          expect(response).to have_http_status(:found)
+          expect(response).to redirect_to(games_url)
+          expect(flash.now[:notice]).to eq 'Game was successfully created.'
+          expect(assigned_game.errors).to be_empty
+          expect(assigned_game).to be_persisted
+        end
+      end
+    end
+
+    context 'when player_ids exceed the limit' do
+      let(:invalid_player_ids) { Array.new(Game::MAX_PLAYERS_PER_GAME + 1) { create(:player).id } }
+      let(:params) { { game: { player_ids: invalid_player_ids } } }
+
+      it do
+        aggregate_failures do
+          expect { create_game }.not_to change(Game, :count)
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(flash.now[:notice]).to eq(
+            "There can be a maximum of #{Game::MAX_PLAYERS_PER_GAME} players in a game."
+          )
+          expect(assigned_game.errors.full_messages).to include(
+            "Game players There can be a maximum of #{Game::MAX_PLAYERS_PER_GAME} players in a game."
+          )
+          expect(assigned_game).not_to be_persisted
+        end
+      end
+    end
+  end
 end
